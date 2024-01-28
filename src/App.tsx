@@ -1,47 +1,17 @@
 import { useState, useEffect } from 'react';
 import HodlTable from './modules/crypto/HodlTable';
-import { columns } from './modules/crypto/HodlTable/columns';
+import { Columns } from './modules/crypto/HodlTable/Columns';
 
-import type { Payment } from './modules/crypto/HodlTable/columns';
+import type { CryptoHodlBalanceItem } from './modules/crypto/HodlTable/Columns';
 
-const getData = async (): Promise<Payment[]> => {
-  // Fetch data from your API here.
-  return [
-    {
-      id: 'm5gr84i9',
-      amount: 316,
-      status: 'success',
-      email: 'ken99@yahoo.com',
-    },
-    {
-      id: '3u1reuv4',
-      amount: 242,
-      status: 'success',
-      email: 'Abe45@gmail.com',
-    },
-    {
-      id: 'derv1ws0',
-      amount: 837,
-      status: 'processing',
-      email: 'Monserrat44@gmail.com',
-    },
-    {
-      id: '5kma53ae',
-      amount: 874,
-      status: 'success',
-      email: 'Silas22@gmail.com',
-    },
-    {
-      id: 'bhqecj4p',
-      amount: 721,
-      status: 'failed',
-      email: 'carmella@hotmail.com',
-    },
-  ];
+import { hodl } from '../mockData/api/crypto/balance';
+
+const getData = async (): Promise<CryptoHodlBalanceItem[]> => {
+  return hodl.balance;
 };
 
 const App = () => {
-  const [data, setData] = useState<Payment[]>([]);
+  const [data, setData] = useState<CryptoHodlBalanceItem[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,7 +27,7 @@ const App = () => {
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-4 lg:mb-8">
         Crypto HODL
       </h1>
-      <HodlTable columns={columns} data={data} />
+      <HodlTable columns={Columns} data={data} />
     </div>
   );
 };
