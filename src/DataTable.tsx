@@ -53,6 +53,7 @@ const HodlTable = <TData, TValue>({
   return (
     <div>
       <div className="flex items-center py-4">
+        {/* TODO makes filter filter optional and configurable */}
         <Input
           placeholder="Filter assets..."
           value={(table.getColumn('asset')?.getFilterValue() as string) ?? ''}
@@ -61,7 +62,6 @@ const HodlTable = <TData, TValue>({
           }
           className="max-w-sm"
         />
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">

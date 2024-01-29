@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import HodlTable from './modules/crypto/HodlTable';
+import HodlTable from './DataTable';
 import { Columns } from './modules/crypto/HodlTable/Columns';
 import cryptoService from './services/crypto';
 
