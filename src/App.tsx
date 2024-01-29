@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import HodlTable from './DataTable';
-import { Columns } from './modules/crypto/HodlTable/Columns';
+import Hodl from './modules/crypto/Hodl';
 import cryptoService from './services/crypto';
 
-import type { CryptoHodlBalanceItem } from './modules/crypto/HodlTable/Columns';
+import type { CryptoHodlBalanceItem } from './modules/crypto/Hodl/TableColumns';
 
 const App = () => {
   const [data, setData] = useState<CryptoHodlBalanceItem[]>([]);
@@ -19,10 +18,7 @@ const App = () => {
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-4 lg:mb-8">
-        Crypto HODL
-      </h1>
-      <HodlTable columns={Columns} data={data} />
+      <Hodl data={data} />
     </div>
   );
 };

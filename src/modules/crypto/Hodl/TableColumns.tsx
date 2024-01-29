@@ -30,7 +30,7 @@ const formatPercentage = (value: number) =>
     maximumFractionDigits: 2,
   }).format(value);
 
-export const Columns: ColumnDef<CryptoHodlBalanceItem>[] = [
+export const TableColumns: ColumnDef<CryptoHodlBalanceItem>[] = [
   { accessorKey: 'asset', header: 'Asset' },
   {
     accessorKey: 'spot',
