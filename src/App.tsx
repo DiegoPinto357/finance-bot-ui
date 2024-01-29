@@ -1,22 +1,17 @@
 import { useState, useEffect } from 'react';
 import HodlTable from './modules/crypto/HodlTable';
 import { Columns } from './modules/crypto/HodlTable/Columns';
+import cryptoService from './services/crypto';
 
 import type { CryptoHodlBalanceItem } from './modules/crypto/HodlTable/Columns';
-
-import { hodl } from '../mockData/api/crypto/balance';
-
-const getData = async (): Promise<CryptoHodlBalanceItem[]> => {
-  return hodl.balance;
-};
 
 const App = () => {
   const [data, setData] = useState<CryptoHodlBalanceItem[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const newData = await getData();
-      setData(newData);
+      const { balance } = await cryptoService.getBalance('hodl');
+      setData(balance);
     };
 
     fetchData();
