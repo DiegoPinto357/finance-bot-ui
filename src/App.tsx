@@ -1,9 +1,9 @@
-import Hodl from './modules/crypto/Hodl';
+import Router from './Router';
 
 const App = () => {
   return (
     <div className="container mx-auto py-10">
-      <Hodl />
+      <Router />
     </div>
   );
 };
