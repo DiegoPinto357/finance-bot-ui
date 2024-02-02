@@ -15,6 +15,11 @@ export type CryptoHodlBalanceItem = {
   diffTokens: number;
 };
 
+const binanceTradeBaseUrl = 'https://www.binance.com/en/trade/';
+const binanceTradeUrlParams = 'type=spot';
+
+const assetsPairedWithUsdt = ['ATOM', 'FTM', 'RUNE', 'USDC', 'VET'];
+
 const formatPrecision = (value: number) => value.toPrecision(5);
 
 const formatCurreny = (value: number) =>
@@ -31,7 +36,25 @@ const formatPercentage = (value: number) =>
   }).format(value);
 
 export const TableColumns: ColumnDef<CryptoHodlBalanceItem>[] = [
-  { accessorKey: 'asset', header: 'Asset' },
+  {
+    accessorKey: 'asset',
+    header: 'Asset',
+    cell: ({ cell }) => {
+      const asset = cell.getValue<string>();
+
+      if (asset === 'BRL') return asset;
+
+      const baseAsset = assetsPairedWithUsdt.includes(asset) ? 'USDT' : 'BRL';
+      const pair = `${asset}_${baseAsset}`;
+      const url = `${binanceTradeBaseUrl}${pair}?${binanceTradeUrlParams}`;
+
+      return (
+        <a href={url} target="_blank">
+          {asset}
+        </a>
+      );
+    },
+  },
   {
     accessorKey: 'spot',
     header: 'Spot',
