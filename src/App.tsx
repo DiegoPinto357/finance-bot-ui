@@ -7,7 +7,7 @@ const App = () => {
       <header className="container px-0">
         <NavigationBar />
       </header>
-      <main className="container mx-auto py-10">
+      <main className="container mx-auto pt-4 pb-8">
         <Router />
       </main>
     </>
