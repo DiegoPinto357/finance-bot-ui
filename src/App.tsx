@@ -1,10 +1,16 @@
 import Router from './Router';
+import NavigationBar from './NavigationBar';
 
 const App = () => {
   return (
-    <div className="container mx-auto py-10">
-      <Router />
-    </div>
+    <>
+      <header className="container px-0">
+        <NavigationBar />
+      </header>
+      <main className="container mx-auto py-10">
+        <Router />
+      </main>
+    </>
   );
 };
 

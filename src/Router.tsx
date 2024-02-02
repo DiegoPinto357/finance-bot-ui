@@ -8,6 +8,7 @@ const Router = () => {
       <Routes>
         <Route path="/" Component={Home} />
         <Route path="/crypto/hodl" Component={CryptoHodl} />
+        <Route path="/portfolio" element={<h1>Portfolio</h1>} />
         <Route path="*" element={<h1>Not found</h1>} />
       </Routes>
     </BrowserRouter>

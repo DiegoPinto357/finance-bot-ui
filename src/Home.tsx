@@ -1,13 +1,5 @@
-import { Link } from 'react-router-dom';
-
 const Home = () => {
-  return (
-    <div>
-      <Link to="/crypto/hodl">Crypto HODL</Link>
-      <br />
-      <Link to="/portfolio">Portfolio</Link>
-    </div>
-  );
+  return <div>Home</div>;
 };
 
 export default Home;
