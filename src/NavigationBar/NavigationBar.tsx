@@ -21,7 +21,7 @@ const cryptoSubmenuItems = [
 
 const NavigationBar = () => {
   return (
-    <NavigationMenu className="p-4">
+    <NavigationMenu>
       <NavigationMenuList>
         <MenuItem path="/">Home</MenuItem>
         <SubMenu items={stockSubmenuItems}>Stock</SubMenu>
