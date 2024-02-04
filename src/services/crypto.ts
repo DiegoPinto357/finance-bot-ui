@@ -3,7 +3,7 @@ import axios from 'axios';
 const host = 'http://localhost:3001';
 // const host = 'http://192.168.1.200:3001';
 
-type PortfolioType = 'hodl';
+type PortfolioType = 'hodl' | 'defi';
 
 type HodlBalance = {
   balance: {
