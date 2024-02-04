@@ -6,7 +6,14 @@ import ThemeSwitch from './theme/ThemeSwitch';
 import Router from './Router';
 import NavigationBar from './NavigationBar';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 20 * (60 * 1000),
+      cacheTime: 20 * (60 * 1000),
+    },
+  },
+});
 
 const App = () => {
   return (
