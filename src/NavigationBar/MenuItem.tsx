@@ -1,4 +1,5 @@
 import { PropsWithChildren } from 'react';
+import { Link } from 'react-router-dom';
 import {
   NavigationMenuItem,
   NavigationMenuLink,
@@ -11,8 +12,8 @@ type Props = {
 
 const MenuItem = ({ path, children }: PropsWithChildren<Props>) => (
   <NavigationMenuItem>
-    <NavigationMenuLink className={navigationMenuTriggerStyle()} href={path}>
-      {children}
+    <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+      <Link to={path}>{children}</Link>
     </NavigationMenuLink>
   </NavigationMenuItem>
 );

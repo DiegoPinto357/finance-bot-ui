@@ -1,3 +1,4 @@
+import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { ThemeProvider } from './theme/ThemeProvider';
@@ -11,13 +12,15 @@ const App = () => {
   return (
     <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
       <QueryClientProvider client={queryClient}>
-        <header className="container flex p-4">
-          <NavigationBar />
-          <ThemeSwitch className="ml-auto" />
-        </header>
-        <main className="container mx-auto pt-4 pb-8">
-          <Router />
-        </main>
+        <BrowserRouter>
+          <header className="container flex p-4">
+            <NavigationBar />
+            <ThemeSwitch className="ml-auto" />
+          </header>
+          <main className="container mx-auto pt-4 pb-8">
+            <Router />
+          </main>
+        </BrowserRouter>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </ThemeProvider>

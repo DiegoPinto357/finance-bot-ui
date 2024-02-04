@@ -18,7 +18,7 @@ const SubMenu = ({ items, children }: PropsWithChildren<Props>) => (
       <NavigationMenuContent>
         <ul className="w-fit min-w-[90px] gap-3 p-2">
           {items.map(({ label, path }) => (
-            <SubMenuItem href={path}>{label}</SubMenuItem>
+            <SubMenuItem to={path}>{label}</SubMenuItem>
           ))}
         </ul>
       </NavigationMenuContent>
