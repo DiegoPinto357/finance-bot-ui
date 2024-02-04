@@ -49,7 +49,12 @@ export const TableColumns: ColumnDef<CryptoHodlBalanceItem>[] = [
       const url = `${binanceTradeBaseUrl}${pair}?${binanceTradeUrlParams}`;
 
       return (
-        <a href={url} target="_blank">
+        <a
+          // TODO create global link class
+          className="text-primary underline-offset-4 hover:underline"
+          href={url}
+          target="_blank"
+        >
           {asset}
         </a>
       );
