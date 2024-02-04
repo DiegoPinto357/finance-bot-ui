@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import cryptoService from '../../../services/crypto';
+import cryptoService from '../../../../services/crypto';
 
 const Defi = () => {
   // TODO use loading and error flags

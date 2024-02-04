@@ -20,6 +20,7 @@ const binanceTradeUrlParams = 'type=spot';
 
 const assetsPairedWithUsdt = ['ATOM', 'FTM', 'RUNE', 'USDC', 'VET'];
 
+// TODO move format functions to utils lib (formatNumber?)
 const formatPrecision = (value: number) => value.toPrecision(5);
 
 const formatCurreny = (value: number) =>

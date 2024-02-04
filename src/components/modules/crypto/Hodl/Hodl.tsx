@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import DataTable from '../../../DataTable';
 import { TableColumns } from './TableColumns';
-import cryptoService from '../../../services/crypto';
+import cryptoService from '../../../../services/crypto';
 
 const Hodl = () => {
   // TODO use loading and error flags
