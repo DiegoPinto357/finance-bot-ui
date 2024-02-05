@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query';
 import Typography from '@/components/Typography';
 import DataTable from '../../DataTable';
+import { formatCurrency } from '@/lib/formatNumber';
 import { TableColumns } from './TableColumns';
 import portfolioService from '../../../services/portfolio';
 
@@ -49,7 +50,8 @@ const Portfolio = () => {
   return (
     <>
       <Typography variant="h1">Portfolio</Typography>
-      <DataTable columns={TableColumns} data={mappedData} />
+      <DataTable className="mb-4" columns={TableColumns} data={mappedData} />
+      <Typography variant="h3">Total: {formatCurrency(data?.total)}</Typography>
     </>
   );
 };
