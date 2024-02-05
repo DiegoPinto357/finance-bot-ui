@@ -66,24 +66,19 @@ export const TableColumns: ColumnDef<CryptoHodlBalanceItem>[] = [
     header: 'Total',
     cell: ({ cell }) => formatPrecision(cell.getValue<number>()),
   },
-  { accessorKey: 'portfolioScore', header: 'Portfolio Score' },
+  {
+    accessorKey: 'portfolioScore',
+    header: 'Portfolio Score',
+  },
   {
     accessorKey: 'priceBRL',
     header: 'Price BRL',
-    cell: ({ cell }) => (
-      <div className="text-right">
-        {formatCurrency(cell.getValue<number>())}
-      </div>
-    ),
+    cell: ({ cell }) => formatCurrency(cell.getValue<number>()),
   },
   {
     accessorKey: 'positionBRL',
     header: 'Position BRL',
-    cell: ({ cell }) => (
-      <div className="text-right">
-        {formatCurrency(cell.getValue<number>())}
-      </div>
-    ),
+    cell: ({ cell }) => formatCurrency(cell.getValue<number>()),
   },
   {
     accessorKey: 'positionTarget',
@@ -103,11 +98,7 @@ export const TableColumns: ColumnDef<CryptoHodlBalanceItem>[] = [
   {
     accessorKey: 'diffBRL',
     header: 'Diff BRL',
-    cell: ({ cell }) => (
-      <div className="text-right">
-        {formatCurrency(cell.getValue<number>())}
-      </div>
-    ),
+    cell: ({ cell }) => formatCurrency(cell.getValue<number>()),
   },
   {
     accessorKey: 'diffTokens',

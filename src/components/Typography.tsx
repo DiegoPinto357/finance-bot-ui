@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 
 type Props = {
-  variant: 'h1' | 'h2' | 'h3';
+  variant: 'h1' | 'h2' | 'h3' | 'h4';
   className?: string;
 };
 
@@ -32,10 +32,19 @@ const Typography = ({
     case 'h3':
       return (
         <h3
-          className={`scroll-m-4 font-semibold mb-1 text-lg lg:text-xl lg:mb-0.5 ${className}`}
+          className={`scroll-m-4 font-semibold mb-1 text-lg lg:text-xl lg:mb-2 ${className}`}
         >
           {children}
         </h3>
+      );
+
+    case 'h4':
+      return (
+        <h4
+          className={`scroll-m-2 mb-0.5 text-md lg:text-lg lg:mb-1 ${className}`}
+        >
+          {children}
+        </h4>
       );
   }
 };
