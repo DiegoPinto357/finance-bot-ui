@@ -3,6 +3,7 @@ import Typography from './Typography';
 import Home from './Home';
 import CryptoHodl from './modules/crypto/Hodl';
 import CryptoDefi from './modules/crypto/Defi';
+import Portfolio from './modules/Portfolio';
 
 const Router = () => {
   return (
@@ -12,7 +13,7 @@ const Router = () => {
       <Route path="/crypto/hodl" Component={CryptoHodl} />
       <Route path="/crypto/defi" Component={CryptoDefi} />
 
-      <Route path="/portfolio" element={<h1>Portfolio</h1>} />
+      <Route path="/portfolio" Component={Portfolio} />
 
       <Route
         path="*"
