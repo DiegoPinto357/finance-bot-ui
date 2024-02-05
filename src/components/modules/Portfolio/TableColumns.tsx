@@ -1,4 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
+import { formatCurrency } from '@/lib/formatNumber';
 
 // TOdo fetch list from server/infer from data
 const portfolios = [
@@ -36,14 +37,6 @@ type PortfolioBalanceItem = {
   portfolio: string;
   total: number;
 } & Record<string, number>;
-
-const formatCurrency = (value: number | undefined) => {
-  if (!value) return '';
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  }).format(value);
-};
 
 export const TableColumns: ColumnDef<PortfolioBalanceItem>[] = [
   {

@@ -1,4 +1,9 @@
 import { ColumnDef } from '@tanstack/react-table';
+import {
+  formatCurrency,
+  formatPercentage,
+  formatPrecision,
+} from '@/lib/formatNumber';
 
 type CryptoHodlBalanceItem = {
   asset: string;
@@ -19,22 +24,6 @@ const binanceTradeBaseUrl = 'https://www.binance.com/en/trade/';
 const binanceTradeUrlParams = 'type=spot';
 
 const assetsPairedWithUsdt = ['ATOM', 'FTM', 'RUNE', 'USDC', 'VET'];
-
-// TODO move format functions to utils lib (formatNumber?)
-const formatPrecision = (value: number) => value.toPrecision(5);
-
-const formatCurrency = (value: number) =>
-  new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  }).format(value);
-
-const formatPercentage = (value: number) =>
-  new Intl.NumberFormat('pt-BR', {
-    style: 'percent',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(value);
 
 export const TableColumns: ColumnDef<CryptoHodlBalanceItem>[] = [
   {
