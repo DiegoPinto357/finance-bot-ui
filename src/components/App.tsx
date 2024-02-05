@@ -20,11 +20,11 @@ const App = () => {
     <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <header className="container flex p-4">
+          <header className="container flex p-4 fixed bg-background top-0">
             <NavigationBar />
             <ThemeSwitch className="ml-auto" />
           </header>
-          <main className="container mx-auto pt-4 pb-8">
+          <main className="container mx-auto mt-[68px] pt-4 pb-8">
             <Router />
           </main>
         </BrowserRouter>

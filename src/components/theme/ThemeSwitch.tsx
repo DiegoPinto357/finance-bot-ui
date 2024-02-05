@@ -22,7 +22,7 @@ const ThemeSwitch = ({ className }: Props) => {
   );
 
   return (
-    <div className={`flex ${className}`}>
+    <div className={`flex my-auto ${className}`}>
       <Sun className="h-[1.2rem] w-[1.2rem] mx-2" />
       <Switch checked={theme === 'dark'} onCheckedChange={handleOnChange} />
       <Moon className="h-[1.2rem] w-[1.2rem] mx-2" />

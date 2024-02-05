@@ -25,12 +25,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-interface DataTableProps<TData, TValue> {
+type DataTableProps<TData, TValue> = {
+  className?: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[] | undefined;
-}
+};
 
-const HodlTable = <TData, TValue>({
+const DataTable = <TData, TValue>({
+  className,
   columns,
   data,
 }: DataTableProps<TData, TValue>) => {
@@ -51,7 +53,7 @@ const HodlTable = <TData, TValue>({
   });
 
   return (
-    <div>
+    <div className={className}>
       <div className="flex items-center py-4">
         {/* TODO makes filter filter optional and configurable */}
         <Input
@@ -142,4 +144,4 @@ const HodlTable = <TData, TValue>({
   );
 };
 
-export default HodlTable;
+export default DataTable;
