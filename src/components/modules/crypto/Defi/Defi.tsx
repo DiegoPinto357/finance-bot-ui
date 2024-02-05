@@ -1,18 +1,16 @@
 import { useQuery } from 'react-query';
+import Typography from '@/components/Typography';
 import cryptoService from '../../../../services/crypto';
 
 const Defi = () => {
   // TODO use loading and error flags
-  const { data } = useQuery('cryptoDefi', () =>
+  const { data } = useQuery('cryptoDefiBalance', () =>
     cryptoService.getBalance('defi')
   );
 
   return (
     <>
-      {/* TODO create typography */}
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-4 lg:mb-8">
-        Crypto DeFi
-      </h1>
+      <Typography variant="h1">Crypto DeFi</Typography>
       {/* <DataTable columns={TableColumns} data={data?.balance} /> */}
       {JSON.stringify(data, null, 2)}
     </>
