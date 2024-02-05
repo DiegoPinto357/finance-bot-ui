@@ -1,6 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 
-export type CryptoHodlBalanceItem = {
+type CryptoHodlBalanceItem = {
   asset: string;
   spot: number;
   earn: number;
@@ -23,7 +23,7 @@ const assetsPairedWithUsdt = ['ATOM', 'FTM', 'RUNE', 'USDC', 'VET'];
 // TODO move format functions to utils lib (formatNumber?)
 const formatPrecision = (value: number) => value.toPrecision(5);
 
-const formatCurreny = (value: number) =>
+const formatCurrency = (value: number) =>
   new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
@@ -40,6 +40,7 @@ export const TableColumns: ColumnDef<CryptoHodlBalanceItem>[] = [
   {
     accessorKey: 'asset',
     header: 'Asset',
+    enableHiding: false,
     cell: ({ cell }) => {
       const asset = cell.getValue<string>();
 
@@ -80,12 +81,20 @@ export const TableColumns: ColumnDef<CryptoHodlBalanceItem>[] = [
   {
     accessorKey: 'priceBRL',
     header: 'Price BRL',
-    cell: ({ cell }) => formatCurreny(cell.getValue<number>()),
+    cell: ({ cell }) => (
+      <div className="text-right">
+        {formatCurrency(cell.getValue<number>())}
+      </div>
+    ),
   },
   {
     accessorKey: 'positionBRL',
     header: 'Position BRL',
-    cell: ({ cell }) => formatCurreny(cell.getValue<number>()),
+    cell: ({ cell }) => (
+      <div className="text-right">
+        {formatCurrency(cell.getValue<number>())}
+      </div>
+    ),
   },
   {
     accessorKey: 'positionTarget',
@@ -105,7 +114,11 @@ export const TableColumns: ColumnDef<CryptoHodlBalanceItem>[] = [
   {
     accessorKey: 'diffBRL',
     header: 'Diff BRL',
-    cell: ({ cell }) => formatCurreny(cell.getValue<number>()),
+    cell: ({ cell }) => (
+      <div className="text-right">
+        {formatCurrency(cell.getValue<number>())}
+      </div>
+    ),
   },
   {
     accessorKey: 'diffTokens',
