@@ -38,11 +38,31 @@ type PortfolioBalanceItem = {
   total: number;
 } & Record<string, number>;
 
-export const TableColumns: ColumnDef<PortfolioBalanceItem>[] = [
+type Params = {
+  onPortfolioClick?: (portfolio: string) => void;
+};
+
+export const TableColumns = (
+  params?: Params
+): ColumnDef<PortfolioBalanceItem>[] => [
   {
     accessorKey: 'portfolio',
     header: 'Portfolio',
     enablePinning: true,
+    cell: ({ cell }) => {
+      const value = cell.getValue<string>();
+      return (
+        <button
+          onClick={() => {
+            if (params?.onPortfolioClick) {
+              params.onPortfolioClick(value);
+            }
+          }}
+        >
+          {value}
+        </button>
+      );
+    },
   },
 
   ...portfolios.map(
