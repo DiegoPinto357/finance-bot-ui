@@ -17,7 +17,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+// import { Input } from '@/components/ui/input';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -56,14 +56,14 @@ const DataTable = <TData, TValue>({
     <div className={className}>
       <div className="flex items-center py-4">
         {/* TODO makes filter filter optional and configurable */}
-        <Input
+        {/* <Input
           placeholder="Filter assets..."
           value={(table.getColumn('asset')?.getFilterValue() as string) ?? ''}
           onChange={event =>
             table.getColumn('asset')?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
-        />
+        /> */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
