@@ -24,17 +24,22 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import Cell from './Cell';
+
+import type { DragAndDropInfo } from './Cell';
 
 type DataTableProps<TData, TValue> = {
   className?: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[] | undefined;
+  onCellDrop?: (dragAndDropInfo: DragAndDropInfo) => void;
 };
 
 const DataTable = <TData, TValue>({
   className,
   columns,
   data,
+  onCellDrop,
 }: DataTableProps<TData, TValue>) => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -118,17 +123,13 @@ const DataTable = <TData, TValue>({
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
+                    <Cell cell={cell} onDrop={onCellDrop} />
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
+                {/* TODO add loader (prop isLoading) */}
                 <TableCell
                   colSpan={columns.length}
                   className="h-24 text-center"

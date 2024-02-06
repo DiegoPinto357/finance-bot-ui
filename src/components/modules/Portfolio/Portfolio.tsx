@@ -1,3 +1,4 @@
+import { useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
 import Typography from '@/components/Typography';
 import {
@@ -16,7 +17,7 @@ import { TableColumns } from './TableColumns';
 import portfolioService from '../../../services/portfolio';
 
 import type { PortfolioBalance } from '../../../services/portfolio';
-import { useCallback, useState } from 'react';
+import type { DragAndDropInfo } from '@/components/DataTable/Cell';
 
 const mapBalance = (rawBalance: { asset: string; value: number }[]) =>
   rawBalance.reduce((obj, item) => {
@@ -72,6 +73,9 @@ const Portfolio = () => {
         className="mb-4"
         columns={TableColumns({ onPortfolioClick: handlePortfolioClick })}
         data={mappedData}
+        onCellDrop={(dragAndDropInfo: DragAndDropInfo) => {
+          console.log({ dragAndDropInfo });
+        }}
       />
       <Typography variant="h3">Total: {formatCurrency(data?.total)}</Typography>
 

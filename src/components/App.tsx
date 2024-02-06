@@ -1,6 +1,8 @@
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ThemeProvider } from './theme/ThemeProvider';
 import ThemeSwitch from './theme/ThemeSwitch';
 import Router from './Router';
@@ -26,9 +28,11 @@ const App = () => {
               <ThemeSwitch className="ml-auto" />
             </div>
           </header>
-          <main className="container mx-auto mt-[68px] pt-4 pb-8">
-            <Router />
-          </main>
+          <DndProvider backend={HTML5Backend}>
+            <main className="container mx-auto mt-[68px] pt-4 pb-8">
+              <Router />
+            </main>
+          </DndProvider>
         </BrowserRouter>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

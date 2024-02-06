@@ -1,8 +1,9 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { formatCurrency } from '@/lib/formatNumber';
+import ValueCell from './ValueCell';
 
-// TOdo fetch list from server/infer from data
-const portfolios = [
+// TODO fetch list from server/infer from data
+const assets = [
   'nubank',
   'iti',
   '99pay',
@@ -65,15 +66,15 @@ export const TableColumns = (
     },
   },
 
-  ...portfolios.map(
-    portfolio =>
+  ...assets.map(
+    asset =>
       ({
-        accessorKey: portfolio,
-        header: portfolio,
-        cell: ({ cell }) => (
-          <div className="text-right">
+        accessorKey: asset,
+        header: asset,
+        cell: ({ row, cell }) => (
+          <ValueCell portfolio={row.getValue('portfolio')} asset={asset}>
             {formatCurrency(cell.getValue<number>())}
-          </div>
+          </ValueCell>
         ),
       } as ColumnDef<PortfolioBalanceItem>)
   ),
