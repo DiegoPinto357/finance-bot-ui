@@ -34,10 +34,10 @@ const assets = [
   'defi2',
 ];
 
-type PortfolioBalanceItem = {
+export type PortfolioBalanceItem = {
   portfolio: string;
   total: number;
-} & Record<string, number>;
+} & Partial<Record<string, number | string>>;
 
 type Params = {
   onPortfolioClick?: (portfolio: string) => void;

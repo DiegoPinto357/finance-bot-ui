@@ -16,29 +16,42 @@ import DataTable from '../../DataTable';
 import { TableColumns } from './TableColumns';
 import portfolioService from '../../../services/portfolio';
 
-import type { PortfolioBalance } from '../../../services/portfolio';
 import type { DragAndDropInfo } from '@/components/DataTable/Cell';
+import type { PortfolioBalanceItem } from './TableColumns';
+import type {
+  AssetBalance,
+  PortfolioBalance,
+} from '../../../services/portfolio';
 
-const mapBalance = (rawBalance: { asset: string; value: number }[]) =>
-  rawBalance.reduce((obj, item) => {
-    obj[item.asset] = item.value;
+const mapBalance = (
+  rawBalance: AssetBalance[] | undefined,
+  totals: PortfolioBalanceItem
+) => {
+  if (!rawBalance) return {};
+  return rawBalance.reduce((obj, { asset, value }) => {
+    obj[asset] = value;
+
+    totals[asset] =
+      totals[asset] && typeof totals[asset] === 'number'
+        ? (totals[asset]! as number) + value // TODO fix this type mess
+        : value;
     return obj;
   }, {} as Record<string, number>);
+};
 
 const mapData = (rawData: PortfolioBalance) => {
-  return Object.entries(rawData.balance).map(
+  const totals: PortfolioBalanceItem = {
+    portfolio: 'total',
+    total: 0,
+  };
+
+  const rows = Object.entries(rawData.balance).map(
     ([portfolio, { balance, total }]) => {
-      const fixedBalance = balance.fixed
-        ? mapBalance(balance.fixed?.balance)
-        : {};
+      const fixedBalance = mapBalance(balance.fixed?.balance, totals);
+      const stockBalance = mapBalance(balance.stock?.balance, totals);
+      const cryptoBalance = mapBalance(balance.crypto?.balance, totals);
 
-      const stockBalance = balance.stock
-        ? mapBalance(balance.stock?.balance)
-        : {};
-
-      const cryptoBalance = balance.crypto
-        ? mapBalance(balance.crypto?.balance)
-        : {};
+      totals['total'] = totals['total']! + total;
 
       return {
         portfolio,
@@ -49,6 +62,8 @@ const mapData = (rawData: PortfolioBalance) => {
       } as { portfolio: string; total: number } & Record<string, number>;
     }
   );
+
+  return [...rows, totals];
 };
 
 const Portfolio = () => {
