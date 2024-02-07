@@ -123,7 +123,7 @@ const DataTable = <TData, TValue>({
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map(cell => (
-                    <Cell cell={cell} onDrop={onCellDrop} />
+                    <Cell key={cell.id} cell={cell} onDrop={onCellDrop} />
                   ))}
                 </TableRow>
               ))
