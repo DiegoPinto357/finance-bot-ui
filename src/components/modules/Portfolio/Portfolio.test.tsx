@@ -1,4 +1,5 @@
-import { render } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import useGetportfolioBalance from './useGetPortfolioBalance';
 import { triggerCellDrop } from '../../DataTable/__mocks__/DataTable';
 import Portfolio from '.';
@@ -14,7 +15,7 @@ vi.mock('../../DataTable');
 describe('Portfolio', () => {
   describe('drag and drop values', () => {
     describe('transfer values', () => {
-      it('transfers value between assets within portfolio', () => {
+      it('transfers value between assets within portfolio', async () => {
         vi.mocked(useGetportfolioBalance).mockReturnValue({
           data: portfolioBalance,
         } as unknown as UseQueryResult<PortfolioBalance, unknown>);
@@ -23,7 +24,16 @@ describe('Portfolio', () => {
           drag: { colId: 'iti', rowId: 'suricat' },
           drop: { colId: 'nubank', rowId: 'suricat' },
         });
+
+        const dialog = await screen.findByRole('dialog', {
+          name: 'Operation',
+        });
+        const transferTabButton = within(dialog).getByRole('tab', {
+          name: 'transfer',
+        });
+        userEvent.click(transferTabButton);
       });
+
       it.todo('does not trasfer value across portfolios');
     });
 

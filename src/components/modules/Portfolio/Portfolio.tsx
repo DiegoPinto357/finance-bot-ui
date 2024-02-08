@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/formatNumber';
 import DataTable from '../../DataTable';
 import { TableColumns } from './TableColumns';
+import OperationDialog from './OperationDialog';
 import useGetportfolioBalance from './useGetPortfolioBalance';
 
 import type { DragAndDropInfo } from '@/components/DataTable/Cell';
@@ -69,6 +70,8 @@ const Portfolio = () => {
   // TODO use loading and error flags
   const { data } = useGetportfolioBalance();
 
+  const [openOperationDialog, setOpenOperationDialog] =
+    useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
   const handlePortfolioClick = useCallback((portfolio: string) => {
@@ -78,6 +81,11 @@ const Portfolio = () => {
 
   const mappedData = data ? mapData(data) : [];
 
+  const handleCellDrop = useCallback((dragAndDropInfo: DragAndDropInfo) => {
+    console.log({ dragAndDropInfo });
+    setOpenOperationDialog(true);
+  }, []);
+
   return (
     <>
       <Typography variant="h1">Portfolio</Typography>
@@ -85,11 +93,15 @@ const Portfolio = () => {
         className="mb-4"
         columns={TableColumns({ onPortfolioClick: handlePortfolioClick })}
         data={mappedData}
-        onCellDrop={(dragAndDropInfo: DragAndDropInfo) => {
-          console.log({ dragAndDropInfo });
-        }}
+        onCellDrop={handleCellDrop}
       />
       <Typography variant="h3">Total: {formatCurrency(data?.total)}</Typography>
+
+      <OperationDialog
+        open={openOperationDialog}
+        operations={['transfer', 'swap']}
+        onOpenChange={setOpenOperationDialog}
+      />
 
       <Drawer direction="right" open={openDrawer} onOpenChange={setOpenDrawer}>
         <DrawerContent className="mt-0 top-0 left-auto rounded-none">
