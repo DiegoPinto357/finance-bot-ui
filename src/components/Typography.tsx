@@ -14,6 +14,7 @@ const Typography = ({
     case 'h1':
       return (
         <h1
+          // TODO prevent "undefined" className (check other places)
           className={`scroll-m-16 font-semibold mb-4 text-4xl lg:text-5xl lg:mb-8 ${className}`}
         >
           {children}

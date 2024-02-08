@@ -6,6 +6,7 @@ const host = 'http://localhost:3001';
 export type AssetBalance = {
   asset: string;
   value: number;
+  liquidity?: boolean;
 };
 
 type BalanceByAssetType = {
@@ -34,6 +35,7 @@ export type PortfolioBalance = {
 const getBalance = async () => {
   const url = `${host}/api/portfolio/balance`;
   const response = await axios.get<PortfolioBalance>(url);
+  console.log(response.data);
   return response.data;
 };
 

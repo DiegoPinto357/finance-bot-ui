@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-import { useQuery } from 'react-query';
 import Typography from '@/components/Typography';
 import {
   Drawer,
@@ -14,7 +13,7 @@ import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/formatNumber';
 import DataTable from '../../DataTable';
 import { TableColumns } from './TableColumns';
-import portfolioService from '../../../services/portfolio';
+import useGetportfolioBalance from './useGetPortfolioBalance';
 
 import type { DragAndDropInfo } from '@/components/DataTable/Cell';
 import type { PortfolioBalanceItem } from './TableColumns';
@@ -68,9 +67,7 @@ const mapData = (rawData: PortfolioBalance) => {
 
 const Portfolio = () => {
   // TODO use loading and error flags
-  const { data } = useQuery('portfolioBalance', () =>
-    portfolioService.getBalance()
-  );
+  const { data } = useGetportfolioBalance();
 
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 

@@ -28,7 +28,7 @@ import Cell from './Cell';
 
 import type { DragAndDropInfo } from './Cell';
 
-type DataTableProps<TData, TValue> = {
+export type DataTableProps<TData, TValue> = {
   className?: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[] | undefined;
