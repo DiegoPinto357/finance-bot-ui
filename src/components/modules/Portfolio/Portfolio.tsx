@@ -22,6 +22,7 @@ import type {
   AssetBalance,
   PortfolioBalance,
 } from '../../../services/portfolio';
+import type { TransferFormSchema } from './TransferForm';
 
 const mapBalance = (
   rawBalance: AssetBalance[] | undefined,
@@ -73,6 +74,7 @@ const Portfolio = () => {
   const [openOperationDialog, setOpenOperationDialog] =
     useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const [operationData, setOperationData] = useState<TransferFormSchema>({});
 
   const handlePortfolioClick = useCallback((portfolio: string) => {
     console.log({ portfolio });
@@ -82,7 +84,11 @@ const Portfolio = () => {
   const mappedData = data ? mapData(data) : [];
 
   const handleCellDrop = useCallback((dragAndDropInfo: DragAndDropInfo) => {
-    console.log({ dragAndDropInfo });
+    setOperationData({
+      portfolio: dragAndDropInfo?.drag.rowId,
+      origin: dragAndDropInfo?.drag.colId,
+      destiny: dragAndDropInfo?.drop.colId,
+    });
     setOpenOperationDialog(true);
   }, []);
 
@@ -100,6 +106,7 @@ const Portfolio = () => {
       <OperationDialog
         open={openOperationDialog}
         operations={['transfer', 'swap']}
+        operationData={operationData}
         onOpenChange={setOpenOperationDialog}
       />
 

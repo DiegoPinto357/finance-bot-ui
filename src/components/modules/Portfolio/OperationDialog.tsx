@@ -1,3 +1,4 @@
+// import React from 'react';
 import {
   Dialog,
   DialogContent,
@@ -8,16 +9,32 @@ import {
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+import TransferForm from './TransferForm';
+
+import type { TransferFormSchema } from './TransferForm';
 
 type Operation = 'transfer' | 'swap' | 'deposit' | 'withdrawn';
+
+// const FormComponents: Record<Operation, React.FC> = {
+//   transfer: TransferForm,
+//   swap: () => <div>swap</div>,
+//   deposit: () => <div>deposit</div>,
+//   withdrawn: () => <div>withdrawn</div>,
+// };
 
 type Props = {
   open: boolean;
   operations: Operation[];
+  operationData: TransferFormSchema; // TODO support multiple operations
   onOpenChange: (open: boolean) => void;
 };
 
-const OperationDialog = ({ open, operations, onOpenChange }: Props) => {
+const OperationDialog = ({
+  open,
+  operations,
+  operationData,
+  onOpenChange,
+}: Props) => {
   const renderTabs = operations.length > 1;
 
   return (
@@ -39,16 +56,22 @@ const OperationDialog = ({ open, operations, onOpenChange }: Props) => {
                 </TabsTrigger>
               ))}
             </TabsList>
-            {operations.map(operation => (
-              <TabsContent key={`${operation}-content`} value={operation}>
-                {operation}
-              </TabsContent>
-            ))}
+            {operations.map(operation => {
+              // const FormComponent = FormComponents[operation];
+              return (
+                <TabsContent key={`${operation}-content`} value={operation}>
+                  {/* <FormComponent data={{ username: 'Diego' }} /> */}
+                  <TransferForm data={operationData} />
+                </TabsContent>
+              );
+            })}
           </Tabs>
         ) : null}
 
         <DialogFooter>
-          <Button type="submit">Save changes</Button>
+          <Button type="submit" form="operation-form">
+            Submit
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

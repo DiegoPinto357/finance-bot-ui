@@ -3,7 +3,7 @@ import axios from 'axios';
 const host = 'http://localhost:3001';
 // const host = 'http://192.168.1.200:3001';
 
-type PortfolioType = 'hodl' | 'defi';
+type CryptoPortfolioType = 'hodl' | 'defi';
 
 type HodlBalance = {
   balance: {
@@ -23,7 +23,7 @@ type HodlBalance = {
   total: number;
 };
 
-const getBalance = async (portfolioType: PortfolioType) => {
+const getBalance = async (portfolioType: CryptoPortfolioType) => {
   const url = `${host}/api/crypto/balance/${portfolioType}`;
   const response = await axios.get<HodlBalance>(url);
   return response.data;
