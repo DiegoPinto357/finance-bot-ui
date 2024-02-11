@@ -65,3 +65,7 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.loader > span {
+  background-color: hsl(var(--muted-foreground)) !important;
+}

@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import Typography from '@/components/Typography';
+import Loader from '@/components/Loader';
 import {
   Drawer,
   DrawerClose,
@@ -69,7 +70,7 @@ const mapData = (rawData: PortfolioBalance) => {
 
 const Portfolio = () => {
   // TODO use loading and error flags
-  const { data } = useGetportfolioBalance();
+  const { data, isLoading } = useGetportfolioBalance();
 
   const [openOperationDialog, setOpenOperationDialog] =
     useState<boolean>(false);
@@ -95,13 +96,21 @@ const Portfolio = () => {
   return (
     <>
       <Typography variant="h1">Portfolio</Typography>
-      <DataTable
-        className="mb-4"
-        columns={TableColumns({ onPortfolioClick: handlePortfolioClick })}
-        data={mappedData}
-        onCellDrop={handleCellDrop}
-      />
-      <Typography variant="h3">Total: {formatCurrency(data?.total)}</Typography>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <DataTable
+            className="mb-4"
+            columns={TableColumns({ onPortfolioClick: handlePortfolioClick })}
+            data={mappedData}
+            onCellDrop={handleCellDrop}
+          />
+          <Typography variant="h3">
+            Total: {formatCurrency(data?.total)}
+          </Typography>
+        </>
+      )}
 
       <OperationDialog
         open={openOperationDialog}
