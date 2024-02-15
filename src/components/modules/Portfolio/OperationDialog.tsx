@@ -69,7 +69,11 @@ const OperationDialog = ({
         ) : null}
 
         <DialogFooter>
-          <Button type="submit" form="operation-form">
+          <Button
+            type="submit"
+            form="operation-form"
+            onClick={() => onOpenChange(false)}
+          >
             Submit
           </Button>
         </DialogFooter>
