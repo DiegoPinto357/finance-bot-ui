@@ -33,9 +33,10 @@ const defaultValues: DefaultValues = {
 
 type Props = {
   data?: TransferFormSchema;
+  onSubmmit: () => void;
 };
 
-const TransferForm = ({ data }: Props) => {
+const TransferForm = ({ data, onSubmmit }: Props) => {
   const form = useForm<DefaultValues, void, FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: { ...defaultValues, ...data },
@@ -60,8 +61,9 @@ const TransferForm = ({ data }: Props) => {
         destiny: { class: 'fixed', name: values.destiny },
         value: values.value,
       });
+      onSubmmit();
     },
-    [setAssetValue, transfer]
+    [setAssetValue, transfer, onSubmmit]
   );
 
   return (
@@ -70,24 +72,26 @@ const TransferForm = ({ data }: Props) => {
         id="operation-form"
         aria-label="transfer"
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="space-y-4"
+        className="grid grid-cols-2 gap-4"
         noValidate
       >
+        <FormField control={form.control} name="origin" label="Origin" />
         <FormField
           control={form.control}
           name="originCurrentValue"
           label="Origin Current Value"
           type="number"
         />
+
+        <FormField control={form.control} name="destiny" label="Destiny" />
         <FormField
           control={form.control}
           name="destinyCurrentValue"
           label="Destiny Current Value"
           type="number"
         />
+
         <FormField control={form.control} name="portfolio" label="Portfolio" />
-        <FormField control={form.control} name="origin" label="Origin" />
-        <FormField control={form.control} name="destiny" label="Destiny" />
         <FormField
           control={form.control}
           name="value"

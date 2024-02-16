@@ -59,9 +59,16 @@ const OperationDialog = ({
             {operations.map(operation => {
               // const FormComponent = FormComponents[operation];
               return (
-                <TabsContent key={`${operation}-content`} value={operation}>
+                <TabsContent
+                  key={`${operation}-content`}
+                  className="py-4"
+                  value={operation}
+                >
                   {/* <FormComponent data={{ username: 'Diego' }} /> */}
-                  <TransferForm data={operationData} />
+                  <TransferForm
+                    data={operationData}
+                    onSubmmit={() => onOpenChange(false)}
+                  />
                 </TabsContent>
               );
             })}
@@ -69,11 +76,7 @@ const OperationDialog = ({
         ) : null}
 
         <DialogFooter>
-          <Button
-            type="submit"
-            form="operation-form"
-            onClick={() => onOpenChange(false)}
-          >
+          <Button type="submit" form="operation-form">
             Submit
           </Button>
         </DialogFooter>

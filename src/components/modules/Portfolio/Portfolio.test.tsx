@@ -100,11 +100,14 @@ describe('Portfolio', () => {
         expect(transfer).toBeCalledWith({ portfolio, origin, destiny, value });
       });
 
+      it.todo('handles error from server');
+
       it.todo('does not trasfer value across portfolios');
     });
 
     describe('swap values', () => {
       it.todo('transfers value between assets within portfolio');
+      it.todo('handles error from server');
       it.todo('does ot swap vlues across portfolios');
     });
   });
