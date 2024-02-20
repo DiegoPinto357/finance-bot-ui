@@ -16,6 +16,26 @@ vi.mock('./useTransfer');
 vi.mock('../Fixed/useSetAssetValue');
 vi.mock('../../DataTable');
 
+const selectOperation = async (operation: 'transfer' | 'swap') => {
+  const dialog = await screen.findByRole('dialog', {
+    name: 'Operation',
+  });
+  const transferTabButton = within(dialog).getByRole('tab', {
+    name: operation,
+  });
+  await userEvent.click(transferTabButton);
+};
+
+const confirm = async (action: 'Yes' | 'No') => {
+  const confirmDialog = screen.getByRole('dialog', { name: 'Confirm?' });
+  const confirmButton = within(confirmDialog).getByRole('button', {
+    name: action,
+  });
+  await userEvent.click(confirmButton);
+
+  expect(confirmDialog).not.toBeVisible();
+};
+
 const fillFormField = async (
   form: HTMLElement,
   fieldName: string,
@@ -39,27 +59,31 @@ const fillFormField = async (
 };
 
 describe('Portfolio', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('drag and drop values', () => {
+    vi.mocked(useGetportfolioBalance).mockReturnValue({
+      data: portfolioBalance,
+    } as unknown as UseQueryResult<PortfolioBalance, unknown>);
+
+    const transfer = vi.fn();
+    /* @ts-ignore */
+    vi.mocked(useTransfer).mockReturnValue({
+      transfer,
+    });
+
+    const setAssetValue = vi.fn();
+    /* @ts-ignore */
+    vi.mocked(useSetAssetValue).mockReturnValue({ setAssetValue });
+
     describe('transfer values', () => {
       it('transfers value between assets within portfolio', async () => {
         const portfolio = 'suricat';
         const origin = { class: 'fixed', name: 'iti' };
         const destiny = { class: 'fixed', name: 'nubank' };
         const value = 100;
-
-        vi.mocked(useGetportfolioBalance).mockReturnValue({
-          data: portfolioBalance,
-        } as unknown as UseQueryResult<PortfolioBalance, unknown>);
-
-        const transfer = vi.fn();
-        /* @ts-ignore */
-        vi.mocked(useTransfer).mockReturnValue({
-          transfer,
-        });
-
-        const setAssetValue = vi.fn();
-        /* @ts-ignore */
-        vi.mocked(useSetAssetValue).mockReturnValue({ setAssetValue });
 
         render(<Portfolio />);
 
@@ -68,29 +92,24 @@ describe('Portfolio', () => {
           drop: { colId: destiny.name, rowId: portfolio },
         });
 
-        const dialog = await screen.findByRole('dialog', {
-          name: 'Operation',
-        });
-        const transferTabButton = within(dialog).getByRole('tab', {
-          name: 'transfer',
-        });
-        userEvent.click(transferTabButton);
+        await selectOperation('transfer');
 
         const transferForm = screen.getByRole('form', { name: 'transfer' });
         await fillFormField(transferForm, 'Origin Current Value', 2000);
         await fillFormField(transferForm, 'Destiny Current Value', 1000);
         await fillFormField(transferForm, 'Value', value);
 
-        const submitButton = within(dialog).getByRole('button', {
+        const submitButton = screen.getByRole('button', {
           name: 'Submit',
         });
         await userEvent.click(submitButton);
-        fireEvent.submit(transferForm);
 
-        // click to confirm on confirmation dialog
-        // expect confirm dialog to be closed
+        await confirm('Yes');
 
-        expect(dialog).not.toBeVisible();
+        const operationDialog = screen.queryByRole('dialog', {
+          name: 'Operation',
+        });
+        expect(operationDialog).not.toBeInTheDocument();
 
         expect(setAssetValue).toBeCalledTimes(2);
         expect(setAssetValue).toBeCalledWith({ asset: 'iti', value: 2000 });
@@ -100,9 +119,47 @@ describe('Portfolio', () => {
         expect(transfer).toBeCalledWith({ portfolio, origin, destiny, value });
       });
 
+      it('does not transfer value if user do not confirm it on confirm dialog', async () => {
+        const portfolio = 'suricat';
+        const origin = { class: 'fixed', name: 'iti' };
+        const destiny = { class: 'fixed', name: 'nubank' };
+        const value = 100;
+
+        render(<Portfolio />);
+
+        triggerCellDrop({
+          drag: { colId: origin.name, rowId: portfolio },
+          drop: { colId: destiny.name, rowId: portfolio },
+        });
+
+        await selectOperation('transfer');
+
+        const transferForm = screen.getByRole('form', { name: 'transfer' });
+        await fillFormField(transferForm, 'Origin Current Value', 2000);
+        await fillFormField(transferForm, 'Destiny Current Value', 1000);
+        await fillFormField(transferForm, 'Value', value);
+
+        const submitButton = screen.getByRole('button', {
+          name: 'Submit',
+        });
+        await userEvent.click(submitButton);
+
+        await confirm('No');
+
+        const operationDialog = screen.getByRole('dialog', {
+          name: 'Operation',
+        });
+        expect(operationDialog).toBeVisible();
+
+        expect(setAssetValue).not.toBeCalled();
+        expect(transfer).not.toBeCalled();
+      });
+
       it.todo('handles error from server');
 
-      it.todo('does not trasfer value across portfolios');
+      it.todo('does not transfer value across portfolios');
+
+      it.todo('does not transfer value on stock and crypto - TEMP');
     });
 
     describe('swap values', () => {
