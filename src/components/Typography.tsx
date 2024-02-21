@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 
 type Props = {
-  variant: 'h1' | 'h2' | 'h3' | 'h4';
+  variant: 'h1' | 'h2' | 'h3' | 'h4' | 'p';
   className?: string;
 };
 
@@ -47,6 +47,9 @@ const Typography = ({
           {children}
         </h4>
       );
+
+    case 'p':
+      return <p className={`leading-7  ${className}`}>{children}</p>;
   }
 };
 

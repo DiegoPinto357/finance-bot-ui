@@ -197,7 +197,51 @@ describe('Portfolio', () => {
         expect(transfer).not.toBeCalled();
       });
 
-      it.todo('handles error from server');
+      it('renders error message if server fails', async () => {
+        const portfolio = 'suricat';
+        const origin = { class: 'fixed', name: 'iti' };
+        const destiny = { class: 'fixed', name: 'nubank' };
+        const value = 100;
+
+        transfer.mockRejectedValueOnce(new Error('Error message!'));
+
+        render(<Portfolio />);
+
+        triggerCellDrop({
+          drag: { colId: origin.name, rowId: portfolio },
+          drop: { colId: destiny.name, rowId: portfolio },
+        });
+
+        await selectOperation('transfer');
+
+        const transferForm = screen.getByRole('form', { name: 'transfer' });
+        await fillFormField(transferForm, 'Origin Current Value', 2000);
+        await fillFormField(transferForm, 'Destiny Current Value', 1000);
+        await fillFormField(transferForm, 'Value', value);
+
+        const submitButton = screen.getByRole('button', {
+          name: 'Submit',
+        });
+        await userEvent.click(submitButton);
+
+        await confirm('Yes');
+
+        const operationDialog = screen.getByRole('dialog', {
+          name: 'Operation',
+        });
+        expect(operationDialog).toBeInTheDocument();
+
+        const errorMessage =
+          within(operationDialog).getByText('Error message!');
+        expect(errorMessage).toBeInTheDocument();
+
+        // error message should be clear when open dialog again
+        // triggerCellDrop({
+        //   drag: { colId: origin.name, rowId: portfolio },
+        //   drop: { colId: destiny.name, rowId: portfolio },
+        // });
+        // expect(errorMessage).not.toBeInTheDocument();
+      });
 
       it.todo('does not transfer value across portfolios');
 

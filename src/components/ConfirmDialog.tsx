@@ -12,7 +12,7 @@ type Props = {
   open: boolean;
   form?: string;
   onOpenChange: (open: boolean) => void;
-  onConfirm: () => void;
+  onConfirm?: () => void;
 };
 
 const ConfirmDialog = ({ open, form, onOpenChange, onConfirm }: Props) => {
@@ -32,7 +32,7 @@ const ConfirmDialog = ({ open, form, onOpenChange, onConfirm }: Props) => {
             form={form}
             onClick={() => {
               onOpenChange(false);
-              onConfirm();
+              if (onConfirm) onConfirm();
             }}
           >
             Yes

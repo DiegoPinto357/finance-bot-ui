@@ -1,5 +1,5 @@
 // import React from 'react';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -11,6 +11,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import ConfirmDialog from '@/components/ConfirmDialog';
+import Typography from '@/components/Typography';
 import TransferForm from './TransferForm';
 
 import type { TransferFormSchema } from './TransferForm';
@@ -38,9 +39,17 @@ const OperationDialog = ({
   onOpenChange,
 }: Props) => {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const renderTabs = operations.length > 1;
 
   const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (open) {
+      setErrorMessage(null);
+    }
+  }, [open]);
 
   return (
     <>
@@ -75,6 +84,7 @@ const OperationDialog = ({
                       ref={formRef}
                       data={operationData}
                       onSubmmit={() => onOpenChange(false)}
+                      onError={setErrorMessage}
                     />
                   </TabsContent>
                 );
@@ -93,6 +103,12 @@ const OperationDialog = ({
               Submit
             </Button>
           </DialogFooter>
+
+          {errorMessage ? (
+            <Typography variant="p" className="text-red-600">
+              {errorMessage}
+            </Typography>
+          ) : null}
         </DialogContent>
       </Dialog>
 
@@ -100,7 +116,6 @@ const OperationDialog = ({
         open={confirmDialogOpen}
         form="operation-form"
         onOpenChange={setConfirmDialogOpen}
-        onConfirm={() => onOpenChange(false)}
       />
     </>
   );

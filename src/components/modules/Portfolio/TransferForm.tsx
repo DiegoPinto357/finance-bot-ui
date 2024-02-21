@@ -8,8 +8,8 @@ import useTransfer from './useTransfer';
 import useSetAssetValue from '../Fixed/useSetAssetValue';
 
 const formSchema = z.object({
-  originCurrentValue: z.coerce.number().multipleOf(0.01).positive().min(1),
-  destinyCurrentValue: z.coerce.number().multipleOf(0.01).positive().min(1),
+  originCurrentValue: z.coerce.number().multipleOf(0.01).positive().min(0),
+  destinyCurrentValue: z.coerce.number().multipleOf(0.01).positive().min(0),
   portfolio: z.string().min(1),
   origin: z.string().min(1),
   destiny: z.string().min(1),
@@ -34,9 +34,10 @@ const defaultValues: DefaultValues = {
 type Props = {
   data?: TransferFormSchema;
   onSubmmit: () => void;
+  onError: (errorMessage: string) => void;
 };
 
-const TransferForm = forwardRef(({ data, onSubmmit }: Props, ref) => {
+const TransferForm = forwardRef(({ data, onSubmmit, onError }: Props, ref) => {
   const form = useForm<DefaultValues, void, FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: { ...defaultValues, ...data },
@@ -51,23 +52,28 @@ const TransferForm = forwardRef(({ data, onSubmmit }: Props, ref) => {
 
   const handleSubmit = useCallback(
     async (values: FormSchema) => {
-      await setAssetValue({
-        asset: values.origin,
-        value: values.originCurrentValue,
-      });
-      await setAssetValue({
-        asset: values.destiny,
-        value: values.destinyCurrentValue,
-      });
-      await transfer({
-        portfolio: values.portfolio,
-        origin: { class: 'fixed', name: values.origin },
-        destiny: { class: 'fixed', name: values.destiny },
-        value: values.value,
-      });
-      onSubmmit();
+      try {
+        await setAssetValue({
+          asset: values.origin,
+          value: values.originCurrentValue,
+        });
+        await setAssetValue({
+          asset: values.destiny,
+          value: values.destinyCurrentValue,
+        });
+        await transfer({
+          portfolio: values.portfolio,
+          origin: { class: 'fixed', name: values.origin },
+          destiny: { class: 'fixed', name: values.destiny },
+          value: values.value,
+        });
+        onSubmmit();
+      } catch (error) {
+        if (error instanceof Error) onError(error.message);
+        else onError(String(error));
+      }
     },
-    [setAssetValue, transfer, onSubmmit]
+    [setAssetValue, transfer, onSubmmit, onError]
   );
 
   return (
