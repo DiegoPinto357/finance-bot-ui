@@ -27,7 +27,7 @@ const selectOperation = async (operation: 'transfer' | 'swap') => {
 };
 
 const confirm = async (action: 'Yes' | 'No') => {
-  const confirmDialog = screen.getByRole('dialog', { name: 'Confirm?' });
+  const confirmDialog = screen.getByRole('alertdialog', { name: 'Confirm?' });
   const confirmButton = within(confirmDialog).getByRole('button', {
     name: action,
   });

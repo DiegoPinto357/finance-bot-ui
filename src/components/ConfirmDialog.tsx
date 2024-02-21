@@ -1,11 +1,12 @@
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogFooter,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from '@/components/ui/alert-dialog';
 
 type Props = {
   open: boolean;
@@ -16,15 +17,17 @@ type Props = {
 
 const ConfirmDialog = ({ open, form, onOpenChange, onConfirm }: Props) => {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[240px]">
-        <DialogHeader>
-          <DialogTitle>Confirm?</DialogTitle>
-        </DialogHeader>
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialogContent className="sm:max-w-[320px]">
+        <AlertDialogHeader>
+          <AlertDialogTitle>Confirm?</AlertDialogTitle>
+        </AlertDialogHeader>
 
-        <DialogFooter>
-          <Button onClick={() => onOpenChange(false)}>No</Button>
-          <Button
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={() => onOpenChange(false)}>
+            No
+          </AlertDialogCancel>
+          <AlertDialogAction
             type={form ? 'submit' : 'button'}
             form={form}
             onClick={() => {
@@ -33,10 +36,10 @@ const ConfirmDialog = ({ open, form, onOpenChange, onConfirm }: Props) => {
             }}
           >
             Yes
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 
