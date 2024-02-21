@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { forwardRef, useImperativeHandle, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -36,11 +36,15 @@ type Props = {
   onSubmmit: () => void;
 };
 
-const TransferForm = ({ data, onSubmmit }: Props) => {
+const TransferForm = forwardRef(({ data, onSubmmit }: Props, ref) => {
   const form = useForm<DefaultValues, void, FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: { ...defaultValues, ...data },
   });
+
+  useImperativeHandle(ref, () => ({
+    validate: () => form.trigger(),
+  }));
 
   const { transfer } = useTransfer();
   const { setAssetValue } = useSetAssetValue();
@@ -101,6 +105,6 @@ const TransferForm = ({ data, onSubmmit }: Props) => {
       </form>
     </Form>
   );
-};
+});
 
 export default TransferForm;

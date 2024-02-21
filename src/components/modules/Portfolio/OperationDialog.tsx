@@ -1,5 +1,5 @@
 // import React from 'react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -40,6 +40,8 @@ const OperationDialog = ({
   const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false);
   const renderTabs = operations.length > 1;
 
+  const formRef = useRef<HTMLFormElement>(null);
+
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
@@ -70,6 +72,7 @@ const OperationDialog = ({
                   >
                     {/* <FormComponent data={{ username: 'Diego' }} /> */}
                     <TransferForm
+                      ref={formRef}
                       data={operationData}
                       onSubmmit={() => onOpenChange(false)}
                     />
@@ -80,7 +83,15 @@ const OperationDialog = ({
           ) : null}
 
           <DialogFooter>
-            <Button onClick={() => setConfirmDialogOpen(true)}>Submit</Button>
+            <Button
+              onClick={async () => {
+                if (formRef.current && (await formRef.current.validate())) {
+                  setConfirmDialogOpen(true);
+                }
+              }}
+            >
+              Submit
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

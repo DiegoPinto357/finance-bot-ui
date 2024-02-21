@@ -1,4 +1,4 @@
-import { render, screen, within, fireEvent } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import useGetportfolioBalance from './useGetPortfolioBalance';
 import useTransfer from './useTransfer';
@@ -150,6 +150,48 @@ describe('Portfolio', () => {
           name: 'Operation',
         });
         expect(operationDialog).toBeVisible();
+
+        expect(setAssetValue).not.toBeCalled();
+        expect(transfer).not.toBeCalled();
+      });
+
+      it('does not transfer value if the form validation fails', async () => {
+        const portfolio = 'suricat';
+        const origin = { class: 'fixed', name: 'iti' };
+        const destiny = { class: 'fixed', name: 'nubank' };
+
+        render(<Portfolio />);
+
+        triggerCellDrop({
+          drag: { colId: origin.name, rowId: portfolio },
+          drop: { colId: destiny.name, rowId: portfolio },
+        });
+
+        await selectOperation('transfer');
+
+        const transferForm = screen.getByRole('form', { name: 'transfer' });
+        await fillFormField(transferForm, 'Origin Current Value', 2000);
+        await fillFormField(transferForm, 'Destiny Current Value', 1000);
+
+        const submitButton = screen.getByRole('button', {
+          name: 'Submit',
+        });
+        await userEvent.click(submitButton);
+
+        const confirmDialog = screen.queryByRole('dialog', {
+          name: 'Confirm?',
+        });
+        expect(confirmDialog).not.toBeInTheDocument();
+
+        const operationDialog = screen.getByRole('dialog', {
+          name: 'Operation',
+        });
+        expect(operationDialog).toBeVisible();
+
+        const fieldErrorMessage = within(operationDialog).getByText(
+          'Number must be greater than 0'
+        );
+        expect(fieldErrorMessage).toBeInTheDocument();
 
         expect(setAssetValue).not.toBeCalled();
         expect(transfer).not.toBeCalled();
