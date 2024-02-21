@@ -64,7 +64,7 @@ const OperationDialog = ({
 
           {renderTabs ? (
             <Tabs defaultValue={operations[0]}>
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-2" tabIndex={0}>
                 {operations.map(operation => (
                   <TabsTrigger key={`${operation}-tab`} value={operation}>
                     {operation}
@@ -78,6 +78,7 @@ const OperationDialog = ({
                     key={`${operation}-content`}
                     className="py-4"
                     value={operation}
+                    tabIndex={-1}
                   >
                     {/* <FormComponent data={{ username: 'Diego' }} /> */}
                     <TransferForm
