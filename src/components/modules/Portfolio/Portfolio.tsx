@@ -85,6 +85,8 @@ const Portfolio = () => {
   const mappedData = data ? mapData(data) : [];
 
   const handleCellDrop = useCallback((dragAndDropInfo: DragAndDropInfo) => {
+    if (dragAndDropInfo.drag.rowId !== dragAndDropInfo.drop.rowId) return;
+
     setOperationData({
       portfolio: dragAndDropInfo?.drag.rowId,
       origin: dragAndDropInfo?.drag.colId,

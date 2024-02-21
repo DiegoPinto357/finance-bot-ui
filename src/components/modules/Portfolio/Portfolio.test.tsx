@@ -17,7 +17,7 @@ vi.mock('../Fixed/useSetAssetValue');
 vi.mock('../../DataTable');
 
 const selectOperation = async (operation: 'transfer' | 'swap') => {
-  const dialog = await screen.findByRole('dialog', {
+  const dialog = screen.getByRole('dialog', {
     name: 'Operation',
   });
   const transferTabButton = within(dialog).getByRole('tab', {
@@ -235,6 +235,7 @@ describe('Portfolio', () => {
           within(operationDialog).getByText('Error message!');
         expect(errorMessage).toBeInTheDocument();
 
+        // FIXME
         // error message should be clear when open dialog again
         // triggerCellDrop({
         //   drag: { colId: origin.name, rowId: portfolio },
@@ -243,7 +244,26 @@ describe('Portfolio', () => {
         // expect(errorMessage).not.toBeInTheDocument();
       });
 
-      it.todo('does not transfer value across portfolios');
+      it('does not open operations dialog to operate across portfolios', async () => {
+        const originPortfolio = 'amortecedor';
+        const destinyPortfolio = 'previdencia';
+        const origin = { class: 'fixed', name: 'iti' };
+        const destiny = { class: 'fixed', name: 'nubank' };
+
+        render(<Portfolio />);
+
+        triggerCellDrop({
+          drag: { colId: origin.name, rowId: originPortfolio },
+          drop: { colId: destiny.name, rowId: destinyPortfolio },
+        });
+
+        const dialog = screen.queryByRole('dialog', {
+          name: 'Operation',
+        });
+        expect(dialog).not.toBeInTheDocument();
+
+        // TODO render a warning message?
+      });
 
       it.todo('does not transfer value on stock and crypto - TEMP');
     });
