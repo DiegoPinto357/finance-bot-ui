@@ -43,6 +43,10 @@ describe('TransferForm', () => {
   /* @ts-ignore */
   vi.mocked(useSetAssetValue).mockReturnValue({ setAssetValue });
 
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('sets current assetvalues and executes transfer', async () => {
     const data = { portfolio: 'suricat', origin: 'iti', destiny: 'nubank' };
     const originCurrentValue = 2000;
@@ -78,6 +82,29 @@ describe('TransferForm', () => {
         destiny: { class: 'fixed', name: 'nubank' },
         value,
       });
+    });
+  });
+
+  it('does not transfer value if the form validation fails', async () => {
+    const data = { portfolio: 'suricat', origin: 'iti', destiny: 'nubank' };
+    const originCurrentValue = 2000;
+    const destinyCurrentValue = 1000;
+
+    render(
+      <TransferForm data={data} onSubmmit={() => {}} onError={() => {}} />
+    );
+
+    await fillFormField('Origin Current Value', originCurrentValue);
+    await fillFormField('Destiny Current Value', destinyCurrentValue);
+
+    const form = screen.getByRole('form', { name: 'transfer' });
+    fireEvent.submit(form);
+
+    await waitFor(() => {
+      const errorMessage = screen.getByText('Number must be greater than 0');
+      expect(errorMessage).toBeInTheDocument();
+      expect(setAssetValue).not.toBeCalled();
+      expect(transfer).not.toBeCalled();
     });
   });
 
