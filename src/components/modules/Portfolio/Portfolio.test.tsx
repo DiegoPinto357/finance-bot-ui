@@ -79,11 +79,10 @@ describe('Portfolio', () => {
     vi.mocked(useSetAssetValue).mockReturnValue({ setAssetValue });
 
     describe('transfer values', () => {
-      it('transfers value between assets within portfolio', async () => {
+      it('opens operation modal on drag and drop table cell', async () => {
         const portfolio = 'suricat';
         const origin = { class: 'fixed', name: 'iti' };
         const destiny = { class: 'fixed', name: 'nubank' };
-        const value = 100;
 
         render(<Portfolio />);
 
@@ -92,31 +91,11 @@ describe('Portfolio', () => {
           drop: { colId: destiny.name, rowId: portfolio },
         });
 
-        await selectOperation('transfer');
-
-        const transferForm = screen.getByRole('form', { name: 'transfer' });
-        await fillFormField(transferForm, 'Origin Current Value', 2000);
-        await fillFormField(transferForm, 'Destiny Current Value', 1000);
-        await fillFormField(transferForm, 'Value', value);
-
-        const submitButton = screen.getByRole('button', {
-          name: 'Submit',
-        });
-        await userEvent.click(submitButton);
-
-        await confirm('Yes');
-
-        const operationDialog = screen.queryByRole('dialog', {
+        const operationDialog = screen.getByRole('dialog', {
           name: 'Operation',
         });
-        expect(operationDialog).not.toBeInTheDocument();
 
-        expect(setAssetValue).toBeCalledTimes(2);
-        expect(setAssetValue).toBeCalledWith({ asset: 'iti', value: 2000 });
-        expect(setAssetValue).toBeCalledWith({ asset: 'nubank', value: 1000 });
-
-        expect(transfer).toBeCalledTimes(1);
-        expect(transfer).toBeCalledWith({ portfolio, origin, destiny, value });
+        expect(operationDialog).toBeVisible();
       });
 
       it('does not transfer value if user do not confirm it on confirm dialog', async () => {

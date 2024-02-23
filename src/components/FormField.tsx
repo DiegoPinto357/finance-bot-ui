@@ -1,6 +1,6 @@
 import {
   FormControl,
-  // FormDescription,
+  FormDescription,
   FormField as DefaultFormField,
   FormItem,
   FormLabel,
@@ -14,6 +14,7 @@ type Props<TFieldValues extends FieldValues> = {
   control: Control<TFieldValues>;
   name: Path<TFieldValues>;
   label: string;
+  description?: string;
   type?: React.HTMLInputTypeAttribute;
 };
 
@@ -21,6 +22,7 @@ const FormField = <TFieldValues extends FieldValues>({
   control,
   name,
   label,
+  description,
   type,
 }: Props<TFieldValues>) => {
   return (
@@ -33,9 +35,9 @@ const FormField = <TFieldValues extends FieldValues>({
           <FormControl>
             <Input {...field} type={type} />
           </FormControl>
-          {/* <FormDescription>
-        This is your public display name.
-      </FormDescription> */}
+          {description ? (
+            <FormDescription>{description}</FormDescription>
+          ) : null}
           <FormMessage />
         </FormItem>
       )}

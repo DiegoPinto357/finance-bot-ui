@@ -90,6 +90,7 @@ const TransferForm = forwardRef(({ data, onSubmmit, onError }: Props, ref) => {
           control={form.control}
           name="originCurrentValue"
           label="Origin Current Value"
+          description="Current value: R$12.354,78"
           type="number"
         />
 
