@@ -1,51 +1,9 @@
-import { forwardRef, useImperativeHandle } from 'react';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useForm } from 'react-hook-form';
-import { Form } from '@/components/ui/form';
+import { mockedOnFormSubmit } from './__mocks__/TransferForm';
 import OperationDialog from './OperationDialog';
 
-const onFormSubmit = vi.fn();
-
-vi.mock('./TransferForm', () => ({
-  default: forwardRef(
-    (
-      {
-        onSubmmit,
-        onError,
-      }: { onSubmmit: () => void; onError: (errorMessage: string) => void },
-      ref
-    ) => {
-      const form = useForm();
-
-      useImperativeHandle(ref, () => ({
-        validate: () => form.trigger(),
-      }));
-
-      const handleSubmit = async () => {
-        try {
-          onSubmmit();
-          await onFormSubmit();
-        } catch (error) {
-          if (error instanceof Error) onError(error.message);
-          else onError(String(error));
-        }
-      };
-
-      return (
-        <Form {...form}>
-          <form
-            id="operation-form"
-            aria-label="operation-form"
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="grid grid-cols-2 gap-4"
-            noValidate
-          ></form>
-        </Form>
-      );
-    }
-  ),
-}));
+vi.mock('./TransferForm');
 
 const confirm = async (action: 'Yes' | 'No') => {
   const confirmDialog = screen.getByRole('alertdialog', { name: 'Confirm?' });
@@ -84,7 +42,7 @@ describe('OperationDialog', () => {
     await userEvent.click(submitButton);
 
     await confirm('Yes');
-    expect(onFormSubmit).toBeCalledTimes(1);
+    expect(mockedOnFormSubmit).toBeCalledTimes(1);
   });
 
   it('does not submit form if user do not confirm it on confirm dialog', async () => {
@@ -109,12 +67,12 @@ describe('OperationDialog', () => {
     await userEvent.click(submitButton);
 
     await confirm('No');
-    expect(onFormSubmit).not.toBeCalled();
+    expect(mockedOnFormSubmit).not.toBeCalled();
   });
 
   it('renders error message if server fails', async () => {
     const errorMessage = 'Error message!';
-    onFormSubmit.mockRejectedValueOnce(new Error(errorMessage));
+    mockedOnFormSubmit.mockRejectedValueOnce(new Error(errorMessage));
 
     const operationData = {
       portfolio: 'suricat',
