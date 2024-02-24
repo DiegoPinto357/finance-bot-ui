@@ -6,8 +6,8 @@ import {
   waitFor,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import useTransfer from './useTransfer';
-import useSetAssetValue from '../Fixed/useSetAssetValue';
+import { mockedTransfer } from './__mocks__/useTransfer';
+import { mockedSetAssetValue } from '../Fixed/__mocks__/useSetAssetValue';
 import TransferForm from './TransferForm';
 
 vi.mock('../Fixed/useSetAssetValue');
@@ -33,16 +33,6 @@ const fillFormField = async (fieldName: string, value: string | number) => {
 };
 
 describe('TransferForm', () => {
-  const transfer = vi.fn();
-  /* @ts-ignore */
-  vi.mocked(useTransfer).mockReturnValue({
-    transfer,
-  });
-
-  const setAssetValue = vi.fn();
-  /* @ts-ignore */
-  vi.mocked(useSetAssetValue).mockReturnValue({ setAssetValue });
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -65,18 +55,18 @@ describe('TransferForm', () => {
     fireEvent.submit(form);
 
     await waitFor(() => {
-      expect(setAssetValue).toBeCalledTimes(2);
-      expect(setAssetValue).toBeCalledWith({
+      expect(mockedSetAssetValue).toBeCalledTimes(2);
+      expect(mockedSetAssetValue).toBeCalledWith({
         asset: 'iti',
         value: originCurrentValue,
       });
-      expect(setAssetValue).toBeCalledWith({
+      expect(mockedSetAssetValue).toBeCalledWith({
         asset: 'nubank',
         value: destinyCurrentValue,
       });
 
-      expect(transfer).toBeCalledTimes(1);
-      expect(transfer).toBeCalledWith({
+      expect(mockedTransfer).toBeCalledTimes(1);
+      expect(mockedTransfer).toBeCalledWith({
         portfolio: 'suricat',
         origin: { class: 'fixed', name: 'iti' },
         destiny: { class: 'fixed', name: 'nubank' },
@@ -103,8 +93,8 @@ describe('TransferForm', () => {
     await waitFor(() => {
       const errorMessage = screen.getByText('Number must be greater than 0');
       expect(errorMessage).toBeInTheDocument();
-      expect(setAssetValue).not.toBeCalled();
-      expect(transfer).not.toBeCalled();
+      expect(mockedSetAssetValue).not.toBeCalled();
+      expect(mockedTransfer).not.toBeCalled();
     });
   });
 

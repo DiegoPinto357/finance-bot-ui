@@ -1,7 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import useGetportfolioBalance from './useGetPortfolioBalance';
-import useTransfer from './useTransfer';
-import useSetAssetValue from '../Fixed/useSetAssetValue';
 import { triggerCellDrop } from '../../DataTable/__mocks__/DataTable';
 import Portfolio from '.';
 import portfolioBalance from '../../../../mockData/api/portfolio/balance';
@@ -24,16 +22,6 @@ describe('Portfolio', () => {
     vi.mocked(useGetportfolioBalance).mockReturnValue({
       data: portfolioBalance,
     } as unknown as UseQueryResult<PortfolioBalance, unknown>);
-
-    const transfer = vi.fn();
-    /* @ts-ignore */
-    vi.mocked(useTransfer).mockReturnValue({
-      transfer,
-    });
-
-    const setAssetValue = vi.fn();
-    /* @ts-ignore */
-    vi.mocked(useSetAssetValue).mockReturnValue({ setAssetValue });
 
     it('opens operation modal on drag and drop table cell', async () => {
       const portfolio = 'suricat';
