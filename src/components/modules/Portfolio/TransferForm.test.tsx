@@ -10,6 +10,7 @@ import { mockedTransfer } from './__mocks__/useTransfer';
 import { mockedSetAssetValue } from '../Fixed/__mocks__/useSetAssetValue';
 import TransferForm from './TransferForm';
 
+vi.mock('../Fixed/useGetFixedBalance');
 vi.mock('../Fixed/useSetAssetValue');
 vi.mock('./useTransfer');
 
@@ -55,8 +56,14 @@ describe('TransferForm', () => {
       />
     );
 
-    await fillFormField('Origin Current Value', originCurrentValue);
-    await fillFormField('Destiny Current Value', destinyCurrentValue);
+    await fillFormField(
+      `Origin (${operationData.originAsset}) Current Value`,
+      originCurrentValue
+    );
+    await fillFormField(
+      `Destiny (${operationData.destinyAsset}) Current Value`,
+      destinyCurrentValue
+    );
     await fillFormField('Value', value);
 
     const form = screen.getByRole('form', { name: 'transfer' });
@@ -100,8 +107,14 @@ describe('TransferForm', () => {
       />
     );
 
-    await fillFormField('Origin Current Value', originCurrentValue);
-    await fillFormField('Destiny Current Value', destinyCurrentValue);
+    await fillFormField(
+      `Origin (${operationData.originAsset}) Current Value`,
+      originCurrentValue
+    );
+    await fillFormField(
+      `Destiny (${operationData.destinyAsset}) Current Value`,
+      destinyCurrentValue
+    );
 
     const form = screen.getByRole('form', { name: 'transfer' });
     fireEvent.submit(form);
@@ -114,10 +127,7 @@ describe('TransferForm', () => {
     });
   });
 
-  it.skip('renders current origin and destiny values on field descriptions', async () => {
-    // mock current asset values
-    // const originCurrentValue = 12567.74;
-    // const destinyCurrentValue = 357;
+  it('renders current origin and destiny values on field descriptions', async () => {
     const operationData = {
       portfolio: 'suricat',
       originAsset: 'iti',
@@ -134,18 +144,17 @@ describe('TransferForm', () => {
 
     const form = screen.getByRole('form', { name: 'transfer' });
     const originCurrentValueField = within(form).getByRole('spinbutton', {
-      name: 'Origin Current Value',
+      name: `Origin (${operationData.originAsset}) Current Value`,
     });
     const destinyCurrentValueField = within(form).getByRole('spinbutton', {
-      name: 'Origin Current Value',
+      name: `Destiny (${operationData.destinyAsset}) Current Value`,
     });
 
-    // format currency values
     expect(originCurrentValueField).toHaveAccessibleDescription(
-      'Current value: R$12.567,74'
+      'Current value: R$ 6.943,70'
     );
     expect(destinyCurrentValueField).toHaveAccessibleDescription(
-      'Current value: R$357,00'
+      'Current value: R$ 12.340,05'
     );
   });
 

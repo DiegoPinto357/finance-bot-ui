@@ -56,7 +56,7 @@ const OperationDialog = ({
         <DialogContent className="sm:max-w-[360px]">
           <DialogHeader>
             <DialogTitle>Operation</DialogTitle>
-            <div className="text-sm text-muted-foreground">
+            <div className="py-2 text-sm text-muted-foreground">
               <Typography variant="p">
                 {'Portfolio: '}
                 <b>{operationData.portfolio}</b>

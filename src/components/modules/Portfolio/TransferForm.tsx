@@ -4,7 +4,10 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
 import FormField from '@/components/FormField';
+import { formatCurrency } from '@/lib/formatNumber';
+
 import useTransfer from './useTransfer';
+import useGetFixedBalance from '../Fixed/useGetFixedBalance';
 import useSetAssetValue from '../Fixed/useSetAssetValue';
 
 import { DragAndDropOperationData } from './types';
@@ -45,8 +48,21 @@ const TransferForm = forwardRef(
       validate: () => form.trigger(),
     }));
 
+    const { originAsset, destinyAsset } = operationData;
+    // TODO move this call to Operations form to avoid it being called everytime the form is changed
+    const { data: fixedBalance } = useGetFixedBalance([
+      originAsset,
+      destinyAsset,
+    ]);
     const { transfer } = useTransfer();
     const { setAssetValue } = useSetAssetValue();
+
+    const originCurrentValue = fixedBalance?.balance.find(
+      ({ asset }) => asset === originAsset
+    )?.value;
+    const destinyCurrentValue = fixedBalance?.balance.find(
+      ({ asset }) => asset === destinyAsset
+    )?.value;
 
     const handleSubmit = useCallback(
       async ({
@@ -91,15 +107,18 @@ const TransferForm = forwardRef(
           <FormField
             control={form.control}
             name="originCurrentValue"
-            label="Origin Current Value"
-            description="Current value: R$12.354,78"
+            label={`Origin (${originAsset}) Current Value`}
+            description={`Current value: ${formatCurrency(originCurrentValue)}`}
             type="number"
           />
 
           <FormField
             control={form.control}
             name="destinyCurrentValue"
-            label="Destiny Current Value"
+            label={`Destiny (${destinyAsset}) Current Value`}
+            description={`Current value: ${formatCurrency(
+              destinyCurrentValue
+            )}`}
             type="number"
           />
 
