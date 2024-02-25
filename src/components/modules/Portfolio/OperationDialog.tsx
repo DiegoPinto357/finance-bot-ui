@@ -38,7 +38,6 @@ const OperationDialog = ({
   operationData,
   onOpenChange,
 }: Props) => {
-  console.log('OperationDialog');
   const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
