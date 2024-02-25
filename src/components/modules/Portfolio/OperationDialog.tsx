@@ -9,8 +9,8 @@ import {
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import ConfirmDialog from '@/components/ConfirmDialog';
-import Typography from '@/components/Typography';
+import ConfirmDialog from '@/components/lib/ConfirmDialog';
+import Typography from '@/components/lib/Typography';
 import useGetFixedBalance from '../Fixed/useGetFixedBalance';
 import TransferForm from './TransferForm';
 

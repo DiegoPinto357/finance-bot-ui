@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
-import FormField from '@/components/FormField';
+import FormField from '@/components/lib/FormField';
 import { formatCurrency } from '@/lib/formatNumber';
 
 import useTransfer from './useTransfer';

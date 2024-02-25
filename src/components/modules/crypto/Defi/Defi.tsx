@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import Typography from '@/components/Typography';
+import Typography from '@/components/lib/Typography';
 import cryptoService from '../../../../services/crypto';
 
 const Defi = () => {

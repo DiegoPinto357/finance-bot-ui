@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
-import Typography from '@/components/Typography';
-import Loader from '@/components/Loader';
+import Typography from '@/components/lib/Typography';
+import Loader from '@/components/lib/Loader';
 import DataTable from '@/components/DataTable';
 import { formatCurrency } from '@/lib/formatNumber';
 import { TableColumns } from './TableColumns';

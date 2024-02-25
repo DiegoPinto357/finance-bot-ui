@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import Typography from './Typography';
+import Typography from './lib/Typography';
 import Home from './Home';
 import CryptoHodl from './modules/crypto/Hodl';
 import CryptoDefi from './modules/crypto/Defi';

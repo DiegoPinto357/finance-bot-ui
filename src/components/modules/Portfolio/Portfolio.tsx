@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
-import Typography from '@/components/Typography';
-import Loader from '@/components/Loader';
+import Typography from '@/components/lib/Typography';
+import Loader from '@/components/lib/Loader';
 import {
   Drawer,
   DrawerClose,
