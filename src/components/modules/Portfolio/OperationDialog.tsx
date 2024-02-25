@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import Typography from '@/components/Typography';
+import useGetFixedBalance from '../Fixed/useGetFixedBalance';
 import TransferForm from './TransferForm';
 
 import { DragAndDropOperationData } from './types';
@@ -37,8 +38,22 @@ const OperationDialog = ({
   operationData,
   onOpenChange,
 }: Props) => {
+  console.log('OperationDialog');
   const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const { originAsset, destinyAsset } = operationData;
+  const { data: fixedBalance } = useGetFixedBalance([
+    originAsset,
+    destinyAsset,
+  ]);
+
+  const originCurrentValue =
+    fixedBalance?.balance.find(({ asset }) => asset === originAsset)?.value ||
+    0;
+  const destinyCurrentValue =
+    fixedBalance?.balance.find(({ asset }) => asset === destinyAsset)?.value ||
+    0;
 
   const renderTabs = operations.length > 1;
 
@@ -96,6 +111,10 @@ const OperationDialog = ({
                     <TransferForm
                       ref={formRef}
                       operationData={operationData}
+                      currentAssetValues={{
+                        originCurrentValue,
+                        destinyCurrentValue,
+                      }}
                       onSubmmit={() => onOpenChange(false)}
                       onError={setErrorMessage}
                     />

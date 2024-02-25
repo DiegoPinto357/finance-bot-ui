@@ -7,7 +7,6 @@ import FormField from '@/components/FormField';
 import { formatCurrency } from '@/lib/formatNumber';
 
 import useTransfer from './useTransfer';
-import useGetFixedBalance from '../Fixed/useGetFixedBalance';
 import useSetAssetValue from '../Fixed/useSetAssetValue';
 
 import { DragAndDropOperationData } from './types';
@@ -30,15 +29,24 @@ const defaultValues: DefaultValues = {
   value: '',
 };
 
+type CurrentAssetValues = {
+  originCurrentValue: number;
+  destinyCurrentValue: number;
+};
+
 type Props = {
   operationData: DragAndDropOperationData;
+  currentAssetValues: CurrentAssetValues;
   data?: TransferFormSchema;
   onSubmmit: () => void;
   onError: (errorMessage: string) => void;
 };
 
 const TransferForm = forwardRef(
-  ({ operationData, data, onSubmmit, onError }: Props, ref) => {
+  (
+    { operationData, currentAssetValues, data, onSubmmit, onError }: Props,
+    ref
+  ) => {
     const form = useForm<DefaultValues, void, FormSchema>({
       resolver: zodResolver(formSchema),
       defaultValues: { ...defaultValues, ...data },
@@ -48,21 +56,11 @@ const TransferForm = forwardRef(
       validate: () => form.trigger(),
     }));
 
-    const { originAsset, destinyAsset } = operationData;
-    // TODO move this call to Operations form to avoid it being called everytime the form is changed
-    const { data: fixedBalance } = useGetFixedBalance([
-      originAsset,
-      destinyAsset,
-    ]);
     const { transfer } = useTransfer();
     const { setAssetValue } = useSetAssetValue();
 
-    const originCurrentValue = fixedBalance?.balance.find(
-      ({ asset }) => asset === originAsset
-    )?.value;
-    const destinyCurrentValue = fixedBalance?.balance.find(
-      ({ asset }) => asset === destinyAsset
-    )?.value;
+    const { originAsset, destinyAsset } = operationData;
+    const { originCurrentValue, destinyCurrentValue } = currentAssetValues;
 
     const handleSubmit = useCallback(
       async ({

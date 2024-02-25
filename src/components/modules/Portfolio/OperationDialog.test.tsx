@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { mockedOnFormSubmit } from './__mocks__/TransferForm';
 import OperationDialog from './OperationDialog';
 
+vi.mock('../Fixed/useGetFixedBalance');
 vi.mock('./TransferForm');
 
 const confirm = async (action: 'Yes' | 'No') => {
@@ -16,17 +17,17 @@ const confirm = async (action: 'Yes' | 'No') => {
 };
 
 describe('OperationDialog', () => {
+  const operationData = {
+    portfolio: 'suricat',
+    originAsset: 'iti',
+    destinyAsset: 'nubank',
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('submits form if user confirms it on confirm dialog', async () => {
-    const operationData = {
-      portfolio: 'suricat',
-      origin: 'iti',
-      destiny: 'nubank',
-    };
-
     render(
       <OperationDialog
         open
@@ -46,12 +47,6 @@ describe('OperationDialog', () => {
   });
 
   it('does not submit form if user do not confirm it on confirm dialog', async () => {
-    const operationData = {
-      portfolio: 'suricat',
-      origin: 'iti',
-      destiny: 'nubank',
-    };
-
     render(
       <OperationDialog
         open
@@ -73,12 +68,6 @@ describe('OperationDialog', () => {
   it('renders error message if server fails', async () => {
     const errorMessage = 'Error message!';
     mockedOnFormSubmit.mockRejectedValueOnce(new Error(errorMessage));
-
-    const operationData = {
-      portfolio: 'suricat',
-      origin: 'iti',
-      destiny: 'nubank',
-    };
 
     render(
       <OperationDialog

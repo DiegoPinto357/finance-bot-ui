@@ -55,6 +55,10 @@ describe('Portfolio', () => {
       // TODO render a warning message?
     });
 
+    it.todo(
+      'does not open operations dialog if origin and destiny assets are the same'
+    );
+
     it.todo('does not open operations dialog on stock and crypto - TEMP');
   });
 });

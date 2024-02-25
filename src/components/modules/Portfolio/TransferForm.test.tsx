@@ -10,7 +10,6 @@ import { mockedTransfer } from './__mocks__/useTransfer';
 import { mockedSetAssetValue } from '../Fixed/__mocks__/useSetAssetValue';
 import TransferForm from './TransferForm';
 
-vi.mock('../Fixed/useGetFixedBalance');
 vi.mock('../Fixed/useSetAssetValue');
 vi.mock('./useTransfer');
 
@@ -34,23 +33,28 @@ const fillFormField = async (fieldName: string, value: string | number) => {
 };
 
 describe('TransferForm', () => {
+  const operationData = {
+    portfolio: 'suricat',
+    originAsset: 'iti',
+    destinyAsset: 'nubank',
+  };
+  const currentAssetValues = {
+    originCurrentValue: 1950,
+    destinyCurrentValue: 876,
+  };
+  const newOriginCurrentValue = 2000;
+  const newDestinyCurrentValue = 1000;
+  const value = 100;
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('sets current assetvalues and executes transfer', async () => {
-    const operationData = {
-      portfolio: 'suricat',
-      originAsset: 'iti',
-      destinyAsset: 'nubank',
-    };
-    const originCurrentValue = 2000;
-    const destinyCurrentValue = 1000;
-    const value = 100;
-
     render(
       <TransferForm
         operationData={operationData}
+        currentAssetValues={currentAssetValues}
         onSubmmit={() => {}}
         onError={() => {}}
       />
@@ -58,11 +62,11 @@ describe('TransferForm', () => {
 
     await fillFormField(
       `Origin (${operationData.originAsset}) Current Value`,
-      originCurrentValue
+      newOriginCurrentValue
     );
     await fillFormField(
       `Destiny (${operationData.destinyAsset}) Current Value`,
-      destinyCurrentValue
+      newDestinyCurrentValue
     );
     await fillFormField('Value', value);
 
@@ -73,11 +77,11 @@ describe('TransferForm', () => {
       expect(mockedSetAssetValue).toBeCalledTimes(2);
       expect(mockedSetAssetValue).toBeCalledWith({
         asset: 'iti',
-        value: originCurrentValue,
+        value: newOriginCurrentValue,
       });
       expect(mockedSetAssetValue).toBeCalledWith({
         asset: 'nubank',
-        value: destinyCurrentValue,
+        value: newDestinyCurrentValue,
       });
 
       expect(mockedTransfer).toBeCalledTimes(1);
@@ -91,17 +95,10 @@ describe('TransferForm', () => {
   });
 
   it('does not transfer value if the form validation fails', async () => {
-    const operationData = {
-      portfolio: 'suricat',
-      originAsset: 'iti',
-      destinyAsset: 'nubank',
-    };
-    const originCurrentValue = 2000;
-    const destinyCurrentValue = 1000;
-
     render(
       <TransferForm
         operationData={operationData}
+        currentAssetValues={currentAssetValues}
         onSubmmit={() => {}}
         onError={() => {}}
       />
@@ -109,11 +106,11 @@ describe('TransferForm', () => {
 
     await fillFormField(
       `Origin (${operationData.originAsset}) Current Value`,
-      originCurrentValue
+      newOriginCurrentValue
     );
     await fillFormField(
       `Destiny (${operationData.destinyAsset}) Current Value`,
-      destinyCurrentValue
+      newDestinyCurrentValue
     );
 
     const form = screen.getByRole('form', { name: 'transfer' });
@@ -128,15 +125,10 @@ describe('TransferForm', () => {
   });
 
   it('renders current origin and destiny values on field descriptions', async () => {
-    const operationData = {
-      portfolio: 'suricat',
-      originAsset: 'iti',
-      destinyAsset: 'nubank',
-    };
-
     render(
       <TransferForm
         operationData={operationData}
+        currentAssetValues={currentAssetValues}
         onSubmmit={() => {}}
         onError={() => {}}
       />
@@ -151,10 +143,10 @@ describe('TransferForm', () => {
     });
 
     expect(originCurrentValueField).toHaveAccessibleDescription(
-      'Current value: R$ 6.943,70'
+      'Current value: R$ 1.950,00'
     );
     expect(destinyCurrentValueField).toHaveAccessibleDescription(
-      'Current value: R$ 12.340,05'
+      'Current value: R$ 876,00'
     );
   });
 
