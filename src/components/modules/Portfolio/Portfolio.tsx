@@ -23,7 +23,7 @@ import type {
   AssetBalance,
   PortfolioBalance,
 } from '../../../services/portfolio';
-import type { TransferFormSchema } from './TransferForm';
+import type { DragAndDropOperationData } from './types';
 
 const mapBalance = (
   rawBalance: AssetBalance[] | undefined,
@@ -75,7 +75,9 @@ const Portfolio = () => {
   const [openOperationDialog, setOpenOperationDialog] =
     useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
-  const [operationData, setOperationData] = useState<TransferFormSchema>({});
+  const [operationData, setOperationData] = useState<
+    DragAndDropOperationData | undefined
+  >(undefined);
 
   const handlePortfolioClick = useCallback((portfolio: string) => {
     console.log({ portfolio });
@@ -89,8 +91,8 @@ const Portfolio = () => {
 
     setOperationData({
       portfolio: dragAndDropInfo?.drag.rowId,
-      origin: dragAndDropInfo?.drag.colId,
-      destiny: dragAndDropInfo?.drop.colId,
+      originAsset: dragAndDropInfo?.drag.colId,
+      destinyAsset: dragAndDropInfo?.drop.colId,
     });
     setOpenOperationDialog(true);
   }, []);
@@ -114,12 +116,14 @@ const Portfolio = () => {
         </>
       )}
 
-      <OperationDialog
-        open={openOperationDialog}
-        operations={['transfer', 'swap']}
-        operationData={operationData}
-        onOpenChange={setOpenOperationDialog}
-      />
+      {operationData ? (
+        <OperationDialog
+          open={openOperationDialog}
+          operations={['transfer', 'swap']}
+          operationData={operationData}
+          onOpenChange={setOpenOperationDialog}
+        />
+      ) : null}
 
       <Drawer direction="right" open={openDrawer} onOpenChange={setOpenDrawer}>
         <DrawerContent className="mt-0 top-0 left-auto rounded-none">

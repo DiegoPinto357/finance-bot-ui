@@ -49,7 +49,7 @@ const Typography = ({
       );
 
     case 'p':
-      return <p className={`leading-7  ${className}`}>{children}</p>;
+      return <p className={`leading-6  ${className}`}>{children}</p>;
   }
 };
 

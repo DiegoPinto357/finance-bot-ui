@@ -38,13 +38,21 @@ describe('TransferForm', () => {
   });
 
   it('sets current assetvalues and executes transfer', async () => {
-    const data = { portfolio: 'suricat', origin: 'iti', destiny: 'nubank' };
+    const operationData = {
+      portfolio: 'suricat',
+      originAsset: 'iti',
+      destinyAsset: 'nubank',
+    };
     const originCurrentValue = 2000;
     const destinyCurrentValue = 1000;
     const value = 100;
 
     render(
-      <TransferForm data={data} onSubmmit={() => {}} onError={() => {}} />
+      <TransferForm
+        operationData={operationData}
+        onSubmmit={() => {}}
+        onError={() => {}}
+      />
     );
 
     await fillFormField('Origin Current Value', originCurrentValue);
@@ -76,12 +84,20 @@ describe('TransferForm', () => {
   });
 
   it('does not transfer value if the form validation fails', async () => {
-    const data = { portfolio: 'suricat', origin: 'iti', destiny: 'nubank' };
+    const operationData = {
+      portfolio: 'suricat',
+      originAsset: 'iti',
+      destinyAsset: 'nubank',
+    };
     const originCurrentValue = 2000;
     const destinyCurrentValue = 1000;
 
     render(
-      <TransferForm data={data} onSubmmit={() => {}} onError={() => {}} />
+      <TransferForm
+        operationData={operationData}
+        onSubmmit={() => {}}
+        onError={() => {}}
+      />
     );
 
     await fillFormField('Origin Current Value', originCurrentValue);
@@ -102,8 +118,19 @@ describe('TransferForm', () => {
     // mock current asset values
     // const originCurrentValue = 12567.74;
     // const destinyCurrentValue = 357;
+    const operationData = {
+      portfolio: 'suricat',
+      originAsset: 'iti',
+      destinyAsset: 'nubank',
+    };
 
-    render(<TransferForm onSubmmit={() => {}} onError={() => {}} />);
+    render(
+      <TransferForm
+        operationData={operationData}
+        onSubmmit={() => {}}
+        onError={() => {}}
+      />
+    );
 
     const form = screen.getByRole('form', { name: 'transfer' });
     const originCurrentValueField = within(form).getByRole('spinbutton', {

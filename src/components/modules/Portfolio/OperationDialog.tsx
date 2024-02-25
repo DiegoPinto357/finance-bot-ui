@@ -3,7 +3,6 @@ import { useState, useRef, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
-  // DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -14,7 +13,7 @@ import ConfirmDialog from '@/components/ConfirmDialog';
 import Typography from '@/components/Typography';
 import TransferForm from './TransferForm';
 
-import type { TransferFormSchema } from './TransferForm';
+import { DragAndDropOperationData } from './types';
 
 type Operation = 'transfer' | 'swap' | 'deposit' | 'withdrawn';
 
@@ -28,7 +27,7 @@ type Operation = 'transfer' | 'swap' | 'deposit' | 'withdrawn';
 type Props = {
   open: boolean;
   operations: Operation[];
-  operationData: TransferFormSchema; // TODO support multiple operations
+  operationData: DragAndDropOperationData;
   onOpenChange: (open: boolean) => void;
 };
 
@@ -54,12 +53,25 @@ const OperationDialog = ({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[360px]">
           <DialogHeader>
             <DialogTitle>Operation</DialogTitle>
-            {/* <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DialogDescription> */}
+            <div className="text-sm text-muted-foreground">
+              <Typography variant="p">
+                {'Portfolio: '}
+                <b>{operationData.portfolio}</b>
+              </Typography>
+
+              <Typography variant="p">
+                {'Origin Asset: '}
+                <b>{operationData.originAsset}</b>
+              </Typography>
+
+              <Typography variant="p">
+                {'Destiny Asset: '}
+                <b>{operationData.destinyAsset}</b>
+              </Typography>
+            </div>
           </DialogHeader>
 
           {renderTabs ? (
@@ -83,7 +95,7 @@ const OperationDialog = ({
                     {/* <FormComponent data={{ username: 'Diego' }} /> */}
                     <TransferForm
                       ref={formRef}
-                      data={operationData}
+                      operationData={operationData}
                       onSubmmit={() => onOpenChange(false)}
                       onError={setErrorMessage}
                     />
@@ -94,7 +106,9 @@ const OperationDialog = ({
           ) : null}
 
           <DialogFooter>
+            {/* TODO adjst button label based on selected operation */}
             <Button
+              className="w-full"
               onClick={async () => {
                 if (formRef.current && (await formRef.current.validate())) {
                   setConfirmDialogOpen(true);

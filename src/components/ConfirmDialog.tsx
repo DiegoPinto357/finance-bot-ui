@@ -18,7 +18,7 @@ type Props = {
 const ConfirmDialog = ({ open, form, onOpenChange, onConfirm }: Props) => {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="sm:max-w-[320px]">
+      <AlertDialogContent className="sm:max-w-[280px]">
         <AlertDialogHeader>
           <AlertDialogTitle>Confirm?</AlertDialogTitle>
         </AlertDialogHeader>
