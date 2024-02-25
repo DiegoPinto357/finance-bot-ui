@@ -117,7 +117,7 @@ describe('TransferForm', () => {
     fireEvent.submit(form);
 
     await waitFor(() => {
-      const errorMessage = screen.getByText('Number must be greater than 0');
+      const errorMessage = screen.getByText('Required field');
       expect(errorMessage).toBeInTheDocument();
       expect(mockedSetAssetValue).not.toBeCalled();
       expect(mockedTransfer).not.toBeCalled();
@@ -150,7 +150,32 @@ describe('TransferForm', () => {
     );
   });
 
-  it.todo('skips setting current asset values before transfer');
+  it('skips setting current asset values before transfer', async () => {
+    render(
+      <TransferForm
+        operationData={operationData}
+        currentAssetValues={currentAssetValues}
+        onSubmmit={() => {}}
+        onError={() => {}}
+      />
+    );
+
+    await fillFormField('Value', value);
+
+    const form = screen.getByRole('form', { name: 'transfer' });
+    fireEvent.submit(form);
+
+    await waitFor(() => {
+      expect(mockedSetAssetValue).not.toBeCalled();
+      expect(mockedTransfer).toBeCalledTimes(1);
+      expect(mockedTransfer).toBeCalledWith({
+        portfolio: 'suricat',
+        origin: { class: 'fixed', name: 'iti' },
+        destiny: { class: 'fixed', name: 'nubank' },
+        value,
+      });
+    });
+  });
 
   it.todo('transfers all available funds');
 });
