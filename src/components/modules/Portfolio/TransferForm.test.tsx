@@ -1,10 +1,4 @@
-import {
-  render,
-  screen,
-  within,
-  fireEvent,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockedTransfer } from './__mocks__/useTransfer';
 import { mockedSetAssetValue } from '../Fixed/__mocks__/useSetAssetValue';
@@ -25,8 +19,7 @@ const fillFormField = async (fieldName: string, value: string | number) => {
     fieldValue = value;
   }
 
-  const form = screen.getByRole('form', { name: 'transfer' });
-  const field = within(form).getByRole(fieldRole, {
+  const field = screen.getByRole(fieldRole, {
     name: fieldName,
   });
   await userEvent.type(field, fieldValue);
@@ -134,11 +127,10 @@ describe('TransferForm', () => {
       />
     );
 
-    const form = screen.getByRole('form', { name: 'transfer' });
-    const originCurrentValueField = within(form).getByRole('spinbutton', {
+    const originCurrentValueField = screen.getByRole('spinbutton', {
       name: `Origin (${operationData.originAsset}) Current Value`,
     });
-    const destinyCurrentValueField = within(form).getByRole('spinbutton', {
+    const destinyCurrentValueField = screen.getByRole('spinbutton', {
       name: `Destiny (${operationData.destinyAsset}) Current Value`,
     });
 
@@ -177,5 +169,38 @@ describe('TransferForm', () => {
     });
   });
 
-  it.todo('transfers all available funds');
+  it('transfers all available funds', async () => {
+    render(
+      <TransferForm
+        operationData={operationData}
+        currentAssetValues={currentAssetValues}
+        onSubmmit={() => {}}
+        onError={() => {}}
+      />
+    );
+
+    const form = screen.getByRole('form', { name: 'transfer' });
+
+    const transferAllFundsCheckbox = screen.getByRole('checkbox', {
+      name: 'Transfer all funds',
+    });
+    await userEvent.click(transferAllFundsCheckbox);
+
+    const valueField = screen.getByRole('spinbutton', {
+      name: 'Value',
+    });
+    expect(valueField).toBeDisabled();
+
+    fireEvent.submit(form);
+
+    await waitFor(() => {
+      expect(mockedTransfer).toBeCalledTimes(1);
+      expect(mockedTransfer).toBeCalledWith({
+        portfolio: 'suricat',
+        origin: { class: 'fixed', name: 'iti' },
+        destiny: { class: 'fixed', name: 'nubank' },
+        value: 'all',
+      });
+    });
+  });
 });

@@ -1,9 +1,10 @@
-import { forwardRef, useImperativeHandle, useCallback } from 'react';
+import { forwardRef, useImperativeHandle, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
 import FormField from '@/components/lib/FormField';
+import FormCheckbox from '@/components/lib/FormCheckbox';
 import { currencyField, optionalCurrencyField } from '@/lib/formFieldSchema';
 import { formatCurrency } from '@/lib/formatNumber';
 
@@ -12,23 +13,28 @@ import useSetAssetValue from '../Fixed/useSetAssetValue';
 
 import { DragAndDropOperationData } from './types';
 
-const formSchema = z.object({
-  originCurrentValue: optionalCurrencyField,
-  destinyCurrentValue: optionalCurrencyField,
-  value: currencyField,
-});
+const createFormSchema = (isValueOptional: boolean) =>
+  z.object({
+    originCurrentValue: optionalCurrencyField,
+    destinyCurrentValue: optionalCurrencyField,
+    allFundsValue: z.coerce.boolean(),
+    value: isValueOptional ? currencyField.optional() : currencyField,
+  });
 
-type FormSchema = z.infer<typeof formSchema>;
+type FormSchema = z.infer<ReturnType<typeof createFormSchema>>;
 
-export type TransferFormSchema = Partial<FormSchema>;
+type TransferFormSchema = Partial<FormSchema>;
 
-type DefaultValues = Partial<Record<keyof FormSchema, string | number>>;
+type DefaultValues = Partial<
+  Record<keyof FormSchema, string | number | boolean>
+>;
 
 const defaultValues: DefaultValues = {
   originCurrentValue: '',
   destinyCurrentValue: '',
+  allFundsValue: '',
   value: '',
-};
+} as const;
 
 type CurrentAssetValues = {
   originCurrentValue: number;
@@ -48,8 +54,11 @@ const TransferForm = forwardRef(
     { operationData, currentAssetValues, data, onSubmmit, onError }: Props,
     ref
   ) => {
+    const [valueFieldDisabled, setValueFieldDisabled] =
+      useState<boolean>(false);
+
     const form = useForm<DefaultValues, void, FormSchema>({
-      resolver: zodResolver(formSchema),
+      resolver: zodResolver(createFormSchema(valueFieldDisabled)),
       defaultValues: { ...defaultValues, ...data },
     });
 
@@ -68,6 +77,7 @@ const TransferForm = forwardRef(
         originCurrentValue,
         destinyCurrentValue,
         value,
+        allFundsValue,
       }: FormSchema) => {
         const { portfolio, originAsset, destinyAsset } = operationData;
         try {
@@ -89,7 +99,7 @@ const TransferForm = forwardRef(
             portfolio: portfolio,
             origin: { class: 'fixed', name: originAsset },
             destiny: { class: 'fixed', name: destinyAsset },
-            value: value,
+            value: allFundsValue ? 'all' : value || 0,
           });
 
           onSubmmit();
@@ -128,11 +138,19 @@ const TransferForm = forwardRef(
             type="number"
           />
 
+          <FormCheckbox
+            control={form.control}
+            name="allFundsValue"
+            label="Transfer all funds"
+            onChange={setValueFieldDisabled}
+          />
+
           <FormField
             control={form.control}
             name="value"
             label="Value"
             type="number"
+            disabled={valueFieldDisabled}
           />
         </form>
       </Form>
