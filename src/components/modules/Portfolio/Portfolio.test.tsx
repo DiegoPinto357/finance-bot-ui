@@ -30,7 +30,6 @@ describe('Portfolio', () => {
       const operationDialog = screen.getByRole('dialog', {
         name: 'Operation',
       });
-
       expect(operationDialog).toBeVisible();
     });
 
@@ -47,17 +46,31 @@ describe('Portfolio', () => {
         drop: { colId: destiny.name, rowId: destinyPortfolio },
       });
 
-      const dialog = screen.queryByRole('dialog', {
+      const operationDialog = screen.queryByRole('dialog', {
         name: 'Operation',
       });
-      expect(dialog).not.toBeInTheDocument();
+      expect(operationDialog).not.toBeInTheDocument();
 
       // TODO render a warning message?
     });
 
-    it.todo(
-      'does not open operations dialog if origin and destiny assets are the same'
-    );
+    it('does not open operations dialog if origin and destiny assets are the same', () => {
+      const portfolio = 'suricat';
+      const origin = { class: 'fixed', name: 'iti' };
+      const destiny = { class: 'fixed', name: 'iti' };
+
+      render(<Portfolio />);
+
+      triggerCellDrop({
+        drag: { colId: origin.name, rowId: portfolio },
+        drop: { colId: destiny.name, rowId: portfolio },
+      });
+
+      const operationDialog = screen.queryByRole('dialog', {
+        name: 'Operation',
+      });
+      expect(operationDialog).not.toBeInTheDocument();
+    });
 
     it.todo('does not open operations dialog on stock and crypto - TEMP');
   });

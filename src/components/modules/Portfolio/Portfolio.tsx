@@ -86,13 +86,14 @@ const Portfolio = () => {
 
   const mappedData = data ? mapData(data) : [];
 
-  const handleCellDrop = useCallback((dragAndDropInfo: DragAndDropInfo) => {
-    if (dragAndDropInfo.drag.rowId !== dragAndDropInfo.drop.rowId) return;
+  const handleCellDrop = useCallback(({ drag, drop }: DragAndDropInfo) => {
+    if (drag.rowId !== drop.rowId) return;
+    if (drag.colId === drop.colId) return;
 
     setOperationData({
-      portfolio: dragAndDropInfo?.drag.rowId,
-      originAsset: dragAndDropInfo?.drag.colId,
-      destinyAsset: dragAndDropInfo?.drop.colId,
+      portfolio: drag.rowId,
+      originAsset: drag.colId,
+      destinyAsset: drop.colId,
     });
     setOpenOperationDialog(true);
   }, []);
