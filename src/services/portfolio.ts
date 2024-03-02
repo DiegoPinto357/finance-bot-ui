@@ -1,7 +1,4 @@
-import axios from 'axios';
-
-const host = 'http://localhost:3001';
-// const host = 'http://192.168.1.200:3001';
+import httpClient from '@/lib/httpClient';
 
 export type AssetBalance = {
   asset: string;
@@ -33,9 +30,8 @@ export type PortfolioBalance = {
 };
 
 const getBalance = async () => {
-  const url = `${host}/api/portfolio/balance`;
-  const response = await axios.get<PortfolioBalance>(url);
-  return response.data;
+  const url = `/api/portfolio/balance`;
+  return await httpClient.get<PortfolioBalance>(url);
 };
 
 type Portfolio = string;
@@ -64,9 +60,8 @@ export type TransferParams = {
 };
 
 const transfer = async (data: TransferParams) => {
-  const url = `${host}/api/portfolio/transfer`;
-  const response = await axios.post<{ status: string }>(url, data);
-  return response.data;
+  const url = `/api/portfolio/transfer`;
+  return await httpClient.post<{ status: string }>(url, data);
 };
 
 export default {

@@ -1,7 +1,4 @@
-import axios from 'axios';
-
-const host = 'http://localhost:3001';
-// const host = 'http://192.168.1.200:3001';
+import httpClient from '@/lib/httpClient';
 
 type FixedAssetBalance = {
   asset: string;
@@ -15,11 +12,10 @@ export type FixedBalance = {
 };
 
 const getBalance = async (assetName?: string | string[]) => {
-  const url = `${host}/api/fixed/balance`;
-  const response = await axios.get<FixedBalance>(url, {
+  const url = `/api/fixed/balance`;
+  return await httpClient.get<FixedBalance>(url, {
     params: { assetName },
   });
-  return response.data;
 };
 
 type SetAssetValueParams = {
@@ -28,8 +24,8 @@ type SetAssetValueParams = {
 };
 
 const setAssetValue = async (data: SetAssetValueParams) => {
-  const url = `${host}/api/fixed/asset-value`;
-  await axios.post(url, data);
+  const url = `/api/fixed/asset-value`;
+  await httpClient.post(url, data);
   // TODO return data?
 };
 
