@@ -1,5 +1,5 @@
 // import React from 'react';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, forwardRef } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -13,17 +13,20 @@ import ConfirmDialog from '@/components/lib/ConfirmDialog';
 import Typography from '@/components/lib/Typography';
 import useGetFixedBalance from '../Fixed/useGetFixedBalance';
 import TransferForm from './TransferForm';
+import SwapForm from './SwapForm';
 
-import { DragAndDropOperationData } from './types';
+import type { ForwardRefExoticComponent } from 'react';
+import type { DragAndDropOperationData } from './types';
 
 type Operation = 'transfer' | 'swap' | 'deposit' | 'withdrawn';
 
-// const FormComponents: Record<Operation, React.FC> = {
-//   transfer: TransferForm,
-//   swap: () => <div>swap</div>,
-//   deposit: () => <div>deposit</div>,
-//   withdrawn: () => <div>withdrawn</div>,
-// };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const FormComponents: Record<Operation, ForwardRefExoticComponent<any>> = {
+  transfer: TransferForm,
+  swap: SwapForm,
+  deposit: forwardRef(() => <div>deposit</div>),
+  withdrawn: forwardRef(() => <div>withdrawn</div>),
+};
 
 type Props = {
   open: boolean;
@@ -98,7 +101,7 @@ const OperationDialog = ({
                 ))}
               </TabsList>
               {operations.map(operation => {
-                // const FormComponent = FormComponents[operation];
+                const FormComponent = FormComponents[operation];
                 return (
                   <TabsContent
                     key={`${operation}-content`}
@@ -106,8 +109,7 @@ const OperationDialog = ({
                     value={operation}
                     tabIndex={-1}
                   >
-                    {/* <FormComponent data={{ username: 'Diego' }} /> */}
-                    <TransferForm
+                    <FormComponent
                       ref={formRef}
                       operationData={operationData}
                       currentAssetValues={{

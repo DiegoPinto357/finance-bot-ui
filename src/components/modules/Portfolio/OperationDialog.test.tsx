@@ -5,6 +5,7 @@ import OperationDialog from './OperationDialog';
 
 vi.mock('../Fixed/useGetFixedBalance');
 vi.mock('./TransferForm');
+vi.mock('./SwapForm');
 
 const confirm = async (action: 'Yes' | 'No') => {
   const confirmDialog = screen.getByRole('alertdialog', { name: 'Confirm?' });
@@ -25,6 +26,31 @@ describe('OperationDialog', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  it('renders corresponding form when clicking on tabs', async () => {
+    render(
+      <OperationDialog
+        open
+        operations={['transfer', 'swap']}
+        operationData={operationData}
+        onOpenChange={() => {}}
+      />
+    );
+
+    const transferTab = screen.getByRole('tab', { name: 'transfer' });
+    const swapTab = screen.getByRole('tab', { name: 'swap' });
+
+    let transferForm = screen.getByRole('form', { name: 'transfer' });
+    expect(transferForm).toBeInTheDocument();
+
+    await userEvent.click(swapTab);
+    const swapForm = screen.getByRole('form', { name: 'swap' });
+    expect(swapForm).toBeInTheDocument();
+
+    await userEvent.click(transferTab);
+    transferForm = screen.getByRole('form', { name: 'transfer' });
+    expect(transferForm).toBeInTheDocument();
   });
 
   it('submits form if user confirms it on confirm dialog', async () => {
