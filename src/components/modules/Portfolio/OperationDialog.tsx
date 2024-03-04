@@ -1,4 +1,3 @@
-// import React from 'react';
 import { useState, useRef, useEffect, forwardRef } from 'react';
 import {
   Dialog,
@@ -93,7 +92,10 @@ const OperationDialog = ({
 
           {renderTabs ? (
             <Tabs defaultValue={operations[0]}>
-              <TabsList className="grid w-full grid-cols-2" tabIndex={0}>
+              <TabsList
+                className={`grid w-full grid-cols-${operations.length}`}
+                tabIndex={0}
+              >
                 {operations.map(operation => (
                   <TabsTrigger key={`${operation}-tab`} value={operation}>
                     {operation}
