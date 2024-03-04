@@ -117,7 +117,7 @@ const Portfolio = () => {
         </>
       )}
 
-      {operationData ? (
+      {operationData && openOperationDialog ? (
         <OperationDialog
           open={openOperationDialog}
           operations={['transfer', 'swap']}
