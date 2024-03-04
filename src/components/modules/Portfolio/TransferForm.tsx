@@ -7,11 +7,10 @@ import FormField from '@/components/lib/FormField';
 import FormCheckbox from '@/components/lib/FormCheckbox';
 import { currencyField, optionalCurrencyField } from '@/lib/formFieldSchema';
 import { formatCurrency } from '@/lib/formatNumber';
-
 import useTransfer from './useTransfer';
 import useSetAssetValue from '../Fixed/useSetAssetValue';
 
-import { DragAndDropOperationData } from './types';
+import type { DragAndDropOperationData, CurrentAssetValues } from './types';
 
 const createFormSchema = (isValueOptional: boolean) =>
   z.object({
@@ -35,11 +34,6 @@ const defaultValues: DefaultValues = {
   allFundsValue: '',
   value: '',
 } as const;
-
-type CurrentAssetValues = {
-  originCurrentValue: number;
-  destinyCurrentValue: number;
-};
 
 type Props = {
   operationData: DragAndDropOperationData;
@@ -117,7 +111,7 @@ const TransferForm = forwardRef(
           id="operation-form"
           aria-label="transfer"
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="grid grid-cols-1 gap-4"
+          className="grid content-start grid-cols-1 gap-4 h-[406px]"
           noValidate
         >
           <FormField

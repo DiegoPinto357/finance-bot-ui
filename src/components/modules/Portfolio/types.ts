@@ -3,3 +3,8 @@ export type DragAndDropOperationData = {
   originAsset: string;
   destinyAsset: string;
 };
+
+export type CurrentAssetValues = {
+  originCurrentValue: number;
+  destinyCurrentValue: number;
+};

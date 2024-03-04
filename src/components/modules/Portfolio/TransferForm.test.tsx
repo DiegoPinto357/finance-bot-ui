@@ -2,28 +2,11 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockedTransfer } from './__mocks__/useTransfer';
 import { mockedSetAssetValue } from '../Fixed/__mocks__/useSetAssetValue';
+import { fillFormField } from '@/testUtils/forms';
 import TransferForm from './TransferForm';
 
 vi.mock('../Fixed/useSetAssetValue');
 vi.mock('./useTransfer');
-
-const fillFormField = async (fieldName: string, value: string | number) => {
-  let fieldRole;
-  let fieldValue;
-
-  if (typeof value === 'number') {
-    fieldRole = 'spinbutton';
-    fieldValue = value.toString();
-  } else {
-    fieldRole = 'textbox';
-    fieldValue = value;
-  }
-
-  const field = screen.getByRole(fieldRole, {
-    name: fieldName,
-  });
-  await userEvent.type(field, fieldValue);
-};
 
 describe('TransferForm', () => {
   const operationData = {
