@@ -43,7 +43,7 @@ describe('TransferForm', () => {
     vi.clearAllMocks();
   });
 
-  it('sets current assetvalues and executes transfer', async () => {
+  it('sets current asset values and executes transfer', async () => {
     render(
       <TransferForm
         operationData={operationData}
