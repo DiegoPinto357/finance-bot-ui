@@ -120,7 +120,7 @@ const Portfolio = () => {
       {operationData && openOperationDialog ? (
         <OperationDialog
           open={openOperationDialog}
-          operations={['transfer', 'swap']}
+          operations={['swap', 'transfer']}
           operationData={operationData}
           onOpenChange={setOpenOperationDialog}
         />
