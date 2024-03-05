@@ -19,5 +19,6 @@ export const fillFormField = async (
   const field = screen.getByRole(fieldRole, {
     name: fieldName,
   });
+  await userEvent.clear(field);
   await userEvent.type(field, fieldValue);
 };

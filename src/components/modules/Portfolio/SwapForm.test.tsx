@@ -1,10 +1,11 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-// import { mockedSwap } from './__mocks__/useSwap';
+import { mockedSwap } from './__mocks__/useSwap';
 import { mockedSetAssetValue } from '../Fixed/__mocks__/useSetAssetValue';
 import { fillFormField } from '@/testUtils/forms';
 import SwapForm from './SwapForm';
 
 vi.mock('../Fixed/useSetAssetValue');
+vi.mock('./useSwap');
 
 describe('SwapForm', () => {
   const operationData = {
@@ -56,13 +57,16 @@ describe('SwapForm', () => {
         value: newDestinyCurrentValue,
       });
 
-      // expect(mockedSwap).toBeCalledTimes(1);
-      // expect(mockedSwap).toBeCalledWith({
-      //   portfolio: 'suricat',
-      //   origin: { class: 'fixed', name: 'iti' },
-      //   destiny: { class: 'fixed', name: 'nubank' },
-      //   value,
-      // });
+      expect(mockedSwap).toBeCalledTimes(1);
+      expect(mockedSwap).toBeCalledWith({
+        portfolio: 'suricat',
+        origin: { class: 'fixed', name: 'iti' },
+        destiny: { class: 'fixed', name: 'nubank' },
+        value,
+        liquidity: liquidityProvider,
+      });
     });
   });
+
+  it.todo('raises an error if portfolio and liquidity provider are the same');
 });

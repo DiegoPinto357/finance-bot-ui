@@ -60,11 +60,25 @@ export type TransferParams = {
 };
 
 const transfer = async (data: TransferParams) => {
-  const url = `/api/portfolio/transfer`;
+  const url = '/api/portfolio/transfer';
+  return await httpClient.post<{ status: string }>(url, data);
+};
+
+type SwapParams = {
+  value: number | 'all';
+  portfolio: Portfolio;
+  origin: Asset;
+  destiny: Asset;
+  liquidity: Portfolio;
+};
+
+const swap = async (data: SwapParams) => {
+  const url = '/api/portfolio/swap';
   return await httpClient.post<{ status: string }>(url, data);
 };
 
 export default {
   getBalance,
   transfer,
+  swap,
 };

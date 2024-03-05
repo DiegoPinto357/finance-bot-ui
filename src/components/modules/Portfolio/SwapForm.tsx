@@ -7,7 +7,7 @@ import FormField from '@/components/lib/FormField';
 import FormCheckbox from '@/components/lib/FormCheckbox';
 import { currencyField, optionalCurrencyField } from '@/lib/formFieldSchema';
 import { formatCurrency } from '@/lib/formatNumber';
-// import useSwap from './useSwap';
+import useSwap from './useSwap';
 import useSetAssetValue from '../Fixed/useSetAssetValue';
 
 import type { DragAndDropOperationData, CurrentAssetValues } from './types';
@@ -62,7 +62,7 @@ const SwapForm = forwardRef(
       validate: () => form.trigger(),
     }));
 
-    // const { transfer } = useTransfer();
+    const { swap } = useSwap();
     const { setAssetValue } = useSetAssetValue();
 
     const { originAsset, destinyAsset } = operationData;
@@ -74,6 +74,7 @@ const SwapForm = forwardRef(
         destinyCurrentValue,
         value,
         allFundsValue,
+        liquidityProvider,
       }: FormSchema) => {
         const { portfolio, originAsset, destinyAsset } = operationData;
         try {
@@ -91,13 +92,13 @@ const SwapForm = forwardRef(
             });
           }
 
-          // await transfer({
-          //   portfolio: portfolio,
-          //   origin: { class: 'fixed', name: originAsset },
-          //   destiny: { class: 'fixed', name: destinyAsset },
-          //   value: allFundsValue ? 'all' : value || 0,
-          // });
-          console.log({ value, allFundsValue, portfolio });
+          await swap({
+            portfolio: portfolio,
+            origin: { class: 'fixed', name: originAsset },
+            destiny: { class: 'fixed', name: destinyAsset },
+            value: allFundsValue ? 'all' : value || 0,
+            liquidity: liquidityProvider,
+          });
 
           onSubmmit();
         } catch (error) {
@@ -105,7 +106,7 @@ const SwapForm = forwardRef(
           else onError(String(error));
         }
       },
-      [operationData, setAssetValue, onSubmmit, onError]
+      [operationData, setAssetValue, swap, onSubmmit, onError]
     );
 
     return (
@@ -117,12 +118,6 @@ const SwapForm = forwardRef(
           className="grid content-start grid-cols-1 gap-4 h-[406px]"
           noValidate
         >
-          {/* <FormField
-            control={form.control}
-            name="liquidityProvider"
-            label="Liquidity Provider"
-          /> */}
-
           <FormField
             control={form.control}
             name="originCurrentValue"
