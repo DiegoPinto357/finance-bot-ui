@@ -77,7 +77,14 @@ const SwapForm = forwardRef(
         liquidityProvider,
       }: FormSchema) => {
         const { portfolio, originAsset, destinyAsset } = operationData;
+
         try {
+          if (portfolio === liquidityProvider) {
+            throw new Error(
+              'Portfolio and liquidity provider must not be the same.'
+            );
+          }
+
           if (originCurrentValue) {
             await setAssetValue({
               asset: originAsset,

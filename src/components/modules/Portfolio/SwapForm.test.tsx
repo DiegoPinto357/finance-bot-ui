@@ -68,5 +68,38 @@ describe('SwapForm', () => {
     });
   });
 
-  it.todo('raises an error if portfolio and liquidity provider are the same');
+  // TODO remove portfolio from the liquidity provider options
+  it('raises an error if portfolio and liquidity provider are the same', async () => {
+    const onErrorMock = vi.fn();
+
+    render(
+      <SwapForm
+        operationData={{ ...operationData, portfolio: liquidityProvider }}
+        currentAssetValues={currentAssetValues}
+        onSubmmit={() => {}}
+        onError={onErrorMock}
+      />
+    );
+
+    await fillFormField('Liquidity Provider', liquidityProvider);
+    await fillFormField(
+      `Origin (${operationData.originAsset}) Current Value`,
+      newOriginCurrentValue
+    );
+    await fillFormField(
+      `Destiny (${operationData.destinyAsset}) Current Value`,
+      newDestinyCurrentValue
+    );
+    await fillFormField('Value', value);
+
+    const form = screen.getByRole('form', { name: 'swap' });
+    fireEvent.submit(form);
+
+    await waitFor(() => {
+      expect(onErrorMock).toBeCalledTimes(1);
+      expect(onErrorMock).toBeCalledWith(
+        'Portfolio and liquidity provider must not be the same.'
+      );
+    });
+  });
 });

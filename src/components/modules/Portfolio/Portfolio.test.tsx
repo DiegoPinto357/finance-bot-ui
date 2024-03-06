@@ -5,6 +5,7 @@ import Portfolio from '.';
 vi.mock('react-dnd');
 vi.mock('./useGetPortfolioBalance');
 vi.mock('./useTransfer');
+vi.mock('./useSwap');
 vi.mock('../Fixed/useGetFixedBalance');
 vi.mock('../Fixed/useSetAssetValue');
 vi.mock('../../DataTable');
