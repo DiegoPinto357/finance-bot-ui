@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import Typography from '@/components/lib/Typography';
 import Loader from '@/components/lib/Loader';
 import {
@@ -41,7 +41,9 @@ const mapBalance = (
   }, {} as Record<string, number>);
 };
 
-const mapData = (rawData: PortfolioBalance) => {
+const mapData = (rawData?: PortfolioBalance) => {
+  if (!rawData) return [];
+
   const totals: PortfolioBalanceItem = {
     portfolio: 'total',
     total: 0,
@@ -68,8 +70,11 @@ const mapData = (rawData: PortfolioBalance) => {
   return [...rows, totals];
 };
 
+const getPortfolios = (balance: { portfolio: string }[]) =>
+  balance.map(({ portfolio }) => portfolio);
+
 const Portfolio = () => {
-  // TODO use loading and error flags
+  // TODO use error flag
   const { data, isLoading } = useGetportfolioBalance();
 
   const [openOperationDialog, setOpenOperationDialog] =
@@ -79,12 +84,13 @@ const Portfolio = () => {
     DragAndDropOperationData | undefined
   >(undefined);
 
+  const mappedData = useMemo(() => mapData(data), [data]);
+  const portfolios = useMemo(() => getPortfolios(mappedData), [mappedData]);
+
   const handlePortfolioClick = useCallback((portfolio: string) => {
     console.log({ portfolio });
     setOpenDrawer(true);
   }, []);
-
-  const mappedData = data ? mapData(data) : [];
 
   const handleCellDrop = useCallback(({ drag, drop }: DragAndDropInfo) => {
     if (drag.rowId !== drop.rowId) return;
@@ -122,6 +128,7 @@ const Portfolio = () => {
           open={openOperationDialog}
           operations={['swap', 'transfer']}
           operationData={operationData}
+          portfolios={portfolios} // TODO consider using a context provider
           onOpenChange={setOpenOperationDialog}
         />
       ) : null}

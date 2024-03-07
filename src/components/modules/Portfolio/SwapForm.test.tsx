@@ -1,8 +1,9 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { mockedSwap } from './__mocks__/useSwap';
 import { mockedSetAssetValue } from '../Fixed/__mocks__/useSetAssetValue';
-import { fillFormField } from '@/testUtils/forms';
+import { fillFormField, selectFormFieldOption } from '@/testUtils/forms';
 import SwapForm from './SwapForm';
+import portfolios from '../../../../mockData/api/portfolio/portfolios';
 
 vi.mock('../Fixed/useSetAssetValue');
 vi.mock('./useSwap');
@@ -13,7 +14,7 @@ describe('SwapForm', () => {
     originAsset: 'iti',
     destinyAsset: 'nubank',
   };
-  const liquidityProvider = 'amortecedor';
+  const liquidityProvider = 'reservaEmergencia';
   const currentAssetValues = {
     originCurrentValue: 1950,
     destinyCurrentValue: 876,
@@ -27,12 +28,12 @@ describe('SwapForm', () => {
       <SwapForm
         operationData={operationData}
         currentAssetValues={currentAssetValues}
+        portfolios={portfolios}
         onSubmmit={() => {}}
         onError={() => {}}
       />
     );
 
-    await fillFormField('Liquidity Provider', liquidityProvider);
     await fillFormField(
       `Origin (${operationData.originAsset}) Current Value`,
       newOriginCurrentValue
@@ -42,6 +43,7 @@ describe('SwapForm', () => {
       newDestinyCurrentValue
     );
     await fillFormField('Value', value);
+    await selectFormFieldOption('Liquidity Provider', liquidityProvider);
 
     const form = screen.getByRole('form', { name: 'swap' });
     fireEvent.submit(form);
@@ -76,12 +78,12 @@ describe('SwapForm', () => {
       <SwapForm
         operationData={{ ...operationData, portfolio: liquidityProvider }}
         currentAssetValues={currentAssetValues}
+        portfolios={portfolios}
         onSubmmit={() => {}}
         onError={onErrorMock}
       />
     );
 
-    await fillFormField('Liquidity Provider', liquidityProvider);
     await fillFormField(
       `Origin (${operationData.originAsset}) Current Value`,
       newOriginCurrentValue
@@ -91,6 +93,7 @@ describe('SwapForm', () => {
       newDestinyCurrentValue
     );
     await fillFormField('Value', value);
+    await selectFormFieldOption('Liquidity Provider', liquidityProvider);
 
     const form = screen.getByRole('form', { name: 'swap' });
     fireEvent.submit(form);

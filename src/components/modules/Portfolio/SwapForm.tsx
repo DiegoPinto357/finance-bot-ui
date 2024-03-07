@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
 import FormField from '@/components/lib/FormField';
 import FormCheckbox from '@/components/lib/FormCheckbox';
+import FormSelect from '@/components/lib/FormSelect';
 import { currencyField, optionalCurrencyField } from '@/lib/formFieldSchema';
 import { formatCurrency } from '@/lib/formatNumber';
 import useSwap from './useSwap';
@@ -40,6 +41,7 @@ const defaultValues: DefaultValues = {
 type Props = {
   operationData: DragAndDropOperationData;
   currentAssetValues: CurrentAssetValues;
+  portfolios: string[];
   data?: SwapFormSchema;
   onSubmmit: () => void;
   onError: (errorMessage: string) => void;
@@ -47,7 +49,14 @@ type Props = {
 
 const SwapForm = forwardRef(
   (
-    { operationData, currentAssetValues, data, onSubmmit, onError }: Props,
+    {
+      operationData,
+      currentAssetValues,
+      portfolios,
+      data,
+      onSubmmit,
+      onError,
+    }: Props,
     ref
   ) => {
     const [valueFieldDisabled, setValueFieldDisabled] =
@@ -158,10 +167,11 @@ const SwapForm = forwardRef(
             disabled={valueFieldDisabled}
           />
 
-          <FormField
+          <FormSelect
             control={form.control}
             name="liquidityProvider"
             label="Liquidity Provider"
+            options={portfolios}
           />
         </form>
       </Form>

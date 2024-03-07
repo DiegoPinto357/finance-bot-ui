@@ -31,6 +31,7 @@ type Props = {
   open: boolean;
   operations: Operation[];
   operationData: DragAndDropOperationData;
+  portfolios: string[];
   onOpenChange: (open: boolean) => void;
 };
 
@@ -38,6 +39,7 @@ const OperationDialog = ({
   open,
   operations,
   operationData,
+  portfolios,
   onOpenChange,
 }: Props) => {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false);
@@ -118,6 +120,7 @@ const OperationDialog = ({
                         originCurrentValue,
                         destinyCurrentValue,
                       }}
+                      portfolios={portfolios}
                       onSubmmit={() => onOpenChange(false)}
                       onError={setErrorMessage}
                     />

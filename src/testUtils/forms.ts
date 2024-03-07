@@ -22,3 +22,19 @@ export const fillFormField = async (
   await userEvent.clear(field);
   await userEvent.type(field, fieldValue);
 };
+
+export const selectFormFieldOption = async (
+  fieldName: string,
+  value: string
+) => {
+  const field = screen
+    .getByRole('combobox', {
+      name: fieldName,
+    })
+    .closest('div')
+    ?.querySelector('select');
+
+  if (field) {
+    await userEvent.selectOptions(field, value);
+  }
+};

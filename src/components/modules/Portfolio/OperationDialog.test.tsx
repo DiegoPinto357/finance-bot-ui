@@ -2,6 +2,7 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockedOnFormSubmit } from './__mocks__/TransferForm';
 import OperationDialog from './OperationDialog';
+import portfolios from '../../../../mockData/api/portfolio/portfolios';
 
 vi.mock('../Fixed/useGetFixedBalance');
 vi.mock('./TransferForm');
@@ -34,6 +35,7 @@ describe('OperationDialog', () => {
         open
         operations={['transfer', 'swap']}
         operationData={operationData}
+        portfolios={portfolios}
         onOpenChange={() => {}}
       />
     );
@@ -59,6 +61,7 @@ describe('OperationDialog', () => {
         open
         operations={['transfer', 'swap']}
         operationData={operationData}
+        portfolios={portfolios}
         onOpenChange={() => {}}
       />
     );
@@ -78,6 +81,7 @@ describe('OperationDialog', () => {
         open
         operations={['transfer', 'swap']}
         operationData={operationData}
+        portfolios={portfolios}
         onOpenChange={() => {}}
       />
     );
@@ -100,6 +104,7 @@ describe('OperationDialog', () => {
         open
         operations={['transfer', 'swap']}
         operationData={operationData}
+        portfolios={portfolios}
         onOpenChange={() => {}}
       />
     );

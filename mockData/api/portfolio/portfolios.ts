@@ -1,0 +1,18 @@
+export default [
+  'reservaEmergencia',
+  'amortecedor',
+  'financiamento',
+  'viagem',
+  'reformaCasa',
+  'previdencia',
+  'leni',
+  'mae',
+  'seguroCarro',
+  'impostos',
+  'manutencaoCarro',
+  'suricat',
+  'congelamentoSuricats',
+  'carro',
+  'macbookFirma',
+  'rendaPassiva',
+];
