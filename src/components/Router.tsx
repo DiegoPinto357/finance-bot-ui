@@ -4,6 +4,7 @@ import Home from './Home';
 import CryptoHodl from './modules/crypto/Hodl';
 import CryptoDefi from './modules/crypto/Defi';
 import Portfolio from './modules/Portfolio';
+import Settings from './Settings';
 
 const Router = () => {
   return (
@@ -14,6 +15,8 @@ const Router = () => {
       <Route path="/crypto/defi" Component={CryptoDefi} />
 
       <Route path="/portfolio" Component={Portfolio} />
+
+      <Route path="/settings" Component={Settings} />
 
       <Route
         path="*"

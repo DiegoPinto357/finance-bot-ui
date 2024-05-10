@@ -27,6 +27,7 @@ const NavigationBar = () => {
         <SubMenu items={stockSubmenuItems}>Stock</SubMenu>
         <SubMenu items={cryptoSubmenuItems}>Crypto</SubMenu>
         <MenuItem path="/portfolio">Portfolio</MenuItem>
+        <MenuItem path="/settings">Settings</MenuItem>
       </NavigationMenuList>
     </NavigationMenu>
   );
