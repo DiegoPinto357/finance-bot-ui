@@ -67,7 +67,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm version patch"
+      "pre-push": "git stash && npm version patch && git stash pop"
     }
   }
 }
