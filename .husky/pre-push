@@ -1,0 +1,3 @@
+git stash
+npm version patch
+git stash pop
