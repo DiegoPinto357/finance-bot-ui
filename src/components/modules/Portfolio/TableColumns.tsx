@@ -2,11 +2,11 @@ import { ColumnDef } from '@tanstack/react-table';
 import { formatCurrency } from '@/lib/formatNumber';
 import ValueCell from './ValueCell';
 
-// TODO fetch list from server/infer from data
+// TODO fetch list from server or infer from data
 const assets = [
   'nubank',
   'iti',
-  '99pay',
+  // '99pay',
   'inco',
   'xpWesternAsset',
   'xpTrendInvestback',
