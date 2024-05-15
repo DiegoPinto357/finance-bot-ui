@@ -6,7 +6,7 @@ const Settings = () => {
       <Typography variant="h1">Settings</Typography>
       <div className="my-8">
         <Typography variant="h2">Status</Typography>
-        <p>App version: </p>
+        <p>App version: {APP_VERSION}</p>
         <p>Server version: </p>
         <p>Server status:</p>
       </div>
