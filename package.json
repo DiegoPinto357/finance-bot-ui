@@ -9,8 +9,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "DEBUG_PRINT_LIMIT=99999 vitest",
-    "test:ui": "vitest --ui",
-    "prepare": "husky"
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -29,7 +28,6 @@
     "axios": "^1.6.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
-    "husky": "^9.0.11",
     "lucide-react": "^0.321.0",
     "react": "^18.2.0",
     "react-dnd": "^16.0.1",
