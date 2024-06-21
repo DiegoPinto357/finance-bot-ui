@@ -5,7 +5,7 @@ import systemService from '../../services/system';
 import type { ComponentPropsWithoutRef } from 'react';
 
 const Status = ({ className }: ComponentPropsWithoutRef<'div'>) => {
-  const { data, isLoading, isSuccess } = useQuery(
+  const { data, isFetching, isSuccess } = useQuery(
     'serverVersion',
     () => systemService.getServerVersion(),
     {
@@ -14,7 +14,7 @@ const Status = ({ className }: ComponentPropsWithoutRef<'div'>) => {
     }
   );
 
-  const serverVersion = isLoading
+  const serverVersion = isFetching
     ? 'Loading'
     : !isSuccess
     ? 'Offline'

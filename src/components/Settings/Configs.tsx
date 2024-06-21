@@ -1,30 +1,61 @@
-import { useState } from 'react';
+import { useRef } from 'react';
+import { useQueryClient } from 'react-query';
 import { RadioGroup } from '@/components/ui/radio-group';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import useConfigs from '../useConfigs';
 import Typography from '../lib/Typography';
 import RadioItem from '../lib/RadioItem';
+import { SERVER_HOST_ADDRESS } from './constants';
 
 import type { ComponentPropsWithoutRef } from 'react';
 
 const Configs = ({ className }: ComponentPropsWithoutRef<'div'>) => {
-  const [serverHost, setServerHost] = useState<string>('localhost');
+  const { serverHost, customServerHost, setServerHost, setCustomServerHost } =
+    useConfigs();
+
+  const customServerHostInput = useRef<HTMLInputElement>(null);
+
+  const queryClient = useQueryClient();
+
+  const handleServerHostChange = (value: string) => {
+    setServerHost(value);
+    queryClient.refetchQueries({
+      queryKey: 'serverVersion',
+      exact: true,
+    });
+  };
+
+  const handleCustomSeverHostButtonClick = () => {
+    setCustomServerHost(customServerHostInput.current?.value || '');
+    queryClient.refetchQueries({
+      queryKey: 'serverVersion',
+      exact: true,
+    });
+  };
+
   const isCustomServerHost = serverHost === 'custom';
 
   return (
     <div className={className}>
       <Typography variant="h2">Configs</Typography>
-      <Typography variant="h3">Server host:</Typography>
-      <RadioGroup defaultValue="localhost" onValueChange={setServerHost}>
+      <Typography id="server-host-label" variant="h3">
+        Server host
+      </Typography>
+      <RadioGroup
+        value={serverHost}
+        onValueChange={handleServerHostChange}
+        aria-labelledby="server-host-label"
+      >
         <RadioItem
           id="server-host-localhost"
           value="localhost"
-          label="Local host (http://localhost:3001)"
+          label={`Local host (${SERVER_HOST_ADDRESS.localhost})`}
         />
         <RadioItem
           id="server-host-homeserver"
           value="homeserver"
-          label="Home server (http://192.168.31.200:3001)"
+          label={`Home server (${SERVER_HOST_ADDRESS.homeserver})`}
         />
         <RadioItem
           id="server-host-custom"
@@ -32,8 +63,20 @@ const Configs = ({ className }: ComponentPropsWithoutRef<'div'>) => {
           label="Custom address"
         />
         <div className="flex w-full max-w-sm items-center space-x-2">
-          <Input disabled={!isCustomServerHost} placeholder="http://" />
-          <Button disabled={!isCustomServerHost}>Ok</Button>
+          {/* TODO handle enter press */}
+          <Input
+            ref={customServerHostInput}
+            disabled={!isCustomServerHost}
+            placeholder="http://"
+            defaultValue={customServerHost}
+            aria-labelledby="server-host-custom"
+          />
+          <Button
+            disabled={!isCustomServerHost}
+            onClick={handleCustomSeverHostButtonClick}
+          >
+            Ok
+          </Button>
         </div>
       </RadioGroup>
     </div>

@@ -7,6 +7,7 @@ import { ThemeProvider } from './theme/ThemeProvider';
 import ThemeSwitch from './theme/ThemeSwitch';
 import Router from './Router';
 import NavigationBar from './NavigationBar';
+import useConfigs from './useConfigs';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,6 +19,7 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
+  useConfigs();
   return (
     <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
       <QueryClientProvider client={queryClient}>

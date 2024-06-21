@@ -1,14 +1,21 @@
 import axios, { RawAxiosRequestConfig } from 'axios';
 
-const POST_DRYRUN = true;
+const POST_DRYRUN = false;
 
-const host = 'http://localhost:3001';
-// const host = 'http://192.168.1.200:3001';
+const defaultHost = 'http://localhost:3001';
 
 const httpClient = axios.create({
-  baseURL: host,
+  baseURL: defaultHost,
   timeout: 15000,
 });
+
+type Config = {
+  host?: string;
+};
+
+const config = ({ host }: Config) => {
+  if (host) httpClient.defaults.baseURL = host;
+};
 
 const get = async <T>(url: string, config?: RawAxiosRequestConfig<unknown>) => {
   const response = await httpClient(url, config);
@@ -29,6 +36,7 @@ const post = async <T>(
 };
 
 export default {
+  config,
   get,
   post,
 };
