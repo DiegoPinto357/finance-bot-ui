@@ -25,12 +25,37 @@ import type {
 } from '../../../services/portfolio';
 import type { DragAndDropOperationData } from './types';
 
+const FIXED_HEADER_ORDER = ['nubank', 'iti'];
+const STOCK_HEADER_ORDER = ['float', 'br', 'fii', 'us'];
+const CRYPTO_HEADER_ORDER = ['hodl', 'backed', 'defi', 'defi2'];
+
+const reorderAssets = (header: string[], order: string[]) => {
+  const reorderedArray: string[] = [];
+  const otherElements: string[] = [];
+
+  header.forEach(element => {
+    if (order.includes(element)) {
+      reorderedArray.push(element);
+    } else {
+      otherElements.push(element);
+    }
+  });
+
+  reorderedArray.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+  otherElements.sort();
+
+  return [...reorderedArray, ...otherElements];
+};
+
 const mapBalance = (
   rawBalance: AssetBalance[] | undefined,
-  totals: PortfolioBalanceItem
+  totals: PortfolioBalanceItem,
+  assets: Set<string>
 ) => {
   if (!rawBalance) return {};
-  return rawBalance.reduce((obj, { asset, value }) => {
+  return rawBalance.reduce((obj, balance) => {
+    const { asset, value } = balance;
+    assets.add(asset);
     obj[asset] = value;
 
     totals[asset] =
@@ -42,18 +67,34 @@ const mapBalance = (
 };
 
 const mapData = (rawData?: PortfolioBalance) => {
-  if (!rawData) return [];
+  if (!rawData) return { header: [], rows: [] };
 
   const totals: PortfolioBalanceItem = {
     portfolio: 'total',
     total: 0,
   };
 
+  const fixedAssets = new Set<string>();
+  const stockAssets = new Set<string>();
+  const cryptoAssets = new Set<string>();
+
   const rows = Object.entries(rawData.balance).map(
     ([portfolio, { balance, total }]) => {
-      const fixedBalance = mapBalance(balance.fixed?.balance, totals);
-      const stockBalance = mapBalance(balance.stock?.balance, totals);
-      const cryptoBalance = mapBalance(balance.crypto?.balance, totals);
+      const fixedBalance = mapBalance(
+        balance.fixed?.balance,
+        totals,
+        fixedAssets
+      );
+      const stockBalance = mapBalance(
+        balance.stock?.balance,
+        totals,
+        stockAssets
+      );
+      const cryptoBalance = mapBalance(
+        balance.crypto?.balance,
+        totals,
+        cryptoAssets
+      );
 
       totals['total'] = totals['total']! + total;
 
@@ -67,7 +108,14 @@ const mapData = (rawData?: PortfolioBalance) => {
     }
   );
 
-  return [...rows, totals];
+  return {
+    header: [
+      ...reorderAssets(Array.from(fixedAssets), FIXED_HEADER_ORDER),
+      ...reorderAssets(Array.from(stockAssets), STOCK_HEADER_ORDER),
+      ...reorderAssets(Array.from(cryptoAssets), CRYPTO_HEADER_ORDER),
+    ],
+    rows: [...rows, totals],
+  };
 };
 
 const getPortfolios = (balance: { portfolio: string }[]) =>
@@ -84,7 +132,7 @@ const Portfolio = () => {
     DragAndDropOperationData | undefined
   >(undefined);
 
-  const mappedData = useMemo(() => mapData(data), [data]);
+  const { header, rows: mappedData } = useMemo(() => mapData(data), [data]);
   const portfolios = useMemo(() => getPortfolios(mappedData), [mappedData]);
 
   const handlePortfolioClick = useCallback((portfolio: string) => {
@@ -113,7 +161,9 @@ const Portfolio = () => {
         <>
           <DataTable
             className="mb-4"
-            columns={TableColumns({ onPortfolioClick: handlePortfolioClick })}
+            columns={TableColumns(header, {
+              onPortfolioClick: handlePortfolioClick,
+            })}
             data={mappedData}
             onCellDrop={handleCellDrop}
           />

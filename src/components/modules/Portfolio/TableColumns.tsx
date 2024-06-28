@@ -2,39 +2,6 @@ import { ColumnDef } from '@tanstack/react-table';
 import { formatCurrency } from '@/lib/formatNumber';
 import ValueCell from './ValueCell';
 
-// TODO fetch list from server or infer from data
-const assets = [
-  'nubank',
-  'iti',
-  // '99pay',
-  'inco',
-  'xpWesternAsset',
-  'xpTrendInvestback',
-  'daycovalCDB110',
-  'daycovalCDBCDI1_2',
-  'nuInvestCDB8_5',
-  'nuInvestCDB9_5',
-  'nuInvestCDB12_5',
-  'nuInvestCBDIPCA5_5',
-  'nuInvestTDIPCA2035',
-  'nuInvestTDPre2029',
-  'nuInvestTDPre2031',
-  'nuInvestTDIPCA2045',
-  'sofisaCDBMax60',
-  'sofisaCDB110',
-  'sofisaCDBIPCA7_5',
-  'interArcaPGBL',
-  'float',
-  'br',
-  'us',
-  'fii',
-  'binanceBuffer',
-  'hodl',
-  'backed',
-  'defi',
-  'defi2',
-];
-
 export type PortfolioBalanceItem = {
   portfolio: string;
   total: number;
@@ -45,6 +12,7 @@ type Params = {
 };
 
 export const TableColumns = (
+  assets: string[],
   params?: Params
 ): ColumnDef<PortfolioBalanceItem>[] => [
   {
