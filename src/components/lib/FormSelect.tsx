@@ -25,7 +25,7 @@ type Props<TFieldValues extends FieldValues> = {
   onChange?: (checked: boolean) => void;
 };
 
-const FormCheckbox = <TFieldValues extends FieldValues>({
+const FormSelect = <TFieldValues extends FieldValues>({
   control,
   name,
   label,
@@ -63,4 +63,4 @@ const FormCheckbox = <TFieldValues extends FieldValues>({
   );
 };
 
-export default FormCheckbox;
+export default FormSelect;
