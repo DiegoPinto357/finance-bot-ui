@@ -32,7 +32,7 @@ const useGetAssetBalance = (assets: Asset[]) => {
     fetchAssetBalance(assetsRef.current);
   }, []);
 
-  return balance;
+  return balance ? balance?.balance.map(({ value }) => value) : [];
 };
 
 export default useGetAssetBalance;

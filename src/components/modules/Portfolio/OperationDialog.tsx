@@ -47,11 +47,10 @@ const OperationDialog = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const { originAsset, destinyAsset } = operationData;
-  const assetsBalance = useGetAssetBalance([originAsset, destinyAsset]);
-
-  // TODO remove the node "balance" from useGetAssetBalance result
-  const originCurrentValue = assetsBalance?.balance[0].value;
-  const destinyCurrentValue = assetsBalance?.balance[1].value;
+  const [originCurrentValue, destinyCurrentValue] = useGetAssetBalance([
+    originAsset,
+    destinyAsset,
+  ]);
 
   const renderTabs = operations.length > 1;
 
