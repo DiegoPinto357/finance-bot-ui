@@ -1,11 +1,13 @@
 import { PropsWithChildren } from 'react';
 import { useDrag } from 'react-dnd';
 
+import type { Asset } from '@/types';
+
 const hideSourceOnDrag = true;
 
 type Props = {
   portfolio: string;
-  asset: string;
+  asset: Asset;
 };
 
 const ValueCell = ({

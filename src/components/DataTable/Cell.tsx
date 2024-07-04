@@ -3,10 +3,11 @@ import { useDrop } from 'react-dnd';
 import { TableCell } from '@/components/ui/table';
 
 import type { Cell } from '@tanstack/react-table';
+import type { Asset, AssetClass } from '@/types';
 
 type CellPosition = {
   rowId: string;
-  colId: string;
+  colId: Asset;
 };
 
 export type DragAndDropInfo = {
@@ -26,7 +27,8 @@ const Cell = <TData, TValue>({ cell, onDrop }: Props<TData, TValue>) => {
       drop: (dragCell: CellPosition) => {
         if (onDrop) {
           const rowId = cell.row.getAllCells()[0].getValue<string>();
-          const colId = cell.column.id;
+          const asset = cell.column.id.split(':');
+          const colId = { class: asset[0] as AssetClass, name: asset[1] };
           onDrop({ drag: dragCell, drop: { rowId, colId } });
         }
       },

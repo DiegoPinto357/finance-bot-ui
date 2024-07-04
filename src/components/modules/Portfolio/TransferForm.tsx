@@ -7,6 +7,7 @@ import FormField from '@/components/lib/FormField';
 import FormCheckbox from '@/components/lib/FormCheckbox';
 import { currencyField, optionalCurrencyField } from '@/lib/formFieldSchema';
 import { formatCurrency } from '@/lib/formatNumber';
+import { formatAssetName } from '@/lib/formatString';
 import useTransfer from './useTransfer';
 import useSetAssetValue from '../Fixed/useSetAssetValue';
 
@@ -61,6 +62,7 @@ const TransferForm = forwardRef(
     }));
 
     const { transfer } = useTransfer();
+    // TODO need to set values for all asset classes
     const { setAssetValue } = useSetAssetValue();
 
     const { originAsset, destinyAsset } = operationData;
@@ -77,22 +79,22 @@ const TransferForm = forwardRef(
         try {
           if (originCurrentValue) {
             await setAssetValue({
-              asset: originAsset,
+              asset: originAsset.name,
               value: originCurrentValue,
             });
           }
 
           if (destinyCurrentValue) {
             await setAssetValue({
-              asset: destinyAsset,
+              asset: destinyAsset.name,
               value: destinyCurrentValue,
             });
           }
 
           await transfer({
             portfolio: portfolio,
-            origin: { class: 'fixed', name: originAsset },
-            destiny: { class: 'fixed', name: destinyAsset },
+            origin: originAsset,
+            destiny: destinyAsset,
             value: allFundsValue ? 'all' : value || 0,
           });
 
@@ -117,7 +119,7 @@ const TransferForm = forwardRef(
           <FormField
             control={form.control}
             name="originCurrentValue"
-            label={`Origin (${originAsset}) Current Value`}
+            label={`Origin (${formatAssetName(originAsset)}) Current Value`}
             description={`Current value: ${formatCurrency(originCurrentValue)}`}
             type="number"
           />
@@ -125,7 +127,7 @@ const TransferForm = forwardRef(
           <FormField
             control={form.control}
             name="destinyCurrentValue"
-            label={`Destiny (${destinyAsset}) Current Value`}
+            label={`Destiny (${formatAssetName(destinyAsset)}) Current Value`}
             description={`Current value: ${formatCurrency(
               destinyCurrentValue
             )}`}

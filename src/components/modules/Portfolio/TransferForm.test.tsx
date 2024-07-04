@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockedTransfer } from './__mocks__/useTransfer';
 import { mockedSetAssetValue } from '../Fixed/__mocks__/useSetAssetValue';
+import { formatAssetName } from '@/lib/formatString';
 import { fillFormField } from '@/testUtils/forms';
 import TransferForm from './TransferForm';
 
@@ -11,9 +12,9 @@ vi.mock('./useTransfer');
 describe('TransferForm', () => {
   const operationData = {
     portfolio: 'suricat',
-    originAsset: 'iti',
-    destinyAsset: 'nubank',
-  };
+    originAsset: { class: 'fixed', name: 'iti' },
+    destinyAsset: { class: 'fixed', name: 'nubank' },
+  } as const;
   const currentAssetValues = {
     originCurrentValue: 1950,
     destinyCurrentValue: 876,
@@ -37,11 +38,11 @@ describe('TransferForm', () => {
     );
 
     await fillFormField(
-      `Origin (${operationData.originAsset}) Current Value`,
+      `Origin (${formatAssetName(operationData.originAsset)}) Current Value`,
       newOriginCurrentValue
     );
     await fillFormField(
-      `Destiny (${operationData.destinyAsset}) Current Value`,
+      `Destiny (${formatAssetName(operationData.destinyAsset)}) Current Value`,
       newDestinyCurrentValue
     );
     await fillFormField('Value', value);
@@ -81,11 +82,11 @@ describe('TransferForm', () => {
     );
 
     await fillFormField(
-      `Origin (${operationData.originAsset}) Current Value`,
+      `Origin (${formatAssetName(operationData.originAsset)}) Current Value`,
       newOriginCurrentValue
     );
     await fillFormField(
-      `Destiny (${operationData.destinyAsset}) Current Value`,
+      `Destiny (${formatAssetName(operationData.destinyAsset)}) Current Value`,
       newDestinyCurrentValue
     );
 
@@ -111,10 +112,14 @@ describe('TransferForm', () => {
     );
 
     const originCurrentValueField = screen.getByRole('spinbutton', {
-      name: `Origin (${operationData.originAsset}) Current Value`,
+      name: `Origin (${formatAssetName(
+        operationData.originAsset
+      )}) Current Value`,
     });
     const destinyCurrentValueField = screen.getByRole('spinbutton', {
-      name: `Destiny (${operationData.destinyAsset}) Current Value`,
+      name: `Destiny (${formatAssetName(
+        operationData.destinyAsset
+      )}) Current Value`,
     });
 
     expect(originCurrentValueField).toHaveAccessibleDescription(

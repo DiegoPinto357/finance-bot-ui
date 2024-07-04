@@ -10,7 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import ConfirmDialog from '@/components/lib/ConfirmDialog';
 import Typography from '@/components/lib/Typography';
-import useGetFixedBalance from '../Fixed/useGetFixedBalance';
+import { formatAssetName } from '@/lib/formatString';
+import useGetAssetBalance from './useGetAssetBalance';
 import TransferForm from './TransferForm';
 import SwapForm from './SwapForm';
 
@@ -46,17 +47,11 @@ const OperationDialog = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const { originAsset, destinyAsset } = operationData;
-  const { data: fixedBalance } = useGetFixedBalance([
-    originAsset,
-    destinyAsset,
-  ]);
+  const assetsBalance = useGetAssetBalance([originAsset, destinyAsset]);
 
-  const originCurrentValue =
-    fixedBalance?.balance.find(({ asset }) => asset === originAsset)?.value ||
-    0;
-  const destinyCurrentValue =
-    fixedBalance?.balance.find(({ asset }) => asset === destinyAsset)?.value ||
-    0;
+  // TODO remove the node "balance" from useGetAssetBalance result
+  const originCurrentValue = assetsBalance?.balance[0].value;
+  const destinyCurrentValue = assetsBalance?.balance[1].value;
 
   const renderTabs = operations.length > 1;
 
@@ -71,7 +66,7 @@ const OperationDialog = ({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="sm:max-w-[360px]">
+        <DialogContent className="sm:max-w-[420px]">
           <DialogHeader>
             <DialogTitle>Operation</DialogTitle>
             <div className="py-2 text-sm text-muted-foreground">
@@ -82,12 +77,12 @@ const OperationDialog = ({
 
               <Typography variant="p">
                 {'Origin Asset: '}
-                <b>{operationData.originAsset}</b>
+                <b>{formatAssetName(operationData.originAsset)}</b>
               </Typography>
 
               <Typography variant="p">
                 {'Destiny Asset: '}
-                <b>{operationData.destinyAsset}</b>
+                <b>{formatAssetName(operationData.destinyAsset)}</b>
               </Typography>
             </div>
           </DialogHeader>

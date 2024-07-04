@@ -67,7 +67,8 @@ const mapBalance = (
 };
 
 const mapData = (rawData?: PortfolioBalance) => {
-  if (!rawData) return { header: [], rows: [] };
+  if (!rawData)
+    return { header: { fixed: [], stock: [], crypto: [] }, rows: [] };
 
   const totals: PortfolioBalanceItem = {
     portfolio: 'total',
@@ -109,11 +110,11 @@ const mapData = (rawData?: PortfolioBalance) => {
   );
 
   return {
-    header: [
-      ...reorderAssets(Array.from(fixedAssets), FIXED_HEADER_ORDER),
-      ...reorderAssets(Array.from(stockAssets), STOCK_HEADER_ORDER),
-      ...reorderAssets(Array.from(cryptoAssets), CRYPTO_HEADER_ORDER),
-    ],
+    header: {
+      fixed: reorderAssets(Array.from(fixedAssets), FIXED_HEADER_ORDER),
+      stock: reorderAssets(Array.from(stockAssets), STOCK_HEADER_ORDER),
+      crypto: reorderAssets(Array.from(cryptoAssets), CRYPTO_HEADER_ORDER),
+    },
     rows: [...rows, totals],
   };
 };
@@ -142,7 +143,11 @@ const Portfolio = () => {
 
   const handleCellDrop = useCallback(({ drag, drop }: DragAndDropInfo) => {
     if (drag.rowId !== drop.rowId) return;
-    if (drag.colId === drop.colId) return;
+    if (
+      drag.colId.class === drop.colId.class &&
+      drag.colId.name === drop.colId.name
+    )
+      return;
 
     setOperationData({
       portfolio: drag.rowId,

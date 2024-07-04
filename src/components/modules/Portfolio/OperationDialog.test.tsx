@@ -4,7 +4,7 @@ import { mockedOnFormSubmit } from './__mocks__/TransferForm';
 import OperationDialog from './OperationDialog';
 import portfolios from '../../../../mockData/api/portfolio/portfolios';
 
-vi.mock('../Fixed/useGetFixedBalance');
+vi.mock('../Fixed/getFixedBalance');
 vi.mock('./TransferForm');
 vi.mock('./SwapForm');
 
@@ -21,9 +21,9 @@ const confirm = async (action: 'Yes' | 'No') => {
 describe('OperationDialog', () => {
   const operationData = {
     portfolio: 'suricat',
-    originAsset: 'iti',
-    destinyAsset: 'nubank',
-  };
+    originAsset: { class: 'fixed', name: 'iti' },
+    destinyAsset: { class: 'fixed', name: 'nubank' },
+  } as const;
 
   beforeEach(() => {
     vi.clearAllMocks();

@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { mockedSwap } from './__mocks__/useSwap';
 import { mockedSetAssetValue } from '../Fixed/__mocks__/useSetAssetValue';
+import { formatAssetName } from '@/lib/formatString';
 import { fillFormField, selectFormFieldOption } from '@/testUtils/forms';
 import SwapForm from './SwapForm';
 import portfolios from '../../../../mockData/api/portfolio/portfolios';
@@ -11,9 +12,9 @@ vi.mock('./useSwap');
 describe('SwapForm', () => {
   const operationData = {
     portfolio: 'suricat',
-    originAsset: 'iti',
-    destinyAsset: 'nubank',
-  };
+    originAsset: { class: 'fixed', name: 'iti' },
+    destinyAsset: { class: 'fixed', name: 'nubank' },
+  } as const;
   const liquidityProvider = 'reservaEmergencia';
   const currentAssetValues = {
     originCurrentValue: 1950,
@@ -35,11 +36,11 @@ describe('SwapForm', () => {
     );
 
     await fillFormField(
-      `Origin (${operationData.originAsset}) Current Value`,
+      `Origin (${formatAssetName(operationData.originAsset)}) Current Value`,
       newOriginCurrentValue
     );
     await fillFormField(
-      `Destiny (${operationData.destinyAsset}) Current Value`,
+      `Destiny (${formatAssetName(operationData.destinyAsset)}) Current Value`,
       newDestinyCurrentValue
     );
     await fillFormField('Value', value);
@@ -85,11 +86,11 @@ describe('SwapForm', () => {
     );
 
     await fillFormField(
-      `Origin (${operationData.originAsset}) Current Value`,
+      `Origin (${formatAssetName(operationData.originAsset)}) Current Value`,
       newOriginCurrentValue
     );
     await fillFormField(
-      `Destiny (${operationData.destinyAsset}) Current Value`,
+      `Destiny (${formatAssetName(operationData.destinyAsset)}) Current Value`,
       newDestinyCurrentValue
     );
     await fillFormField('Value', value);
