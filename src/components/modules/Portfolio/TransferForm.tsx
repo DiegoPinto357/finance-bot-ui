@@ -9,7 +9,7 @@ import { currencyField, optionalCurrencyField } from '@/lib/formFieldSchema';
 import { formatCurrency } from '@/lib/formatNumber';
 import { formatAssetName } from '@/lib/formatString';
 import useTransfer from './useTransfer';
-import useSetAssetValue from '../Fixed/useSetAssetValue';
+import useSetAssetValue from './useSetAssetValue';
 
 import type { DragAndDropOperationData, CurrentAssetValues } from './types';
 
@@ -79,14 +79,14 @@ const TransferForm = forwardRef(
         try {
           if (originCurrentValue) {
             await setAssetValue({
-              asset: originAsset.name,
+              asset: originAsset,
               value: originCurrentValue,
             });
           }
 
           if (destinyCurrentValue) {
             await setAssetValue({
-              asset: destinyAsset.name,
+              asset: destinyAsset,
               value: destinyCurrentValue,
             });
           }

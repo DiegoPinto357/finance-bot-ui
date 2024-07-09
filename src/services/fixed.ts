@@ -18,7 +18,7 @@ const getBalance = async (assetName?: string | string[]) => {
   });
 };
 
-type SetAssetValueParams = {
+export type SetAssetValueParams = {
   asset: string;
   value: number;
 };

@@ -1,12 +1,12 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { mockedSwap } from './__mocks__/useSwap';
-import { mockedSetAssetValue } from '../Fixed/__mocks__/useSetAssetValue';
+import { mockedSetFixedAssetValue } from '../Fixed/__mocks__/setFixedAssetValue';
 import { formatAssetName } from '@/lib/formatString';
 import { fillFormField, selectFormFieldOption } from '@/testUtils/forms';
 import SwapForm from './SwapForm';
 import portfolios from '../../../../mockData/api/portfolio/portfolios';
 
-vi.mock('../Fixed/useSetAssetValue');
+vi.mock('../Fixed/setFixedAssetValue');
 vi.mock('./useSwap');
 
 describe('SwapForm', () => {
@@ -50,12 +50,12 @@ describe('SwapForm', () => {
     fireEvent.submit(form);
 
     await waitFor(() => {
-      expect(mockedSetAssetValue).toBeCalledTimes(2);
-      expect(mockedSetAssetValue).toBeCalledWith({
+      expect(mockedSetFixedAssetValue).toBeCalledTimes(2);
+      expect(mockedSetFixedAssetValue).toBeCalledWith({
         asset: 'iti',
         value: newOriginCurrentValue,
       });
-      expect(mockedSetAssetValue).toBeCalledWith({
+      expect(mockedSetFixedAssetValue).toBeCalledWith({
         asset: 'nubank',
         value: newDestinyCurrentValue,
       });

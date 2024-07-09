@@ -1,9 +1,7 @@
 import { useMutation } from 'react-query';
 import fixedService from '../../../services/fixed';
 
-const useSetAssetValue = () => {
+export const useSetFixedAssetValue = () => {
   const { mutateAsync, ...rest } = useMutation(fixedService.setAssetValue);
-  return { setAssetValue: mutateAsync, ...rest };
+  return { setFixedAssetValue: mutateAsync, ...rest };
 };
-
-export default useSetAssetValue;

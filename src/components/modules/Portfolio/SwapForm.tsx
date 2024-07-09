@@ -10,7 +10,7 @@ import { currencyField, optionalCurrencyField } from '@/lib/formFieldSchema';
 import { formatCurrency } from '@/lib/formatNumber';
 import { formatAssetName } from '@/lib/formatString';
 import useSwap from './useSwap';
-import useSetAssetValue from '../Fixed/useSetAssetValue';
+import { useSetFixedAssetValue } from '../Fixed/setFixedAssetValue';
 
 import type { DragAndDropOperationData, CurrentAssetValues } from './types';
 
@@ -74,7 +74,7 @@ const SwapForm = forwardRef(
 
     const { swap } = useSwap();
     // TODO need to set values for all asset classes
-    const { setAssetValue } = useSetAssetValue();
+    const { setFixedAssetValue } = useSetFixedAssetValue();
 
     const { originAsset, destinyAsset } = operationData;
     const { originCurrentValue, destinyCurrentValue } = currentAssetValues;
@@ -97,14 +97,14 @@ const SwapForm = forwardRef(
           }
 
           if (originCurrentValue) {
-            await setAssetValue({
+            await setFixedAssetValue({
               asset: originAsset.name,
               value: originCurrentValue,
             });
           }
 
           if (destinyCurrentValue) {
-            await setAssetValue({
+            await setFixedAssetValue({
               asset: destinyAsset.name,
               value: destinyCurrentValue,
             });
@@ -124,7 +124,7 @@ const SwapForm = forwardRef(
           else onError(String(error));
         }
       },
-      [operationData, setAssetValue, swap, onSubmmit, onError]
+      [operationData, setFixedAssetValue, swap, onSubmmit, onError]
     );
 
     return (
