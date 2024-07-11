@@ -8,25 +8,43 @@ import {
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import ConfirmDialog from '@/components/lib/ConfirmDialog';
 import Typography from '@/components/lib/Typography';
-import { formatAssetName } from '@/lib/formatString';
+import { formatAssetName, capitalizeString } from '@/lib/formatString';
 import useGetAssetBalance from './useGetAssetBalance';
 import TransferForm from './TransferForm';
 import SwapForm from './SwapForm';
 
+import type { Asset } from '@/types';
 import type { ForwardRefExoticComponent } from 'react';
 import type { DragAndDropOperationData } from './types';
 
 type Operation = 'transfer' | 'swap' | 'deposit' | 'withdrawn';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const FormComponents: Record<Operation, ForwardRefExoticComponent<any>> = {
+type FormComponent = ForwardRefExoticComponent<any>;
+
+const FormComponents: Record<Operation, FormComponent> = {
   transfer: TransferForm,
   swap: SwapForm,
   deposit: forwardRef(() => <div>deposit</div>),
   withdrawn: forwardRef(() => <div>withdrawn</div>),
 };
+
+const allowedAssetsForTransfer = [
+  { class: 'fixed' },
+  { class: 'stock', name: 'float' },
+  { class: 'crypto', name: 'hodl' },
+  { class: 'crypto', name: 'binanceBuffer' },
+];
+
+const isAssetAllowedForTransfer = (asset: Asset) =>
+  allowedAssetsForTransfer.some(
+    allowedAsset =>
+      allowedAsset.class === asset.class &&
+      (allowedAsset.name === undefined || allowedAsset.name === asset.name)
+  );
 
 type Props = {
   open: boolean;
@@ -52,8 +70,6 @@ const OperationDialog = ({
     destinyAsset,
   ]);
 
-  const renderTabs = operations.length > 1;
-
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -61,6 +77,31 @@ const OperationDialog = ({
       setErrorMessage(null);
     }
   }, [open]);
+
+  const allowedOperations = operations.filter(
+    operation =>
+      operation !== 'transfer' ||
+      (isAssetAllowedForTransfer(operationData.originAsset) &&
+        isAssetAllowedForTransfer(operationData.destinyAsset))
+  );
+
+  const renderTabs = allowedOperations.length > 1;
+
+  const renderForm = (FormComponent: FormComponent) => {
+    return (
+      <FormComponent
+        ref={formRef}
+        operationData={operationData}
+        currentAssetValues={{
+          originCurrentValue,
+          destinyCurrentValue,
+        }}
+        portfolios={portfolios}
+        onSubmmit={() => onOpenChange(false)}
+        onError={setErrorMessage}
+      />
+    );
+  };
 
   return (
     <>
@@ -87,19 +128,18 @@ const OperationDialog = ({
           </DialogHeader>
 
           {renderTabs ? (
-            <Tabs defaultValue={operations[0]}>
+            <Tabs defaultValue={allowedOperations[0]}>
               <TabsList
-                className={`grid w-full grid-cols-${operations.length}`}
+                className={`grid w-full grid-cols-${allowedOperations.length}`}
                 tabIndex={0}
               >
-                {operations.map(operation => (
+                {allowedOperations.map(operation => (
                   <TabsTrigger key={`${operation}-tab`} value={operation}>
-                    {operation}
+                    {capitalizeString(operation)}
                   </TabsTrigger>
                 ))}
               </TabsList>
-              {operations.map(operation => {
-                const FormComponent = FormComponents[operation];
+              {allowedOperations.map(operation => {
                 return (
                   <TabsContent
                     key={`${operation}-content`}
@@ -107,22 +147,20 @@ const OperationDialog = ({
                     value={operation}
                     tabIndex={-1}
                   >
-                    <FormComponent
-                      ref={formRef}
-                      operationData={operationData}
-                      currentAssetValues={{
-                        originCurrentValue,
-                        destinyCurrentValue,
-                      }}
-                      portfolios={portfolios}
-                      onSubmmit={() => onOpenChange(false)}
-                      onError={setErrorMessage}
-                    />
+                    {renderForm(FormComponents[operation])}
                   </TabsContent>
                 );
               })}
             </Tabs>
-          ) : null}
+          ) : (
+            <div>
+              <Separator className="mb-4" />
+              <Typography variant="h3">
+                {capitalizeString(allowedOperations[0])}
+              </Typography>
+              {renderForm(FormComponents[allowedOperations[0]])}
+            </div>
+          )}
 
           <DialogFooter>
             {/* TODO adjst button label based on selected operation */}

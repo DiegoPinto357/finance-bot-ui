@@ -40,8 +40,8 @@ describe('OperationDialog', () => {
       />
     );
 
-    const transferTab = screen.getByRole('tab', { name: 'transfer' });
-    const swapTab = screen.getByRole('tab', { name: 'swap' });
+    const transferTab = screen.getByRole('tab', { name: 'Transfer' });
+    const swapTab = screen.getByRole('tab', { name: 'Swap' });
 
     let transferForm = screen.getByRole('form', { name: 'transfer' });
     expect(transferForm).toBeInTheDocument();
@@ -53,6 +53,26 @@ describe('OperationDialog', () => {
     await userEvent.click(transferTab);
     transferForm = screen.getByRole('form', { name: 'transfer' });
     expect(transferForm).toBeInTheDocument();
+  });
+
+  it('does not render tabs when a single operation is available', async () => {
+    render(
+      <OperationDialog
+        open
+        operations={['swap']}
+        operationData={operationData}
+        portfolios={portfolios}
+        onOpenChange={() => {}}
+      />
+    );
+
+    const swapTab = screen.queryByRole('tab', { name: 'swap' });
+    const swapTitle = screen.getByRole('heading', { level: 3, name: 'Swap' });
+    const swapForm = await screen.findByRole('form', { name: 'swap' });
+
+    expect(swapTab).not.toBeInTheDocument();
+    expect(swapTitle).toBeInTheDocument();
+    expect(swapForm).toBeInTheDocument();
   });
 
   it('submits form if user confirms it on confirm dialog', async () => {
@@ -117,5 +137,189 @@ describe('OperationDialog', () => {
 
     const errorMessageElement = screen.getByText(errorMessage);
     expect(errorMessageElement).toBeInTheDocument();
+  });
+
+  describe('transfer', () => {
+    it('allows tranfer from fixed to stock float', async () => {
+      const operationData = {
+        portfolio: 'suricat',
+        originAsset: { class: 'fixed', name: 'iti' },
+        destinyAsset: { class: 'stock', name: 'float' },
+      } as const;
+
+      render(
+        <OperationDialog
+          open
+          operations={['swap', 'transfer']}
+          operationData={operationData}
+          portfolios={portfolios}
+          onOpenChange={() => {}}
+        />
+      );
+
+      const transferTab = screen.getByRole('tab', { name: 'Transfer' });
+      await userEvent.click(transferTab);
+      const transferForm = await screen.findByRole('form', {
+        name: 'transfer',
+      });
+
+      expect(transferForm).toBeInTheDocument();
+    });
+
+    it('allows tranfer from fixed to crypto hodl', async () => {
+      const operationData = {
+        portfolio: 'suricat',
+        originAsset: { class: 'fixed', name: 'iti' },
+        destinyAsset: { class: 'crypto', name: 'hodl' },
+      } as const;
+
+      render(
+        <OperationDialog
+          open
+          operations={['swap', 'transfer']}
+          operationData={operationData}
+          portfolios={portfolios}
+          onOpenChange={() => {}}
+        />
+      );
+
+      const transferTab = screen.getByRole('tab', { name: 'Transfer' });
+      await userEvent.click(transferTab);
+      const transferForm = await screen.findByRole('form', {
+        name: 'transfer',
+      });
+
+      expect(transferForm).toBeInTheDocument();
+    });
+
+    it('allows tranfer from fixed to crypto binanceBuffer', async () => {
+      const operationData = {
+        portfolio: 'suricat',
+        originAsset: { class: 'fixed', name: 'iti' },
+        destinyAsset: { class: 'crypto', name: 'binanceBuffer' },
+      } as const;
+
+      render(
+        <OperationDialog
+          open
+          operations={['swap', 'transfer']}
+          operationData={operationData}
+          portfolios={portfolios}
+          onOpenChange={() => {}}
+        />
+      );
+
+      const transferTab = screen.getByRole('tab', { name: 'Transfer' });
+      await userEvent.click(transferTab);
+      const transferForm = await screen.findByRole('form', {
+        name: 'transfer',
+      });
+
+      expect(transferForm).toBeInTheDocument();
+    });
+
+    it('does not allow transfer from stock asset other than float', async () => {
+      const operationData = {
+        portfolio: 'suricat',
+        originAsset: { class: 'stock', name: 'fii' },
+        destinyAsset: { class: 'fixed', name: 'nubank' },
+      } as const;
+
+      render(
+        <OperationDialog
+          open
+          operations={['swap', 'transfer']}
+          operationData={operationData}
+          portfolios={portfolios}
+          onOpenChange={() => {}}
+        />
+      );
+
+      const transferTab = screen.queryByRole('tab', { name: 'transfer' });
+      const swapTitle = screen.getByRole('heading', { level: 3, name: 'Swap' });
+      const swapForm = await screen.findByRole('form', { name: 'swap' });
+
+      expect(transferTab).not.toBeInTheDocument();
+      expect(swapTitle).toBeInTheDocument();
+      expect(swapForm).toBeInTheDocument();
+    });
+
+    it('does not allow transfer to stock asset other than float', async () => {
+      const operationData = {
+        portfolio: 'suricat',
+        originAsset: { class: 'fixed', name: 'nubank' },
+        destinyAsset: { class: 'stock', name: 'fii' },
+      } as const;
+
+      render(
+        <OperationDialog
+          open
+          operations={['swap', 'transfer']}
+          operationData={operationData}
+          portfolios={portfolios}
+          onOpenChange={() => {}}
+        />
+      );
+
+      const transferTab = screen.queryByRole('tab', { name: 'transfer' });
+      const swapTitle = screen.getByRole('heading', { level: 3, name: 'Swap' });
+      const swapForm = await screen.findByRole('form', { name: 'swap' });
+
+      expect(transferTab).not.toBeInTheDocument();
+      expect(swapTitle).toBeInTheDocument();
+      expect(swapForm).toBeInTheDocument();
+    });
+
+    it('does not allow transfer from crypto asset other than hodl or binanceBuffer', async () => {
+      const operationData = {
+        portfolio: 'suricat',
+        originAsset: { class: 'crypto', name: 'defi' },
+        destinyAsset: { class: 'fixed', name: 'nubank' },
+      } as const;
+
+      render(
+        <OperationDialog
+          open
+          operations={['swap', 'transfer']}
+          operationData={operationData}
+          portfolios={portfolios}
+          onOpenChange={() => {}}
+        />
+      );
+
+      const transferTab = screen.queryByRole('tab', { name: 'transfer' });
+      const swapTitle = screen.getByRole('heading', { level: 3, name: 'Swap' });
+      const swapForm = await screen.findByRole('form', { name: 'swap' });
+
+      expect(transferTab).not.toBeInTheDocument();
+      expect(swapTitle).toBeInTheDocument();
+      expect(swapForm).toBeInTheDocument();
+    });
+
+    it('does not allow transfer to crypto asset other than hodl or binanceBuffer', async () => {
+      const operationData = {
+        portfolio: 'suricat',
+        originAsset: { class: 'fixed', name: 'nubank' },
+        destinyAsset: { class: 'crypto', name: 'defi' },
+      } as const;
+
+      render(
+        <OperationDialog
+          open
+          operations={['swap', 'transfer']}
+          operationData={operationData}
+          portfolios={portfolios}
+          onOpenChange={() => {}}
+        />
+      );
+
+      const transferTab = screen.queryByRole('tab', { name: 'transfer' });
+      const swapTitle = screen.getByRole('heading', { level: 3, name: 'Swap' });
+      const swapForm = await screen.findByRole('form', { name: 'swap' });
+
+      expect(transferTab).not.toBeInTheDocument();
+      expect(swapTitle).toBeInTheDocument();
+      expect(swapForm).toBeInTheDocument();
+    });
   });
 });
