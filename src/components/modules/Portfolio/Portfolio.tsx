@@ -120,7 +120,9 @@ const mapData = (rawData?: PortfolioBalance) => {
 };
 
 const getPortfolios = (balance: { portfolio: string }[]) =>
-  balance.map(({ portfolio }) => portfolio);
+  balance
+    .map(({ portfolio }) => portfolio)
+    .filter(portfolio => portfolio !== 'total');
 
 const Portfolio = () => {
   // TODO use error flag
