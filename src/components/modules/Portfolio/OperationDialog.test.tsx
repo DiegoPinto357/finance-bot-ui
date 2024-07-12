@@ -218,6 +218,32 @@ describe('OperationDialog', () => {
       expect(transferForm).toBeInTheDocument();
     });
 
+    it('allows tranfer from fixed to crypto backed', async () => {
+      const operationData = {
+        portfolio: 'suricat',
+        originAsset: { class: 'fixed', name: 'iti' },
+        destinyAsset: { class: 'crypto', name: 'backed' },
+      } as const;
+
+      render(
+        <OperationDialog
+          open
+          operations={['swap', 'transfer']}
+          operationData={operationData}
+          portfolios={portfolios}
+          onOpenChange={() => {}}
+        />
+      );
+
+      const transferTab = screen.getByRole('tab', { name: 'Transfer' });
+      await userEvent.click(transferTab);
+      const transferForm = await screen.findByRole('form', {
+        name: 'transfer',
+      });
+
+      expect(transferForm).toBeInTheDocument();
+    });
+
     it('does not allow transfer from stock asset other than float', async () => {
       const operationData = {
         portfolio: 'suricat',
@@ -270,7 +296,7 @@ describe('OperationDialog', () => {
       expect(swapForm).toBeInTheDocument();
     });
 
-    it('does not allow transfer from crypto asset other than hodl or binanceBuffer', async () => {
+    it('does not allow transfer from crypto asset other than hodl, binanceBuffer or backed', async () => {
       const operationData = {
         portfolio: 'suricat',
         originAsset: { class: 'crypto', name: 'defi' },
@@ -296,7 +322,7 @@ describe('OperationDialog', () => {
       expect(swapForm).toBeInTheDocument();
     });
 
-    it('does not allow transfer to crypto asset other than hodl or binanceBuffer', async () => {
+    it('does not allow transfer to crypto asset other than hodl, binanceBuffer or backed', async () => {
       const operationData = {
         portfolio: 'suricat',
         originAsset: { class: 'fixed', name: 'nubank' },

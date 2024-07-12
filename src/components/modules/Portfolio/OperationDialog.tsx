@@ -37,6 +37,7 @@ const allowedAssetsForTransfer = [
   { class: 'stock', name: 'float' },
   { class: 'crypto', name: 'hodl' },
   { class: 'crypto', name: 'binanceBuffer' },
+  { class: 'crypto', name: 'backed' },
 ];
 
 const isAssetAllowedForTransfer = (asset: Asset) =>
