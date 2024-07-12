@@ -302,7 +302,6 @@ describe('TransferForm', () => {
         onError={() => {}}
       />
     );
-    2;
 
     const originAssetValueField = screen.queryByRole('spinbutton', {
       name: `Origin (${formatAssetName(

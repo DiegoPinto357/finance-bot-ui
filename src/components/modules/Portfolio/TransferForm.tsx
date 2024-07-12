@@ -10,8 +10,8 @@ import { formatCurrency } from '@/lib/formatNumber';
 import { formatAssetName } from '@/lib/formatString';
 import useTransfer from './useTransfer';
 import useSetAssetValue from './useSetAssetValue';
+import { needManualUpdate } from './utils';
 
-import type { Asset } from '@/types';
 import type { DragAndDropOperationData, CurrentAssetValues } from './types';
 
 const createFormSchema = (isValueOptional: boolean) =>
@@ -36,19 +36,6 @@ const defaultValues: DefaultValues = {
   allFundsValue: '',
   value: '',
 } as const;
-
-const manualFetchBalance = [
-  { class: 'fixed' },
-  { class: 'stock', name: 'float' },
-];
-
-const needManualUpdate = (asset: Asset) =>
-  manualFetchBalance.some(
-    manualUpdatedAsset =>
-      manualUpdatedAsset.class === asset.class &&
-      (manualUpdatedAsset.name === undefined ||
-        manualUpdatedAsset.name === asset.name)
-  );
 
 type Props = {
   operationData: DragAndDropOperationData;
@@ -76,7 +63,6 @@ const TransferForm = forwardRef(
     }));
 
     const { transfer } = useTransfer();
-    // TODO need to set values for all asset classes
     const { setAssetValue } = useSetAssetValue();
 
     const { originAsset, destinyAsset } = operationData;

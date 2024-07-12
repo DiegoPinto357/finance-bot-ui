@@ -10,7 +10,8 @@ import { currencyField, optionalCurrencyField } from '@/lib/formFieldSchema';
 import { formatCurrency } from '@/lib/formatNumber';
 import { formatAssetName } from '@/lib/formatString';
 import useSwap from './useSwap';
-import { useSetFixedAssetValue } from '../Fixed/setFixedAssetValue';
+import useSetAssetValue from './useSetAssetValue';
+import { needManualUpdate } from './utils';
 
 import type { DragAndDropOperationData, CurrentAssetValues } from './types';
 
@@ -73,8 +74,7 @@ const SwapForm = forwardRef(
     }));
 
     const { swap } = useSwap();
-    // TODO need to set values for all asset classes
-    const { setFixedAssetValue } = useSetFixedAssetValue();
+    const { setAssetValue } = useSetAssetValue();
 
     const { originAsset, destinyAsset } = operationData;
     const { originCurrentValue, destinyCurrentValue } = currentAssetValues;
@@ -97,15 +97,15 @@ const SwapForm = forwardRef(
           }
 
           if (originCurrentValue) {
-            await setFixedAssetValue({
-              asset: originAsset.name,
+            await setAssetValue({
+              asset: originAsset,
               value: originCurrentValue,
             });
           }
 
           if (destinyCurrentValue) {
-            await setFixedAssetValue({
-              asset: destinyAsset.name,
+            await setAssetValue({
+              asset: destinyAsset,
               value: destinyCurrentValue,
             });
           }
@@ -124,7 +124,7 @@ const SwapForm = forwardRef(
           else onError(String(error));
         }
       },
-      [operationData, setFixedAssetValue, swap, onSubmmit, onError]
+      [operationData, setAssetValue, swap, onSubmmit, onError]
     );
 
     return (
@@ -133,31 +133,37 @@ const SwapForm = forwardRef(
           id="operation-form"
           aria-label="swap"
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="grid content-start grid-cols-1 gap-4 h-[406px]"
+          className="grid content-start grid-cols-1 gap-4 h-[420px]"
           noValidate
         >
-          <FormField
-            control={form.control}
-            name="originCurrentValue"
-            label={`Origin (${formatAssetName(originAsset)}) Current Value`}
-            description={`Current value: ${formatCurrency(originCurrentValue)}`}
-            type="number"
-          />
+          {needManualUpdate(originAsset) ? (
+            <FormField
+              control={form.control}
+              name="originCurrentValue"
+              label={`Origin (${formatAssetName(originAsset)}) Current Value`}
+              description={`Current value: ${formatCurrency(
+                originCurrentValue
+              )}`}
+              type="number"
+            />
+          ) : null}
 
-          <FormField
-            control={form.control}
-            name="destinyCurrentValue"
-            label={`Destiny (${formatAssetName(destinyAsset)}) Current Value`}
-            description={`Current value: ${formatCurrency(
-              destinyCurrentValue
-            )}`}
-            type="number"
-          />
+          {needManualUpdate(destinyAsset) ? (
+            <FormField
+              control={form.control}
+              name="destinyCurrentValue"
+              label={`Destiny (${formatAssetName(destinyAsset)}) Current Value`}
+              description={`Current value: ${formatCurrency(
+                destinyCurrentValue
+              )}`}
+              type="number"
+            />
+          ) : null}
 
           <FormCheckbox
             control={form.control}
             name="allFundsValue"
-            label="Transfer all funds"
+            label="Swap all funds"
             onChange={setValueFieldDisabled}
           />
 
