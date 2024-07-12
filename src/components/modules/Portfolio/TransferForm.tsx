@@ -11,6 +11,7 @@ import { formatAssetName } from '@/lib/formatString';
 import useTransfer from './useTransfer';
 import useSetAssetValue from './useSetAssetValue';
 
+import type { Asset } from '@/types';
 import type { DragAndDropOperationData, CurrentAssetValues } from './types';
 
 const createFormSchema = (isValueOptional: boolean) =>
@@ -35,6 +36,19 @@ const defaultValues: DefaultValues = {
   allFundsValue: '',
   value: '',
 } as const;
+
+const manualFetchBalance = [
+  { class: 'fixed' },
+  { class: 'stock', name: 'float' },
+];
+
+const needManualUpdate = (asset: Asset) =>
+  manualFetchBalance.some(
+    manualUpdatedAsset =>
+      manualUpdatedAsset.class === asset.class &&
+      (manualUpdatedAsset.name === undefined ||
+        manualUpdatedAsset.name === asset.name)
+  );
 
 type Props = {
   operationData: DragAndDropOperationData;
@@ -113,26 +127,32 @@ const TransferForm = forwardRef(
           id="operation-form"
           aria-label="transfer"
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="grid content-start grid-cols-1 gap-4 h-[406px]"
+          className="grid content-start grid-cols-1 gap-4 h-[420px]"
           noValidate
         >
-          <FormField
-            control={form.control}
-            name="originCurrentValue"
-            label={`Origin (${formatAssetName(originAsset)}) Current Value`}
-            description={`Current value: ${formatCurrency(originCurrentValue)}`}
-            type="number"
-          />
+          {needManualUpdate(originAsset) ? (
+            <FormField
+              control={form.control}
+              name="originCurrentValue"
+              label={`Origin (${formatAssetName(originAsset)}) Current Value`}
+              description={`Current value: ${formatCurrency(
+                originCurrentValue
+              )}`}
+              type="number"
+            />
+          ) : null}
 
-          <FormField
-            control={form.control}
-            name="destinyCurrentValue"
-            label={`Destiny (${formatAssetName(destinyAsset)}) Current Value`}
-            description={`Current value: ${formatCurrency(
-              destinyCurrentValue
-            )}`}
-            type="number"
-          />
+          {needManualUpdate(destinyAsset) ? (
+            <FormField
+              control={form.control}
+              name="destinyCurrentValue"
+              label={`Destiny (${formatAssetName(destinyAsset)}) Current Value`}
+              description={`Current value: ${formatCurrency(
+                destinyCurrentValue
+              )}`}
+              type="number"
+            />
+          ) : null}
 
           <FormCheckbox
             control={form.control}
