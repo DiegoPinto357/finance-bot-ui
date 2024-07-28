@@ -19,7 +19,7 @@ describe('Portfolio', () => {
   });
 
   describe('drag and drop values', () => {
-    it('opens operation modal on drag and drop table cell', async () => {
+    it('opens operation modal on drag and drop table cell for fixed assets', async () => {
       const portfolio = 'suricat';
       const origin: Asset = { class: 'fixed', name: 'iti' };
       const destiny: Asset = { class: 'fixed', name: 'nubank' };
@@ -44,6 +44,56 @@ describe('Portfolio', () => {
       expect(operationDialog).toBeVisible();
       expect(originCurrentValue).toBeInTheDocument();
       expect(destinyCurrentValue).toBeInTheDocument();
+    });
+
+    it('opens operation modal on drag and drop table cell for fixed and stock assets', async () => {
+      const portfolio = 'suricat';
+      const origin: Asset = { class: 'fixed', name: 'iti' };
+      const destiny: Asset = { class: 'stock', name: 'float' };
+
+      render(<Portfolio />);
+
+      triggerCellDrop({
+        drag: { colId: origin, rowId: portfolio },
+        drop: { colId: destiny, rowId: portfolio },
+      });
+
+      const operationDialog = screen.getByRole('dialog', {
+        name: 'Operation',
+      });
+      const originCurrentValue = await within(operationDialog).findByText(
+        'Current value: R$ 6.943,70'
+      );
+      const destinyCurrentValue = await within(operationDialog).findByText(
+        'Current value: R$ 10,14'
+      );
+
+      expect(operationDialog).toBeVisible();
+      expect(originCurrentValue).toBeInTheDocument();
+      expect(destinyCurrentValue).toBeInTheDocument();
+    });
+
+    it('opens operation modal on drag and drop table cell for fixed and crypto assets', async () => {
+      const portfolio = 'suricat';
+      const origin: Asset = { class: 'fixed', name: 'iti' };
+      const destiny: Asset = { class: 'crypto', name: 'hodl' };
+
+      render(<Portfolio />);
+
+      triggerCellDrop({
+        drag: { colId: origin, rowId: portfolio },
+        drop: { colId: destiny, rowId: portfolio },
+      });
+
+      const operationDialog = screen.getByRole('dialog', {
+        name: 'Operation',
+      });
+      const originCurrentValue = await within(operationDialog).findByText(
+        'Current value: R$ 6.943,70'
+      );
+
+      expect(operationDialog).toBeVisible();
+      expect(originCurrentValue).toBeInTheDocument();
     });
 
     it('does not open operations dialog to operate across portfolios', async () => {
