@@ -1,16 +1,10 @@
 import { forwardRef } from 'react';
-import GenericForm from './GenericForm';
+import ActualForm from '../SwapForm';
 
-// eslint-disable-next-line react-refresh/only-export-components
-export { mockedOnFormSubmit } from './GenericForm';
+import type { SwapFormProps } from '../SwapForm';
 
-const SwapForm = forwardRef(
-  (
-    props: { onSubmmit: () => void; onError: (errorMessage: string) => void },
-    ref
-  ) => {
-    return <GenericForm {...props} ariaLabel="swap" ref={ref} />;
-  }
-);
+const SwapForm = forwardRef((props: SwapFormProps, ref) => {
+  return <ActualForm {...props} ref={ref} />;
+});
 
 export default SwapForm;

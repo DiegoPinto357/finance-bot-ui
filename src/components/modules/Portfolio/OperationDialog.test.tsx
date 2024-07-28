@@ -1,10 +1,18 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { mockedOnFormSubmit } from './__mocks__/TransferForm';
+import { formatAssetName } from '@/lib/formatString';
+import { formatCurrency } from '@/lib/formatNumber';
 import OperationDialog from './OperationDialog';
+import { mockedTransfer } from './__mocks__/useTransfer';
 import portfolios from '../../../../mockData/api/portfolio/portfolios';
+import { fillFormField } from '@/testUtils/forms';
 
+vi.mock('../Fixed/setFixedAssetValue');
 vi.mock('../Fixed/getFixedBalance');
+vi.mock('../Stock/setStockAssetValue');
+vi.mock('../Stock/getStockAssetPosition');
+vi.mock('./useTransfer');
+vi.mock('./useSwap');
 vi.mock('./TransferForm');
 vi.mock('./SwapForm');
 
@@ -75,7 +83,7 @@ describe('OperationDialog', () => {
     expect(swapForm).toBeInTheDocument();
   });
 
-  it('submits form if user confirms it on confirm dialog', async () => {
+  it('submits the form if user confirms it on confirm dialog', async () => {
     render(
       <OperationDialog
         open
@@ -86,16 +94,23 @@ describe('OperationDialog', () => {
       />
     );
 
+    await fillFormField('Value', 1000);
     const submitButton = screen.getByRole('button', {
       name: 'Submit',
     });
     await userEvent.click(submitButton);
-
     await confirm('Yes');
-    expect(mockedOnFormSubmit).toBeCalledTimes(1);
+
+    expect(mockedTransfer).toBeCalledTimes(1);
+    expect(mockedTransfer).toBeCalledWith({
+      portfolio: operationData.portfolio,
+      origin: operationData.originAsset,
+      destiny: operationData.destinyAsset,
+      value: 1000,
+    });
   });
 
-  it('does not submit form if user do not confirm it on confirm dialog', async () => {
+  it('does not submit the form if user do not confirm it on confirm dialog', async () => {
     render(
       <OperationDialog
         open
@@ -106,18 +121,19 @@ describe('OperationDialog', () => {
       />
     );
 
+    await fillFormField('Value', 1000);
     const submitButton = screen.getByRole('button', {
       name: 'Submit',
     });
     await userEvent.click(submitButton);
 
     await confirm('No');
-    expect(mockedOnFormSubmit).not.toBeCalled();
+    expect(mockedTransfer).not.toBeCalled();
   });
 
   it('renders error message if server fails', async () => {
     const errorMessage = 'Error message!';
-    mockedOnFormSubmit.mockRejectedValueOnce(new Error(errorMessage));
+    mockedTransfer.mockRejectedValueOnce(new Error(errorMessage));
 
     render(
       <OperationDialog
@@ -129,6 +145,7 @@ describe('OperationDialog', () => {
       />
     );
 
+    await fillFormField('Value', 1000);
     const submitButton = screen.getByRole('button', {
       name: 'Submit',
     });
@@ -137,6 +154,42 @@ describe('OperationDialog', () => {
 
     const errorMessageElement = screen.getByText(errorMessage);
     expect(errorMessageElement).toBeInTheDocument();
+  });
+
+  it('renders current asset values under the field to update current asset values', async () => {
+    const operationData = {
+      portfolio: 'financiamento',
+      originAsset: { class: 'fixed', name: 'inco' },
+      destinyAsset: { class: 'stock', name: 'float' },
+    } as const;
+
+    render(
+      <OperationDialog
+        open
+        operations={['transfer', 'swap']}
+        operationData={operationData}
+        portfolios={portfolios}
+        onOpenChange={() => {}}
+      />
+    );
+
+    const originCurrentValueField = await screen.findByRole('spinbutton', {
+      name: `Origin (${formatAssetName(
+        operationData.originAsset
+      )}) Current Value`,
+    });
+    const destinyCurrentValueField = screen.getByRole('spinbutton', {
+      name: `Destiny (${formatAssetName(
+        operationData.destinyAsset
+      )}) Current Value`,
+    });
+
+    expect(originCurrentValueField).toHaveAccessibleDescription(
+      `Current value: ${formatCurrency(10891.02)}`
+    );
+    expect(destinyCurrentValueField).toHaveAccessibleDescription(
+      `Current value: ${formatCurrency(100)}`
+    );
   });
 
   describe('transfer', () => {

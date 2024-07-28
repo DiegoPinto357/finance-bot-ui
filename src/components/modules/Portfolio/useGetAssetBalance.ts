@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { getFixedBalance } from '../Fixed/getFixedBalance';
+import { getStockAssetPosition } from '../Stock/getStockAssetPosition';
 
-import type { Asset } from '@/types';
-import { FixedBalance } from '@/services/fixed';
+import type { Asset, StockAssetType } from '@/types';
 
-function arrayEqual(a1: Asset[], a2: Asset[]) {
+// TODO move to libs
+const arrayEqual = (a1: Asset[], a2: Asset[]) => {
   if (a1.length !== a2.length) return false;
   for (let i = 0; i < a1.length; i++) {
     if (a1[i] !== a2[i]) {
@@ -12,10 +13,10 @@ function arrayEqual(a1: Asset[], a2: Asset[]) {
     }
   }
   return true;
-}
+};
 
 const useGetAssetBalance = (assets: Asset[]) => {
-  const [balance, setBalance] = useState<FixedBalance>();
+  const [balance, setBalance] = useState<(number | undefined)[]>([]);
   const assetsRef = useRef(assets);
 
   if (!arrayEqual(assets, assetsRef.current)) {
@@ -23,16 +24,29 @@ const useGetAssetBalance = (assets: Asset[]) => {
   }
 
   useEffect(() => {
-    const fetchAssetBalance = async (assets: Asset[]) => {
-      const fixedAssets = assets
-        .filter(asset => asset.class === 'fixed')
-        .map(({ name }) => name);
-      setBalance(await getFixedBalance(fixedAssets));
+    const fetchAssetsBalances = async (assets: Asset[]) => {
+      const balances = await Promise.all(
+        assets.map(async asset => {
+          if (asset.class === 'fixed') {
+            return getFixedBalance(asset.name);
+          }
+          if (asset.class === 'stock') {
+            return getStockAssetPosition(asset.name as StockAssetType);
+          }
+        })
+      );
+
+      setBalance(
+        balances.map(balance =>
+          typeof balance === 'number' ? balance : balance?.total
+        )
+      );
     };
-    fetchAssetBalance(assetsRef.current);
+
+    fetchAssetsBalances(assetsRef.current);
   }, []);
 
-  return balance ? balance?.balance.map(({ value }) => value) : [];
+  return balance;
 };
 
 export default useGetAssetBalance;

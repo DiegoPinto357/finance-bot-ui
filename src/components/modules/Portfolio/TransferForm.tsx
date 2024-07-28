@@ -37,7 +37,7 @@ const defaultValues: DefaultValues = {
   value: '',
 } as const;
 
-type Props = {
+export type TransferFromProps = {
   operationData: DragAndDropOperationData;
   currentAssetValues: CurrentAssetValues;
   data?: TransferFormSchema;
@@ -47,7 +47,13 @@ type Props = {
 
 const TransferForm = forwardRef(
   (
-    { operationData, currentAssetValues, data, onSubmmit, onError }: Props,
+    {
+      operationData,
+      currentAssetValues,
+      data,
+      onSubmmit,
+      onError,
+    }: TransferFromProps,
     ref
   ) => {
     const [valueFieldDisabled, setValueFieldDisabled] =

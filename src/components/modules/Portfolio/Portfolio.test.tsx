@@ -10,6 +10,7 @@ vi.mock('./useTransfer');
 vi.mock('./useSwap');
 vi.mock('../Fixed/getFixedBalance');
 vi.mock('../Fixed/setFixedAssetValue');
+vi.mock('../Stock/setStockAssetValue');
 vi.mock('../../DataTable');
 
 describe('Portfolio', () => {

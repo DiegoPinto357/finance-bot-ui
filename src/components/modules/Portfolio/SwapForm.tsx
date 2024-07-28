@@ -40,7 +40,7 @@ const defaultValues: DefaultValues = {
   value: '',
 } as const;
 
-type Props = {
+export type SwapFormProps = {
   operationData: DragAndDropOperationData;
   currentAssetValues: CurrentAssetValues;
   portfolios: string[];
@@ -58,7 +58,7 @@ const SwapForm = forwardRef(
       data,
       onSubmmit,
       onError,
-    }: Props,
+    }: SwapFormProps,
     ref
   ) => {
     const [valueFieldDisabled, setValueFieldDisabled] =

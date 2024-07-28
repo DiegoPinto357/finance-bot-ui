@@ -2,6 +2,10 @@ import axios, { RawAxiosRequestConfig } from 'axios';
 
 const POST_DRYRUN = false;
 
+if (POST_DRYRUN) {
+  console.log('Post dryrun mode enabled!');
+}
+
 const defaultHost = 'http://localhost:3001';
 
 const httpClient = axios.create({

@@ -13,11 +13,24 @@ const data = {
       liquidity: true,
       value: 6943.7,
     },
+    {
+      asset: 'inco',
+      value: 10891.02,
+    },
   ],
-  total: 19283.75,
 };
 
-export const useGetFixedBalance = () =>
-  ({ data } as unknown as UseQueryResult<FixedBalance, unknown>);
+const getDataByAsset = (assetName: string): FixedBalance => {
+  const balance = data.balance.filter(({ asset }) => asset === assetName);
+  const total = balance.length ? balance[0].value : 0;
+  return { balance, total };
+};
 
-export const getFixedBalance = () => Promise.resolve(data);
+export const useGetFixedBalance = (assetName: string) =>
+  ({ data: getDataByAsset(assetName) } as unknown as UseQueryResult<
+    FixedBalance,
+    unknown
+  >);
+
+export const getFixedBalance = (assetName: string) =>
+  Promise.resolve(getDataByAsset(assetName));
