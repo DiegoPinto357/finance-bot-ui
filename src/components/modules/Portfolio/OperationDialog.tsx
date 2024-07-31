@@ -131,7 +131,9 @@ const OperationDialog = ({
           {renderTabs ? (
             <Tabs defaultValue={allowedOperations[0]}>
               <TabsList
-                className={`grid w-full grid-cols-${allowedOperations.length}`}
+                className={`grid w-full grid-cols-${
+                  allowedOperations.length || 1
+                }`}
                 tabIndex={0}
               >
                 {allowedOperations.map(operation => (
