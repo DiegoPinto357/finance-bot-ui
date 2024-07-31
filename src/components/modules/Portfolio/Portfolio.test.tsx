@@ -134,5 +134,12 @@ describe('Portfolio', () => {
       });
       expect(operationDialog).not.toBeInTheDocument();
     });
+
+    it.todo(
+      'does not open operations dialog when cell is dropped on "portfolio" col'
+    );
+    it.todo(
+      'does not open operations dialog when cell is dropped on "total" col'
+    );
   });
 });

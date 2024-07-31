@@ -38,7 +38,6 @@ export const TableColumns = (
   {
     accessorKey: 'portfolio',
     header: 'Portfolio',
-    enablePinning: true,
     cell: ({ cell }) => {
       const value = cell.getValue<string>();
       return (

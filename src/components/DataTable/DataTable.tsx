@@ -26,12 +26,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 import Cell from './Cell';
 
+import type { CSSProperties } from 'react';
+import type { Column } from '@tanstack/react-table';
 import type { DragAndDropInfo } from './Cell';
 
 export type DataTableProps<TData, TValue> = {
   className?: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[] | undefined;
+  columnPinning?: { left: string[]; right: string[] };
   columnSelector?: boolean;
   onCellDrop?: (dragAndDropInfo: DragAndDropInfo) => void;
 };
@@ -40,6 +43,7 @@ const DataTable = <TData, TValue>({
   className,
   columns,
   data,
+  columnPinning,
   columnSelector,
   onCellDrop,
 }: DataTableProps<TData, TValue>) => {
@@ -49,15 +53,47 @@ const DataTable = <TData, TValue>({
   const table = useReactTable({
     data: data || [],
     columns,
+    enableColumnPinning: true,
     getCoreRowModel: getCoreRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    initialState: {
+      columnPinning,
+    },
     state: {
       columnFilters,
       columnVisibility,
     },
   });
+
+  const getCommonPinningStyles = (column: Column<TData>): CSSProperties => {
+    const isPinned = column.getIsPinned();
+    const isLastLeftPinnedColumn =
+      isPinned === 'left' && column.getIsLastColumn('left');
+    const isFirstRightPinnedColumn =
+      isPinned === 'right' && column.getIsFirstColumn('right');
+
+    return {
+      boxShadow: isLastLeftPinnedColumn
+        ? '-1px 0 hsl(var(--border)) inset'
+        : isFirstRightPinnedColumn
+        ? '1px 0 hsl(var(--border)) inset'
+        : undefined,
+      left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
+      right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
+      opacity: isPinned ? 0.95 : 1,
+      backgroundColor: isPinned ? 'hsl(var(--background))' : 'inherit',
+      borderRadius: isLastLeftPinnedColumn
+        ? 'calc(var(--radius) - 2px) 0 0 calc(var(--radius) - 2px)'
+        : isFirstRightPinnedColumn
+        ? '0 calc(var(--radius) - 2px)  calc(var(--radius) - 2px) 0'
+        : 'unset',
+      position: isPinned ? 'sticky' : 'relative',
+      width: column.getSize(),
+      zIndex: isPinned ? 1 : 0,
+    };
+  };
 
   return (
     <div className={className}>
@@ -108,7 +144,10 @@ const DataTable = <TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      style={{ ...getCommonPinningStyles(header.column) }}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -129,7 +168,12 @@ const DataTable = <TData, TValue>({
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map(cell => (
-                    <Cell key={cell.id} cell={cell} onDrop={onCellDrop} />
+                    <Cell
+                      key={cell.id}
+                      cell={cell}
+                      style={{ ...getCommonPinningStyles(cell.column) }}
+                      onDrop={onCellDrop}
+                    />
                   ))}
                 </TableRow>
               ))

@@ -172,6 +172,7 @@ const Portfolio = () => {
               onPortfolioClick: handlePortfolioClick,
             })}
             data={mappedData}
+            columnPinning={{ left: ['portfolio'], right: ['total'] }}
             onCellDrop={handleCellDrop}
           />
           <Typography variant="h3">

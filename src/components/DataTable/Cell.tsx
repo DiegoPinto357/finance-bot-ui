@@ -2,6 +2,7 @@ import { flexRender } from '@tanstack/react-table';
 import { useDrop } from 'react-dnd';
 import { TableCell } from '@/components/ui/table';
 
+import type { CSSProperties } from 'react';
 import type { Cell } from '@tanstack/react-table';
 import type { Asset, AssetClass } from '@/types';
 
@@ -17,10 +18,11 @@ export type DragAndDropInfo = {
 
 type Props<TData, TValue> = {
   cell: Cell<TData, TValue>;
+  style?: CSSProperties;
   onDrop?: (dragAndDropInfo: DragAndDropInfo) => void;
 };
 
-const Cell = <TData, TValue>({ cell, onDrop }: Props<TData, TValue>) => {
+const Cell = <TData, TValue>({ cell, style, onDrop }: Props<TData, TValue>) => {
   const [, drop] = useDrop(
     () => ({
       accept: 'tableCell',
@@ -37,7 +39,7 @@ const Cell = <TData, TValue>({ cell, onDrop }: Props<TData, TValue>) => {
   );
 
   return (
-    <TableCell key={cell.id} ref={drop}>
+    <TableCell key={cell.id} ref={drop} style={style}>
       {flexRender(cell.column.columnDef.cell, cell.getContext())}
     </TableCell>
   );
