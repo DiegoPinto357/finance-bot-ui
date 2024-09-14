@@ -132,7 +132,7 @@ const OperationDialog = ({
             <Tabs defaultValue={allowedOperations[0]}>
               <TabsList
                 className={`grid w-full grid-cols-${
-                  allowedOperations.length || 1
+                  allowedOperations.length || 2
                 }`}
                 tabIndex={0}
               >

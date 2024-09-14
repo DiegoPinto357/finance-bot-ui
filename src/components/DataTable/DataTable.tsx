@@ -56,7 +56,7 @@ const DataTable = <TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     initialState: {
-      columnPinning,
+      columnPinning: columnPinning || { left: [], right: [] },
     },
     state: {
       columnFilters,
