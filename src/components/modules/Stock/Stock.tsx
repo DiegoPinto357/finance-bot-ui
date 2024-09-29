@@ -1,16 +1,22 @@
 import Typography from '@/components/lib/Typography';
 import Loader from '@/components/lib/Loader';
 import DataTable from '@/components/DataTable';
-import { useGetStockBalance } from '../getStockBalance';
+import { useGetStockBalance } from './getStockBalance';
 import { formatCurrency } from '@/lib/formatNumber';
 import { TableColumns } from './TableColumns';
 
-const Br = () => {
-  const { data, isLoading } = useGetStockBalance('br');
+import type { StockAssetType } from '@/types';
+
+type Props = {
+  assetType: StockAssetType;
+};
+
+const Stock = ({ assetType }: Props) => {
+  const { data, isLoading } = useGetStockBalance(assetType);
 
   return (
     <>
-      <Typography variant="h1">Stock BR</Typography>
+      <Typography variant="h1">{`Stock ${assetType.toUpperCase()}`}</Typography>
       {isLoading ? (
         <Loader />
       ) : (
@@ -29,4 +35,4 @@ const Br = () => {
   );
 };
 
-export default Br;
+export default Stock;
