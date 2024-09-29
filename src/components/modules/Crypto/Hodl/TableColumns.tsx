@@ -5,20 +5,7 @@ import {
   formatPrecision,
 } from '@/lib/formatNumber';
 
-type CryptoHodlBalanceItem = {
-  asset: string;
-  spot: number;
-  earn: number;
-  total: number;
-  portfolioScore: number;
-  priceBRL: number;
-  positionBRL: number;
-  positionTarget: number;
-  position: number;
-  positionDiff: number;
-  diffBRL: number;
-  diffTokens: number;
-};
+import type { CryptoHodlBalanceItem } from '@/services/crypto';
 
 const binanceTradeBaseUrl = 'https://www.binance.com/en/trade/';
 const binanceTradeUrlParams = 'type=spot';

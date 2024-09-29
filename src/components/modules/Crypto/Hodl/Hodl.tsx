@@ -1,16 +1,12 @@
-import { useQuery } from 'react-query';
 import Typography from '@/components/lib/Typography';
 import Loader from '@/components/lib/Loader';
 import DataTable from '@/components/DataTable';
+import { useGetCryptoBalance } from '../getCryptoBalance';
 import { formatCurrency } from '@/lib/formatNumber';
 import { TableColumns } from './TableColumns';
-import cryptoService from '../../../../services/crypto';
 
 const Hodl = () => {
-  // TODO use loading and error flags
-  const { data, isLoading } = useQuery('cryptoHodlBalance', () =>
-    cryptoService.getBalance('hodl')
-  );
+  const { data, isLoading } = useGetCryptoBalance('hodl');
 
   return (
     <>
