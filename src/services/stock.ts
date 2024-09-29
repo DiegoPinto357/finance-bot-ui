@@ -15,7 +15,7 @@ const getTotalPosition = async () => {
 };
 
 type SetAssetValueParams = {
-  asset: string;
+  assetType: string;
   value: number;
 };
 

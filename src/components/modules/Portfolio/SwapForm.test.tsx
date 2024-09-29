@@ -279,7 +279,7 @@ describe('SwapForm', () => {
       });
       expect(mockedSetStockAssetValue).toBeCalledTimes(1);
       expect(mockedSetStockAssetValue).toBeCalledWith({
-        asset: operationData.destinyAsset.name,
+        assetType: operationData.destinyAsset.name,
         value: newDestinyCurrentValue,
       });
 

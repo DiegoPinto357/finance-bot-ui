@@ -42,7 +42,7 @@ describe('useSetAssetValue', () => {
     expect(mockedSetFixedAssetValue).not.toBeCalled();
     expect(mockedSetStockAssetValue).toBeCalledTimes(1);
     expect(mockedSetStockAssetValue).toBeCalledWith({
-      asset: asset.name,
+      assetType: asset.name,
       value,
     });
   });

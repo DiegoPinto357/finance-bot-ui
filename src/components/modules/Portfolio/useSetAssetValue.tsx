@@ -18,7 +18,7 @@ const useSetAssetValue = () => {
     }
 
     if (asset.class === 'stock') {
-      return await setStockAssetValue({ asset: asset.name, value });
+      return await setStockAssetValue({ assetType: asset.name, value });
     }
   };
 
