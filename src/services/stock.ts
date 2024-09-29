@@ -7,6 +7,30 @@ const getAssetPosition = async (assetType: StockAssetType) => {
   return await httpClient.get<number>(url, { params: { assetType } });
 };
 
+export type StockBrBalanceItem = {
+  asset: string;
+  score: number;
+  amount: number;
+  change: number;
+  price: number;
+  positionBRL: number;
+  positionTarget: number;
+  position: number;
+  positionDiff: number;
+  diffBRL: number;
+  diffAmount: number;
+};
+
+type StockBalance = {
+  balance: StockBrBalanceItem[];
+  total: number;
+};
+
+const getBalance = async (assetType: StockAssetType) => {
+  const url = `/api/stock/balance`;
+  return await httpClient.get<StockBalance>(url, { params: { assetType } });
+};
+
 type StockTotalPosition = Record<StockAssetType, number> & { total: number };
 
 const getTotalPosition = async () => {
@@ -26,6 +50,7 @@ const setAssetValue = async (data: SetAssetValueParams) => {
 };
 
 export default {
+  getBalance,
   getAssetPosition,
   getTotalPosition,
   setAssetValue,

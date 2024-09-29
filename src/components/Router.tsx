@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Typography from './lib/Typography';
 import Home from './Home';
+import StockBr from './modules/Stock/Br';
 import CryptoHodl from './modules/Crypto/Hodl';
 import CryptoDefi from './modules/Crypto/Defi';
 import Portfolio from './modules/Portfolio';
@@ -10,6 +11,8 @@ const Router = () => {
   return (
     <Routes>
       <Route path="/" Component={Home} />
+
+      <Route path="/stock/br" Component={StockBr} />
 
       <Route path="/crypto/hodl" Component={CryptoHodl} />
       <Route path="/crypto/defi" Component={CryptoDefi} />
