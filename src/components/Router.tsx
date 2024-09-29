@@ -1,8 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 import Typography from './lib/Typography';
 import Home from './Home';
-import CryptoHodl from './modules/crypto/Hodl';
-import CryptoDefi from './modules/crypto/Defi';
+import CryptoHodl from './modules/Crypto/Hodl';
+import CryptoDefi from './modules/Crypto/Defi';
 import Portfolio from './modules/Portfolio';
 import Settings from './Settings';
 
