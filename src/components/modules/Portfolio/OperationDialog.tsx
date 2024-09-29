@@ -40,6 +40,14 @@ const allowedAssetsForTransfer = [
   { class: 'crypto', name: 'backed' },
 ];
 
+const tabsGridClasses = [
+  'grid-cols-0',
+  'grid-cols-1',
+  'grid-cols-2',
+  'grid-cols-3',
+  'grid-cols-4',
+];
+
 const isAssetAllowedForTransfer = (asset: Asset) =>
   allowedAssetsForTransfer.some(
     allowedAsset =>
@@ -131,8 +139,8 @@ const OperationDialog = ({
           {renderTabs ? (
             <Tabs defaultValue={allowedOperations[0]}>
               <TabsList
-                className={`grid w-full grid-cols-${
-                  allowedOperations.length || 2
+                className={`grid w-full ${
+                  tabsGridClasses[allowedOperations.length]
                 }`}
                 tabIndex={0}
               >

@@ -10,6 +10,7 @@ vi.mock('./useTransfer');
 vi.mock('./useSwap');
 vi.mock('../Fixed/getFixedBalance');
 vi.mock('../Fixed/setFixedAssetValue');
+vi.mock('../Stock/getStockAssetPosition');
 vi.mock('../Stock/setStockAssetValue');
 vi.mock('../../DataTable');
 
@@ -65,7 +66,7 @@ describe('Portfolio', () => {
         'Current value: R$ 6.943,70'
       );
       const destinyCurrentValue = await within(operationDialog).findByText(
-        'Current value: R$ 10,14'
+        'Current value: R$ 100,00'
       );
 
       expect(operationDialog).toBeVisible();
