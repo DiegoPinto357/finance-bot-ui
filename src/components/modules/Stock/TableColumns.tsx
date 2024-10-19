@@ -5,9 +5,9 @@ import {
   formatPrecision,
 } from '@/lib/formatNumber';
 
-import type { StockBrBalanceItem } from '@/services/stock';
+import type { StockBalanceItem } from '@/services/stock';
 
-export const TableColumns: ColumnDef<StockBrBalanceItem>[] = [
+export const TableColumns: ColumnDef<StockBalanceItem>[] = [
   {
     accessorKey: 'asset',
     header: 'Asset',

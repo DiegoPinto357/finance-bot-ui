@@ -7,7 +7,7 @@ const getAssetPosition = async (assetType: StockAssetType) => {
   return await httpClient.get<number>(url, { params: { assetType } });
 };
 
-export type StockBrBalanceItem = {
+export type StockBalanceItem = {
   asset: string;
   score: number;
   amount: number;
@@ -22,7 +22,7 @@ export type StockBrBalanceItem = {
 };
 
 type StockBalance = {
-  balance: StockBrBalanceItem[];
+  balance: StockBalanceItem[];
   total: number;
 };
 
