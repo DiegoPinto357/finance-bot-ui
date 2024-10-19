@@ -1,8 +1,8 @@
 import httpClient from '@/lib/httpClient';
 
-export type CryptoPortfolioType = 'hodl' | 'defi';
+export type CryptoPortfolioType = 'hodl' | 'backed' | 'defi';
 
-export type CryptoHodlBalanceItem = {
+export type CryptoBalanceItem = {
   asset: string;
   spot: number;
   earn: number;
@@ -18,7 +18,7 @@ export type CryptoHodlBalanceItem = {
 };
 
 type HodlBalance = {
-  balance: CryptoHodlBalanceItem[];
+  balance: CryptoBalanceItem[];
   total: number;
 };
 

@@ -5,14 +5,14 @@ import {
   formatPrecision,
 } from '@/lib/formatNumber';
 
-import type { CryptoHodlBalanceItem } from '@/services/crypto';
+import type { CryptoBalanceItem } from '@/services/crypto';
 
 const binanceTradeBaseUrl = 'https://www.binance.com/en/trade/';
 const binanceTradeUrlParams = 'type=spot';
 
 const assetsPairedWithUsdt = ['ATOM', 'FTM', 'RUNE', 'USDC', 'VET'];
 
-export const TableColumns: ColumnDef<CryptoHodlBalanceItem>[] = [
+export const TableColumns: ColumnDef<CryptoBalanceItem>[] = [
   {
     accessorKey: 'asset',
     header: 'Asset',

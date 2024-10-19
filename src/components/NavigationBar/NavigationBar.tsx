@@ -14,9 +14,9 @@ const stockSubmenuItems = [
 
 const cryptoSubmenuItems = [
   { label: 'HODL', path: '/crypto/hodl' },
+  { label: 'Backed', path: '/crypto/backed' },
   { label: 'DeFi', path: '/crypto/defi' },
   { label: 'DeFi2', path: '/crypto/defi2' },
-  { label: 'Backed', path: '/crypto/backed' },
 ];
 
 const NavigationBar = () => {

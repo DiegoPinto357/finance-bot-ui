@@ -3,6 +3,7 @@ import Typography from './lib/Typography';
 import Home from './Home';
 import Stock from './modules/Stock';
 import CryptoHodl from './modules/Crypto/Hodl';
+import CryptoBacked from './modules/Crypto/Backed';
 import CryptoDefi from './modules/Crypto/Defi';
 import Portfolio from './modules/Portfolio';
 import Settings from './Settings';
@@ -17,6 +18,7 @@ const Router = () => {
       <Route path="/stock/fii" element={<Stock assetType="fii" />} />
 
       <Route path="/crypto/hodl" Component={CryptoHodl} />
+      <Route path="/crypto/backed" Component={CryptoBacked} />
       <Route path="/crypto/defi" Component={CryptoDefi} />
 
       <Route path="/portfolio" Component={Portfolio} />
