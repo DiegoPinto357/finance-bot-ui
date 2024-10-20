@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  VisibilityState,
   getCoreRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 import {
@@ -25,6 +23,12 @@ import {
 import HeaderCell from './HeaderCell';
 import Cell from './Cell';
 
+import type {
+  ColumnDef,
+  ColumnFiltersState,
+  VisibilityState,
+  SortingState,
+} from '@tanstack/react-table';
 import type { DragAndDropInfo } from './Cell';
 
 export type DataTableProps<TData, TValue> = {
@@ -46,6 +50,7 @@ const DataTable = <TData, TValue>({
 }: DataTableProps<TData, TValue>) => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
     data: data || [],
@@ -55,12 +60,15 @@ const DataTable = <TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
     initialState: {
       columnPinning: columnPinning || { left: [], right: [] },
     },
     state: {
       columnFilters,
       columnVisibility,
+      sorting,
     },
   });
 
