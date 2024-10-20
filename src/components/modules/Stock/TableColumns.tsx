@@ -12,7 +12,6 @@ export const TableColumns: ColumnDef<StockBalanceItem>[] = [
     accessorKey: 'asset',
     header: 'Asset',
     enableHiding: false,
-    cell: ({ cell }) => cell.getValue<string>(),
   },
   {
     accessorKey: 'score',

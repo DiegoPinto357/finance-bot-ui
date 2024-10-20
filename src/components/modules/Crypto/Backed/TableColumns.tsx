@@ -40,7 +40,6 @@ export const TableColumns: ColumnDef<CryptoBalanceItem>[] = [
     accessorKey: 'asset',
     header: getSortableHeader('Asset'),
     enableHiding: false,
-    cell: ({ cell }) => cell.getValue<string>(),
   },
   {
     accessorKey: 'position',
