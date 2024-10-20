@@ -25,7 +25,7 @@ const getSortableHeader =
 
     return (
       <Button
-        className="px-0"
+        className="p-0"
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
