@@ -106,9 +106,9 @@ const DataTable = <TData, TValue>({
         ) : null}
       </div>
 
-      <div className="rounded-md border">
+      <div className="rounded-md border max-h-[73vh] overflow-y-auto">
         <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0 z-10 opacity-95 bg-background">
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
