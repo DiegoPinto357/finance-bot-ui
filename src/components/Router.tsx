@@ -1,29 +1,19 @@
 import { Routes, Route } from 'react-router-dom';
 import Typography from './lib/Typography';
-import Home from './Home';
-import Stock from './modules/Stock';
-import CryptoHodl from './modules/Crypto/Hodl';
-import CryptoBacked from './modules/Crypto/Backed';
-import CryptoDefi from './modules/Crypto/Defi';
-import Portfolio from './modules/Portfolio';
-import Settings from './Settings';
+import { routes } from './routes';
 
 const Router = () => {
   return (
     <Routes>
-      <Route path="/" Component={Home} />
-
-      <Route path="/stock/br" element={<Stock assetType="br" />} />
-      <Route path="/stock/us" element={<Stock assetType="us" />} />
-      <Route path="/stock/fii" element={<Stock assetType="fii" />} />
-
-      <Route path="/crypto/hodl" Component={CryptoHodl} />
-      <Route path="/crypto/backed" Component={CryptoBacked} />
-      <Route path="/crypto/defi" Component={CryptoDefi} />
-
-      <Route path="/portfolio" Component={Portfolio} />
-
-      <Route path="/settings" Component={Settings} />
+      {Object.keys(routes).map(category =>
+        routes[category].map(route => (
+          <Route
+            key={route.path}
+            path={route.path}
+            Component={route.component}
+          />
+        ))
+      )}
 
       <Route
         path="*"

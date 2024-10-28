@@ -4,29 +4,16 @@ import {
 } from '@/components/ui/navigation-menu';
 import MenuItem from './MenuItem';
 import SubMenu from './SubMenu';
-
-// TODO create centralized source of routes to feed both menu and router
-const stockSubmenuItems = [
-  { label: 'BR', path: '/stock/br' },
-  { label: 'US', path: '/stock/us' },
-  { label: 'FII', path: '/stock/fii' },
-];
-
-const cryptoSubmenuItems = [
-  { label: 'HODL', path: '/crypto/hodl' },
-  { label: 'Backed', path: '/crypto/backed' },
-  { label: 'DeFi', path: '/crypto/defi' },
-  { label: 'DeFi2', path: '/crypto/defi2' },
-];
+import { routes } from '../routes';
 
 const NavigationBar = () => {
   return (
     <NavigationMenu>
       <NavigationMenuList>
         <MenuItem path="/">Home</MenuItem>
-        <SubMenu items={stockSubmenuItems}>Stock</SubMenu>
-        <SubMenu items={cryptoSubmenuItems}>Crypto</SubMenu>
-        <MenuItem path="/portfolio">Portfolio</MenuItem>
+        <SubMenu items={routes.stock}>Stock</SubMenu>
+        <SubMenu items={routes.crypto}>Crypto</SubMenu>
+        <SubMenu items={routes.portfolio}>Portfolio</SubMenu>
         <MenuItem path="/settings">Settings</MenuItem>
       </NavigationMenuList>
     </NavigationMenu>
