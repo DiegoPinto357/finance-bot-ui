@@ -18,7 +18,7 @@ describe('NavigationBar', () => {
     for (const subMenuItem of routes.stock) {
       await userEvent.click(screen.getByRole('button', { name: 'Stock' }));
       await userEvent.click(
-        screen.getByRole('link', { name: subMenuItem.label })
+        await screen.findByRole('link', { name: subMenuItem.label })
       );
       expect(window.location.pathname).toBe(subMenuItem.path);
     }
@@ -26,7 +26,7 @@ describe('NavigationBar', () => {
     for (const subMenuItem of routes.crypto) {
       await userEvent.click(screen.getByRole('button', { name: 'Crypto' }));
       await userEvent.click(
-        screen.getByRole('link', { name: subMenuItem.label })
+        await screen.findByRole('link', { name: subMenuItem.label })
       );
       expect(window.location.pathname).toBe(subMenuItem.path);
     }
@@ -34,7 +34,7 @@ describe('NavigationBar', () => {
     for (const subMenuItem of routes.portfolio) {
       await userEvent.click(screen.getByRole('button', { name: 'Portfolio' }));
       await userEvent.click(
-        screen.getByRole('link', { name: subMenuItem.label })
+        await screen.findByRole('link', { name: subMenuItem.label })
       );
       expect(window.location.pathname).toBe(subMenuItem.path);
     }
