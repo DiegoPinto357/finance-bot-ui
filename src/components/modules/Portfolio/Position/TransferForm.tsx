@@ -8,8 +8,8 @@ import FormCheckbox from '@/components/lib/FormCheckbox';
 import { currencyField, optionalCurrencyField } from '@/lib/formFieldSchema';
 import { formatCurrency } from '@/lib/formatNumber';
 import { formatAssetName } from '@/lib/formatString';
-import useTransfer from './useTransfer';
-import useSetAssetValue from './useSetAssetValue';
+import useTransfer from '../useTransfer';
+import useSetAssetValue from '../useSetAssetValue';
 import { needManualUpdate } from './utils';
 
 import type { DragAndDropOperationData, CurrentAssetValues } from './types';

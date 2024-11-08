@@ -12,17 +12,17 @@ import {
 } from '@/components/ui/drawerCustom';
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/formatNumber';
-import DataTable from '../../DataTable';
+import DataTable from '../../../DataTable';
 import { TableColumns } from './TableColumns';
 import OperationDialog from './OperationDialog';
-import useGetportfolioBalance from './useGetPortfolioBalance';
+import useGetportfolioBalance from '../useGetPortfolioBalance';
 
 import type { DragAndDropInfo } from '@/components/DataTable/Cell';
 import type { PortfolioBalanceItem } from './TableColumns';
 import type {
   AssetBalance,
   PortfolioBalance,
-} from '../../../services/portfolio';
+} from '../../../../services/portfolio';
 import type { DragAndDropOperationData } from './types';
 
 const FIXED_HEADER_ORDER = ['nubank', 'iti'];
@@ -124,7 +124,7 @@ const getPortfolios = (balance: { portfolio: string }[]) =>
     .map(({ portfolio }) => portfolio)
     .filter(portfolio => portfolio !== 'total');
 
-const Portfolio = () => {
+const Position = () => {
   // TODO use error flag
   const { data, isLoading } = useGetportfolioBalance();
 
@@ -161,7 +161,7 @@ const Portfolio = () => {
 
   return (
     <>
-      <Typography variant="h1">Portfolio</Typography>
+      <Typography variant="h1">Portfolio Position</Typography>
       {isLoading ? (
         <Loader />
       ) : (
@@ -209,4 +209,4 @@ const Portfolio = () => {
   );
 };
 
-export default Portfolio;
+export default Position;

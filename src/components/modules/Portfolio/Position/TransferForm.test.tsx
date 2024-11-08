@@ -1,24 +1,22 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { mockedSwap } from './__mocks__/useSwap';
-import { mockedSetFixedAssetValue } from '../Fixed/__mocks__/setFixedAssetValue';
-import { mockedSetStockAssetValue } from '../Stock/__mocks__/setStockAssetValue';
+import { mockedTransfer } from '../__mocks__/useTransfer';
+import { mockedSetFixedAssetValue } from '../../Fixed/__mocks__/setFixedAssetValue';
+import { mockedSetStockAssetValue } from '../../Stock/__mocks__/setStockAssetValue';
 import { formatAssetName } from '@/lib/formatString';
-import { fillFormField, selectFormFieldOption } from '@/testUtils/forms';
-import SwapForm from './SwapForm';
-import portfolios from '../../../../mockData/api/portfolio/portfolios';
+import { fillFormField } from '@/testUtils/forms';
+import TransferForm from './TransferForm';
 
-vi.mock('../Fixed/setFixedAssetValue');
-vi.mock('../Stock/setStockAssetValue');
-vi.mock('./useSwap');
+vi.mock('../../Fixed/setFixedAssetValue');
+vi.mock('../../Stock/setStockAssetValue');
+vi.mock('../useTransfer');
 
-describe('SwapForm', () => {
+describe('TransferForm', () => {
   const operationData = {
     portfolio: 'suricat',
     originAsset: { class: 'fixed', name: 'iti' },
     destinyAsset: { class: 'fixed', name: 'nubank' },
   } as const;
-  const liquidityProvider = 'reservaEmergencia';
   const currentAssetValues = {
     originCurrentValue: 1950,
     destinyCurrentValue: 876,
@@ -31,12 +29,11 @@ describe('SwapForm', () => {
     vi.clearAllMocks();
   });
 
-  it('sets current asset values and executes swap', async () => {
+  it('sets current asset values and executes transfer', async () => {
     render(
-      <SwapForm
+      <TransferForm
         operationData={operationData}
         currentAssetValues={currentAssetValues}
-        portfolios={portfolios}
         onSubmmit={() => {}}
         onError={() => {}}
       />
@@ -51,9 +48,8 @@ describe('SwapForm', () => {
       newDestinyCurrentValue
     );
     await fillFormField('Value', value);
-    await selectFormFieldOption('Liquidity Provider', liquidityProvider);
 
-    const form = screen.getByRole('form', { name: 'swap' });
+    const form = screen.getByRole('form', { name: 'transfer' });
     fireEvent.submit(form);
 
     await waitFor(() => {
@@ -67,23 +63,21 @@ describe('SwapForm', () => {
         value: newDestinyCurrentValue,
       });
 
-      expect(mockedSwap).toBeCalledTimes(1);
-      expect(mockedSwap).toBeCalledWith({
+      expect(mockedTransfer).toBeCalledTimes(1);
+      expect(mockedTransfer).toBeCalledWith({
         portfolio: 'suricat',
         origin: { class: 'fixed', name: 'iti' },
         destiny: { class: 'fixed', name: 'nubank' },
         value,
-        liquidity: liquidityProvider,
       });
     });
   });
 
-  it('does not swap values if the form validation fails', async () => {
+  it('does not transfer value if the form validation fails', async () => {
     render(
-      <SwapForm
+      <TransferForm
         operationData={operationData}
         currentAssetValues={currentAssetValues}
-        portfolios={portfolios}
         onSubmmit={() => {}}
         onError={() => {}}
       />
@@ -98,58 +92,22 @@ describe('SwapForm', () => {
       newDestinyCurrentValue
     );
 
-    const form = screen.getByRole('form', { name: 'swap' });
+    const form = screen.getByRole('form', { name: 'transfer' });
     fireEvent.submit(form);
 
     await waitFor(() => {
       const errorMessage = screen.getByText('Required field');
       expect(errorMessage).toBeInTheDocument();
       expect(mockedSetFixedAssetValue).not.toBeCalled();
-      expect(mockedSwap).not.toBeCalled();
-    });
-  });
-
-  it('raises an error if portfolio and liquidity provider are the same', async () => {
-    const onErrorMock = vi.fn();
-
-    render(
-      <SwapForm
-        operationData={{ ...operationData, portfolio: liquidityProvider }}
-        currentAssetValues={currentAssetValues}
-        portfolios={portfolios}
-        onSubmmit={() => {}}
-        onError={onErrorMock}
-      />
-    );
-
-    await fillFormField(
-      `Origin (${formatAssetName(operationData.originAsset)}) Current Value`,
-      newOriginCurrentValue
-    );
-    await fillFormField(
-      `Destiny (${formatAssetName(operationData.destinyAsset)}) Current Value`,
-      newDestinyCurrentValue
-    );
-    await fillFormField('Value', value);
-    await selectFormFieldOption('Liquidity Provider', liquidityProvider);
-
-    const form = screen.getByRole('form', { name: 'swap' });
-    fireEvent.submit(form);
-
-    await waitFor(() => {
-      expect(onErrorMock).toBeCalledTimes(1);
-      expect(onErrorMock).toBeCalledWith(
-        'Portfolio and liquidity provider must not be the same.'
-      );
+      expect(mockedTransfer).not.toBeCalled();
     });
   });
 
   it('renders current origin and destiny values on field descriptions', async () => {
     render(
-      <SwapForm
+      <TransferForm
         operationData={operationData}
         currentAssetValues={currentAssetValues}
-        portfolios={portfolios}
         onSubmmit={() => {}}
         onError={() => {}}
       />
@@ -174,12 +132,11 @@ describe('SwapForm', () => {
     );
   });
 
-  it('skips setting current asset values before swap when fields are empty', async () => {
+  it('skips setting current asset values before transfer when fields are empty', async () => {
     render(
-      <SwapForm
+      <TransferForm
         operationData={operationData}
         currentAssetValues={currentAssetValues}
-        portfolios={portfolios}
         onSubmmit={() => {}}
         onError={() => {}}
       />
@@ -187,37 +144,35 @@ describe('SwapForm', () => {
 
     await fillFormField('Value', value);
 
-    const form = screen.getByRole('form', { name: 'swap' });
+    const form = screen.getByRole('form', { name: 'transfer' });
     fireEvent.submit(form);
 
     await waitFor(() => {
       expect(mockedSetFixedAssetValue).not.toBeCalled();
-      expect(mockedSwap).toBeCalledTimes(1);
-      expect(mockedSwap).toBeCalledWith({
+      expect(mockedTransfer).toBeCalledTimes(1);
+      expect(mockedTransfer).toBeCalledWith({
         portfolio: 'suricat',
         origin: { class: 'fixed', name: 'iti' },
         destiny: { class: 'fixed', name: 'nubank' },
         value,
-        liquidity: 'amortecedor',
       });
     });
   });
 
-  it('swaps all available funds', async () => {
+  it('transfers all available funds', async () => {
     render(
-      <SwapForm
+      <TransferForm
         operationData={operationData}
         currentAssetValues={currentAssetValues}
-        portfolios={portfolios}
         onSubmmit={() => {}}
         onError={() => {}}
       />
     );
 
-    const form = screen.getByRole('form', { name: 'swap' });
+    const form = screen.getByRole('form', { name: 'transfer' });
 
     const transferAllFundsCheckbox = screen.getByRole('checkbox', {
-      name: 'Swap all funds',
+      name: 'Transfer all funds',
     });
     await userEvent.click(transferAllFundsCheckbox);
 
@@ -229,30 +184,27 @@ describe('SwapForm', () => {
     fireEvent.submit(form);
 
     await waitFor(() => {
-      expect(mockedSwap).toBeCalledTimes(1);
-      expect(mockedSwap).toBeCalledWith({
+      expect(mockedTransfer).toBeCalledTimes(1);
+      expect(mockedTransfer).toBeCalledWith({
         portfolio: 'suricat',
         origin: { class: 'fixed', name: 'iti' },
         destiny: { class: 'fixed', name: 'nubank' },
         value: 'all',
-        liquidity: 'amortecedor',
       });
     });
   });
 
-  it('swaps from fixed to stock float', async () => {
+  it('transfers from fixed to stock float', async () => {
     const operationData = {
       portfolio: 'reformaCasa',
       originAsset: { class: 'fixed', name: 'nubank' },
       destinyAsset: { class: 'stock', name: 'float' },
-      liquidity: 'amortecedor',
     } as const;
 
     render(
-      <SwapForm
+      <TransferForm
         operationData={operationData}
         currentAssetValues={currentAssetValues}
-        portfolios={portfolios}
         onSubmmit={() => {}}
         onError={() => {}}
       />
@@ -268,7 +220,7 @@ describe('SwapForm', () => {
     );
     await fillFormField('Value', value);
 
-    const form = screen.getByRole('form', { name: 'swap' });
+    const form = screen.getByRole('form', { name: 'transfer' });
     fireEvent.submit(form);
 
     await waitFor(() => {
@@ -283,30 +235,27 @@ describe('SwapForm', () => {
         value: newDestinyCurrentValue,
       });
 
-      expect(mockedSwap).toBeCalledTimes(1);
-      expect(mockedSwap).toBeCalledWith({
+      expect(mockedTransfer).toBeCalledTimes(1);
+      expect(mockedTransfer).toBeCalledWith({
         portfolio: operationData.portfolio,
         origin: operationData.originAsset,
         destiny: operationData.destinyAsset,
         value,
-        liquidity: operationData.liquidity,
       });
     });
   });
 
-  it('swaps from fixed to crypto backed', async () => {
+  it('transfers from fixed to crypto backed', async () => {
     const operationData = {
       portfolio: 'reformaCasa',
       originAsset: { class: 'fixed', name: 'nubank' },
       destinyAsset: { class: 'crypto', name: 'backed' },
-      liquidity: 'amortecedor',
     } as const;
 
     render(
-      <SwapForm
+      <TransferForm
         operationData={operationData}
         currentAssetValues={currentAssetValues}
-        portfolios={portfolios}
         onSubmmit={() => {}}
         onError={() => {}}
       />
@@ -318,7 +267,7 @@ describe('SwapForm', () => {
     );
     await fillFormField('Value', value);
 
-    const form = screen.getByRole('form', { name: 'swap' });
+    const form = screen.getByRole('form', { name: 'transfer' });
     fireEvent.submit(form);
 
     await waitFor(() => {
@@ -328,13 +277,12 @@ describe('SwapForm', () => {
         value: newOriginCurrentValue,
       });
 
-      expect(mockedSwap).toBeCalledTimes(1);
-      expect(mockedSwap).toBeCalledWith({
+      expect(mockedTransfer).toBeCalledTimes(1);
+      expect(mockedTransfer).toBeCalledWith({
         portfolio: operationData.portfolio,
         origin: operationData.originAsset,
         destiny: operationData.destinyAsset,
         value,
-        liquidity: operationData.liquidity,
       });
     });
   });
@@ -344,14 +292,12 @@ describe('SwapForm', () => {
       portfolio: 'reformaCasa',
       originAsset: { class: 'stock', name: 'br' },
       destinyAsset: { class: 'fixed', name: 'iti' },
-      liquidity: 'amortecedor',
     } as const;
 
     render(
-      <SwapForm
+      <TransferForm
         operationData={operationData}
         currentAssetValues={currentAssetValues}
-        portfolios={portfolios}
         onSubmmit={() => {}}
         onError={() => {}}
       />
@@ -373,17 +319,16 @@ describe('SwapForm', () => {
 
     await fillFormField('Value', value);
 
-    const form = screen.getByRole('form', { name: 'swap' });
+    const form = screen.getByRole('form', { name: 'transfer' });
     fireEvent.submit(form);
 
     await waitFor(() => {
-      expect(mockedSwap).toBeCalledTimes(1);
-      expect(mockedSwap).toBeCalledWith({
+      expect(mockedTransfer).toBeCalledTimes(1);
+      expect(mockedTransfer).toBeCalledWith({
         portfolio: operationData.portfolio,
         origin: operationData.originAsset,
         destiny: operationData.destinyAsset,
         value,
-        liquidity: operationData.liquidity,
       });
     });
   });
@@ -393,14 +338,12 @@ describe('SwapForm', () => {
       portfolio: 'reformaCasa',
       originAsset: { class: 'fixed', name: 'nubank' },
       destinyAsset: { class: 'stock', name: 'br' },
-      liquidity: 'amortecedor',
     } as const;
 
     render(
-      <SwapForm
+      <TransferForm
         operationData={operationData}
         currentAssetValues={currentAssetValues}
-        portfolios={portfolios}
         onSubmmit={() => {}}
         onError={() => {}}
       />
@@ -422,17 +365,16 @@ describe('SwapForm', () => {
 
     await fillFormField('Value', value);
 
-    const form = screen.getByRole('form', { name: 'swap' });
+    const form = screen.getByRole('form', { name: 'transfer' });
     fireEvent.submit(form);
 
     await waitFor(() => {
-      expect(mockedSwap).toBeCalledTimes(1);
-      expect(mockedSwap).toBeCalledWith({
+      expect(mockedTransfer).toBeCalledTimes(1);
+      expect(mockedTransfer).toBeCalledWith({
         portfolio: operationData.portfolio,
         origin: operationData.originAsset,
         destiny: operationData.destinyAsset,
         value,
-        liquidity: operationData.liquidity,
       });
     });
   });
@@ -442,14 +384,12 @@ describe('SwapForm', () => {
       portfolio: 'reformaCasa',
       originAsset: { class: 'crypto', name: 'backed' },
       destinyAsset: { class: 'fixed', name: 'nubank' },
-      liquidity: 'amortecedor',
     } as const;
 
     render(
-      <SwapForm
+      <TransferForm
         operationData={operationData}
         currentAssetValues={currentAssetValues}
-        portfolios={portfolios}
         onSubmmit={() => {}}
         onError={() => {}}
       />
@@ -471,17 +411,16 @@ describe('SwapForm', () => {
 
     await fillFormField('Value', value);
 
-    const form = screen.getByRole('form', { name: 'swap' });
+    const form = screen.getByRole('form', { name: 'transfer' });
     fireEvent.submit(form);
 
     await waitFor(() => {
-      expect(mockedSwap).toBeCalledTimes(1);
-      expect(mockedSwap).toBeCalledWith({
+      expect(mockedTransfer).toBeCalledTimes(1);
+      expect(mockedTransfer).toBeCalledWith({
         portfolio: operationData.portfolio,
         origin: operationData.originAsset,
         destiny: operationData.destinyAsset,
         value,
-        liquidity: operationData.liquidity,
       });
     });
   });
@@ -491,14 +430,12 @@ describe('SwapForm', () => {
       portfolio: 'reformaCasa',
       originAsset: { class: 'fixed', name: 'nubank' },
       destinyAsset: { class: 'crypto', name: 'defi2' },
-      liquidity: 'amortecedor',
     } as const;
 
     render(
-      <SwapForm
+      <TransferForm
         operationData={operationData}
         currentAssetValues={currentAssetValues}
-        portfolios={portfolios}
         onSubmmit={() => {}}
         onError={() => {}}
       />
@@ -520,17 +457,16 @@ describe('SwapForm', () => {
 
     await fillFormField('Value', value);
 
-    const form = screen.getByRole('form', { name: 'swap' });
+    const form = screen.getByRole('form', { name: 'transfer' });
     fireEvent.submit(form);
 
     await waitFor(() => {
-      expect(mockedSwap).toBeCalledTimes(1);
-      expect(mockedSwap).toBeCalledWith({
+      expect(mockedTransfer).toBeCalledTimes(1);
+      expect(mockedTransfer).toBeCalledWith({
         portfolio: operationData.portfolio,
         origin: operationData.originAsset,
         destiny: operationData.destinyAsset,
         value,
-        liquidity: operationData.liquidity,
       });
     });
   });

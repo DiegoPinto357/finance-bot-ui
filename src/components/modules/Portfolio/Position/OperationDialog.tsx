@@ -12,7 +12,7 @@ import { Separator } from '@/components/ui/separator';
 import ConfirmDialog from '@/components/lib/ConfirmDialog';
 import Typography from '@/components/lib/Typography';
 import { formatAssetName, capitalizeString } from '@/lib/formatString';
-import useGetAssetBalance from './useGetAssetBalance';
+import useGetAssetBalance from '../useGetAssetBalance';
 import TransferForm from './TransferForm';
 import SwapForm from './SwapForm';
 

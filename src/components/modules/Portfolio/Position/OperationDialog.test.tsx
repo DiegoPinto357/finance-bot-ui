@@ -3,18 +3,18 @@ import userEvent from '@testing-library/user-event';
 import { formatAssetName } from '@/lib/formatString';
 import { formatCurrency } from '@/lib/formatNumber';
 import OperationDialog from './OperationDialog';
-import { mockedTransfer } from './__mocks__/useTransfer';
-import portfolios from '../../../../mockData/api/portfolio/portfolios';
+import { mockedTransfer } from '../__mocks__/useTransfer';
+import portfolios from '../../../../../mockData/api/portfolio/portfolios';
 import { fillFormField } from '@/testUtils/forms';
 
-vi.mock('../Fixed/setFixedAssetValue');
-vi.mock('../Fixed/getFixedBalance');
-vi.mock('../Stock/setStockAssetValue');
-vi.mock('../Stock/getStockAssetPosition');
-vi.mock('./useTransfer');
-vi.mock('./useSwap');
-vi.mock('./TransferForm');
-vi.mock('./SwapForm');
+vi.mock('../../Fixed/setFixedAssetValue');
+vi.mock('../../Fixed/getFixedBalance');
+vi.mock('../../Stock/setStockAssetValue');
+vi.mock('../../Stock/getStockAssetPosition');
+vi.mock('../useTransfer');
+vi.mock('../useSwap');
+vi.mock('../TransferForm');
+vi.mock('../SwapForm');
 
 const confirm = async (action: 'Yes' | 'No') => {
   const confirmDialog = screen.getByRole('alertdialog', { name: 'Confirm?' });

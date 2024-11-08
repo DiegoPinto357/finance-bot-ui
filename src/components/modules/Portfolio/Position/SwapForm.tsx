@@ -9,8 +9,8 @@ import FormSelect from '@/components/lib/FormSelect';
 import { currencyField, optionalCurrencyField } from '@/lib/formFieldSchema';
 import { formatCurrency } from '@/lib/formatNumber';
 import { formatAssetName } from '@/lib/formatString';
-import useSwap from './useSwap';
-import useSetAssetValue from './useSetAssetValue';
+import useSwap from '../useSwap';
+import useSetAssetValue from '../useSetAssetValue';
 import { needManualUpdate } from './utils';
 
 import type { DragAndDropOperationData, CurrentAssetValues } from './types';

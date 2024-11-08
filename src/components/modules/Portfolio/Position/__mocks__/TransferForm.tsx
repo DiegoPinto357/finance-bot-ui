@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
-import ActualForm from '../TransferForm';
+import ActualForm from '../Position/TransferForm';
 
-import type { TransferFromProps } from '../TransferForm';
+import type { TransferFromProps } from '../Position/TransferForm';
 
 const TransferForm = forwardRef((props: TransferFromProps, ref) => {
   return <ActualForm {...props} ref={ref} />;

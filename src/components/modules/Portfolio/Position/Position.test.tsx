@@ -1,18 +1,18 @@
 import { render, screen, within } from '@testing-library/react';
-import { triggerCellDrop } from '../../DataTable/__mocks__/DataTable';
+import { triggerCellDrop } from '../../../DataTable/__mocks__/DataTable';
 import Portfolio from '.';
 
 import type { Asset } from '@/types';
 
 vi.mock('react-dnd');
-vi.mock('./useGetPortfolioBalance');
-vi.mock('./useTransfer');
-vi.mock('./useSwap');
-vi.mock('../Fixed/getFixedBalance');
-vi.mock('../Fixed/setFixedAssetValue');
-vi.mock('../Stock/getStockAssetPosition');
-vi.mock('../Stock/setStockAssetValue');
-vi.mock('../../DataTable');
+vi.mock('../useGetPortfolioBalance');
+vi.mock('../useTransfer');
+vi.mock('../useSwap');
+vi.mock('../../Fixed/getFixedBalance');
+vi.mock('../../Fixed/setFixedAssetValue');
+vi.mock('../../Stock/getStockAssetPosition');
+vi.mock('../../Stock/setStockAssetValue');
+vi.mock('../../../DataTable');
 
 describe('Portfolio', () => {
   beforeEach(() => {

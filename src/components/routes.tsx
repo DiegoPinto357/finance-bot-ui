@@ -4,7 +4,7 @@ import Stock from './modules/Stock';
 import CryptoHodl from './modules/Crypto/Hodl';
 import CryptoBacked from './modules/Crypto/Backed';
 import CryptoDefi from './modules/Crypto/Defi';
-import Portfolio from './modules/Portfolio';
+import PortfolioPosition from './modules/Portfolio/Position';
 import Settings from './Settings';
 
 export type Route = {
@@ -82,7 +82,7 @@ export const routes: Record<string, Route[]> = {
     {
       path: '/portfolio/position',
       label: 'Position',
-      component: Portfolio,
+      component: PortfolioPosition,
     },
     {
       path: '/portfolio/diff',
