@@ -13,6 +13,13 @@ const httpClient = axios.create({
   timeout: 15000,
 });
 
+httpClient.interceptors.request.use(config => {
+  if (POST_DRYRUN && config.method === 'POST') {
+    config.data = { ...config.data, dryRun: true };
+  }
+  return config;
+});
+
 let resolveIsReady: () => void;
 const isReady = new Promise<void>(resolve => {
   resolveIsReady = resolve;
@@ -42,7 +49,7 @@ const post = async <T>(
   const response = await httpClient<T>(url, {
     ...config,
     method: 'POST',
-    data: POST_DRYRUN ? { ...data, dryRun: true } : data,
+    data,
   });
   return response.data;
 };
