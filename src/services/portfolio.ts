@@ -1,5 +1,26 @@
 import httpClient from '@/lib/httpClient';
 
+type Portfolio = string;
+type AssetClass = string;
+type AssetName = string;
+type FixedAsset = string;
+type StockAsset = string;
+type CryptoAsset = string;
+
+type Asset =
+  | {
+      class: 'fixed';
+      name: FixedAsset;
+    }
+  | {
+      class: 'stock';
+      name: StockAsset;
+    }
+  | {
+      class: 'crypto';
+      name: CryptoAsset;
+    };
+
 export type AssetBalance = {
   asset: string;
   value: number;
@@ -34,23 +55,29 @@ const getBalance = async () => {
   return await httpClient.get<PortfolioBalance>(url);
 };
 
-type Portfolio = string;
-type FixedAsset = string;
-type StockAsset = string;
-type CryptoAsset = string;
-type Asset =
-  | {
-      class: 'fixed';
-      name: FixedAsset;
-    }
-  | {
-      class: 'stock';
-      name: StockAsset;
-    }
-  | {
-      class: 'crypto';
-      name: CryptoAsset;
-    };
+type Share = {
+  currentShare: number;
+  diffBRL: number;
+  assetClass: AssetClass;
+  asset?: AssetName;
+  targetShare: number;
+  value: number;
+};
+
+type ShareByPortfolio = {
+  portfolio: Portfolio;
+  shares: Share[];
+};
+
+type PortfolioShares = {
+  shares: ShareByPortfolio[];
+  total: number;
+};
+
+const getShares = async () => {
+  const url = `/api/portfolio/shares`;
+  return await httpClient.get<PortfolioShares>(url);
+};
 
 export type TransferParams = {
   value: number | 'all';
@@ -79,6 +106,7 @@ const swap = async (data: SwapParams) => {
 
 export default {
   getBalance,
+  getShares,
   transfer,
   swap,
 };
