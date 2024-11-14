@@ -69,7 +69,7 @@ type ShareByPortfolio = {
   shares: Share[];
 };
 
-type PortfolioShares = {
+export type PortfolioShares = {
   shares: ShareByPortfolio[];
   total: number;
 };
