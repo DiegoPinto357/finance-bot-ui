@@ -44,14 +44,12 @@ const Diff = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <>
-          <DataTable
-            className="mb-4"
-            columns={TableColumns(header, mappedData)}
-            data={mappedData}
-            columnPinning={{ left: ['portfolio'], right: ['total'] }}
-          />
-        </>
+        <DataTable
+          className="mb-4"
+          columns={TableColumns(header, mappedData)}
+          data={mappedData}
+          columnPinning={{ left: ['portfolio'], right: ['total'] }}
+        />
       )}
     </>
   );
