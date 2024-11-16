@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import Typography from '@/components/lib/Typography';
+import PageHeading from '@/components/lib/PageHeading';
 import Loader from '@/components/lib/Loader';
 import DataTable from '@/components/DataTable';
 import { TableColumns } from './TableColumns';
@@ -35,12 +35,14 @@ const mapData = (rawData?: PortfolioShares) => {
 };
 
 const Diff = () => {
-  const { data, isLoading } = useGetPortfolioShares();
+  const { data, isLoading, isFetching, refetch } = useGetPortfolioShares();
   const { header, rows: mappedData } = useMemo(() => mapData(data), [data]);
 
   return (
     <>
-      <Typography variant="h1">Portfolio Diff</Typography>
+      <PageHeading isRefreshing={isFetching} onRefreshClick={() => refetch()}>
+        Portfolio Diff
+      </PageHeading>
       {isLoading ? (
         <Loader />
       ) : (

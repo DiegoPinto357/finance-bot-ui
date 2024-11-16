@@ -1,3 +1,4 @@
+import PageHeading from '@/components/lib/PageHeading';
 import Typography from '@/components/lib/Typography';
 import Loader from '@/components/lib/Loader';
 import DataTable from '@/components/DataTable';
@@ -6,11 +7,13 @@ import { formatCurrency } from '@/lib/formatNumber';
 import { TableColumns } from './TableColumns';
 
 const Hodl = () => {
-  const { data, isLoading } = useGetCryptoBalance('hodl');
+  const { data, isLoading, isFetching, refetch } = useGetCryptoBalance('hodl');
 
   return (
     <>
-      <Typography variant="h1">Crypto HODL</Typography>
+      <PageHeading isRefreshing={isFetching} onRefreshClick={() => refetch()}>
+        Crypto HODL
+      </PageHeading>
       {isLoading ? (
         <Loader />
       ) : (

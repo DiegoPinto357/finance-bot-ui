@@ -11,6 +11,7 @@ import {
   DrawerTitle,
 } from '@/components/ui/drawerCustom';
 import { Button } from '@/components/ui/button';
+import PageHeading from '@/components/lib/PageHeading';
 import { formatCurrency } from '@/lib/formatNumber';
 import DataTable from '../../../DataTable';
 import { TableColumns } from './TableColumns';
@@ -126,7 +127,7 @@ const getPortfolios = (balance: { portfolio: string }[]) =>
 
 const Position = () => {
   // TODO use error flag
-  const { data, isLoading } = useGetportfolioBalance();
+  const { data, isLoading, isFetching, refetch } = useGetportfolioBalance();
 
   const [openOperationDialog, setOpenOperationDialog] =
     useState<boolean>(false);
@@ -161,7 +162,9 @@ const Position = () => {
 
   return (
     <>
-      <Typography variant="h1">Portfolio Position</Typography>
+      <PageHeading isRefreshing={isFetching} onRefreshClick={() => refetch()}>
+        Portfolio Position
+      </PageHeading>
       {isLoading ? (
         <Loader />
       ) : (

@@ -1,3 +1,4 @@
+import PageHeading from '@/components/lib/PageHeading';
 import Typography from '@/components/lib/Typography';
 import Loader from '@/components/lib/Loader';
 import DataTable from '@/components/DataTable';
@@ -6,11 +7,14 @@ import { formatCurrency } from '@/lib/formatNumber';
 import { TableColumns } from './TableColumns';
 
 const Backed = () => {
-  const { data, isLoading } = useGetCryptoBalance('backed');
+  const { data, isLoading, isFetching, refetch } =
+    useGetCryptoBalance('backed');
 
   return (
     <>
-      <Typography variant="h1">Crypto Backed</Typography>
+      <PageHeading isRefreshing={isFetching} onRefreshClick={() => refetch()}>
+        Crypto Backed
+      </PageHeading>
       {isLoading ? (
         <Loader />
       ) : (

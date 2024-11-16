@@ -1,3 +1,4 @@
+import PageHeading from '@/components/lib/PageHeading';
 import Typography from '@/components/lib/Typography';
 import Loader from '@/components/lib/Loader';
 import DataTable from '@/components/DataTable';
@@ -12,11 +13,14 @@ type Props = {
 };
 
 const Stock = ({ assetType }: Props) => {
-  const { data, isLoading } = useGetStockBalance(assetType);
+  const { data, isLoading, isFetching, refetch } =
+    useGetStockBalance(assetType);
 
   return (
     <>
-      <Typography variant="h1">{`Stock ${assetType.toUpperCase()}`}</Typography>
+      <PageHeading isRefreshing={isFetching} onRefreshClick={() => refetch()}>
+        {`Stock ${assetType.toUpperCase()}`}
+      </PageHeading>
       {isLoading ? (
         <Loader />
       ) : (
