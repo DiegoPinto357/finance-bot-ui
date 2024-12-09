@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -37,6 +37,7 @@ export type DataTableProps<TData, TValue> = {
   data: TData[] | undefined;
   columnPinning?: { left: string[]; right: string[] };
   columnSelector?: boolean;
+  scrollToBottom?: boolean;
   onCellDrop?: (dragAndDropInfo: DragAndDropInfo) => void;
 };
 
@@ -46,6 +47,7 @@ const DataTable = <TData, TValue>({
   data,
   columnPinning,
   columnSelector,
+  scrollToBottom,
   onCellDrop,
 }: DataTableProps<TData, TValue>) => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -71,6 +73,14 @@ const DataTable = <TData, TValue>({
       sorting,
     },
   });
+
+  const lastRowRef = useRef<HTMLTableRowElement | null>(null);
+
+  useEffect(() => {
+    if (scrollToBottom && lastRowRef.current) {
+      lastRowRef.current.scrollIntoView();
+    }
+  }, [scrollToBottom]);
 
   return (
     <div className={className}>
@@ -120,23 +130,29 @@ const DataTable = <TData, TValue>({
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
-                  return <HeaderCell key={header.id} header={header} />;
+                  return (
+                    <HeaderCell key={header.id} table={table} header={header} />
+                  );
                 })}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map(row => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                >
-                  {row.getVisibleCells().map(cell => (
-                    <Cell key={cell.id} cell={cell} onDrop={onCellDrop} />
-                  ))}
-                </TableRow>
-              ))
+              table.getRowModel().rows.map((row, index, rows) => {
+                const isLastRow = index === rows.length - 1;
+                return (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && 'selected'}
+                    ref={isLastRow ? lastRowRef : undefined}
+                  >
+                    {row.getVisibleCells().map(cell => (
+                      <Cell key={cell.id} cell={cell} onDrop={onCellDrop} />
+                    ))}
+                  </TableRow>
+                );
+              })
             ) : (
               <TableRow>
                 {/* TODO add loader (prop isLoading) */}
