@@ -71,12 +71,3 @@ export const TableColumns = (
     ),
   ];
 };
-
-export const TableColumns2 = (
-  header: string[]
-): ColumnDef<PortfolioDiffItem>[] =>
-  header.map(headerItem => ({
-    header: headerItem,
-    accessorKey: headerItem,
-    cell: ({ cell }) => formatCurrency(cell.getValue<number>()),
-  }));
