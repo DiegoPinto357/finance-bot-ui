@@ -84,7 +84,7 @@ type PortfolioHistoryItem = {
   portfolios: Record<string, number>;
 };
 
-type PortfolioHistory = PortfolioHistoryItem[];
+export type PortfolioHistory = PortfolioHistoryItem[];
 
 const getHistory = async () => {
   const url = `/api/portfolio/history`;
