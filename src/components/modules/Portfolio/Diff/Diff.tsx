@@ -9,7 +9,6 @@ import type { PortfolioShares } from '@/services/portfolio';
 import type { PortfolioDiffItem } from './TableColumns';
 
 const mapData = (rawData?: PortfolioShares) => {
-  console.log(rawData);
   if (!rawData) return { header: [], rows: [] };
 
   const header: string[] = [];
