@@ -6,6 +6,7 @@ import CryptoBacked from './modules/Crypto/Backed';
 import CryptoDefi from './modules/Crypto/Defi';
 import PortfolioPosition from './modules/Portfolio/Position';
 import PortfolioDiff from './modules/Portfolio/Diff';
+import PortfolioHistory from './modules/Portfolio/History';
 import Settings from './Settings';
 
 export type Route = {
@@ -94,6 +95,11 @@ export const routes: Record<string, Route[]> = {
       path: '/portfolio/liquidity',
       label: 'Liquidity',
       component: NotFound,
+    },
+    {
+      path: '/portfolio/history',
+      label: 'History',
+      component: PortfolioHistory,
     },
   ],
 };
