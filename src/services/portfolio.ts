@@ -79,6 +79,18 @@ const getShares = async () => {
   return await httpClient.get<PortfolioShares>(url);
 };
 
+type PortfolioHistoryItem = {
+  date: string;
+  portfolios: Record<string, number>;
+};
+
+type PortfolioHistory = PortfolioHistoryItem[];
+
+const getHistory = async () => {
+  const url = `/api/portfolio/history`;
+  return await httpClient.get<PortfolioHistory>(url);
+};
+
 export type TransferParams = {
   value: number | 'all';
   portfolio: Portfolio;
@@ -107,6 +119,7 @@ const swap = async (data: SwapParams) => {
 export default {
   getBalance,
   getShares,
+  getHistory,
   transfer,
   swap,
 };
