@@ -1,9 +1,10 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import PageHeading from '@/components/lib/PageHeading';
 import Loader from '@/components/lib/Loader';
 import useGetPortfolioHistory from '../useGetPortfolioHistory';
 import DataTable from '@/components/DataTable';
 import { TableColumns } from './TableColumns';
+import ChartDialog from './ChartDialog';
 
 import type { PortfolioHistory } from '@/services/portfolio';
 
@@ -34,7 +35,13 @@ const History = () => {
   const { data, isLoading, isFetching, refetch } = useGetPortfolioHistory();
   const { header, rows } = useMemo(() => mapData(data), [data]);
 
-  console.log(header, rows);
+  const [chartOpen, setChartOpen] = useState<boolean>(false);
+  const [chartPortfolio, setChartPortfolio] = useState<string>('');
+
+  const handlePortfolioClick = (portfolio: string) => {
+    setChartPortfolio(portfolio);
+    setChartOpen(true);
+  };
 
   return (
     <>
@@ -44,15 +51,24 @@ const History = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        // JSON.stringify(data, null, 2)
         <DataTable
           className="mb-4"
-          columns={TableColumns(header)}
+          columns={TableColumns(header, {
+            onPortfolioClick: handlePortfolioClick,
+          })}
           data={rows}
           columnPinning={{ left: ['date'], right: ['total', 'delta'] }}
           scrollToBottom
         />
       )}
+
+      {chartOpen ? (
+        <ChartDialog
+          open={chartOpen}
+          title={chartPortfolio}
+          onOpenChange={setChartOpen}
+        />
+      ) : null}
     </>
   );
 };

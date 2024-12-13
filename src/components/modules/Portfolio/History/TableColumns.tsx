@@ -1,12 +1,34 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { formatCurrency } from '@/lib/formatNumber';
 
+const buildClickableHeader = (
+  headerLabel: string,
+  onPortfolioClick?: (portfolio: string) => void
+) => {
+  return (
+    <button
+      onClick={() => {
+        if (onPortfolioClick) {
+          onPortfolioClick(headerLabel);
+        }
+      }}
+    >
+      {headerLabel}
+    </button>
+  );
+};
+
 type PortfolioHistoryItem = {
   date: string;
 } & Record<string, string | number>;
 
+type Params = {
+  onPortfolioClick?: (portfolio: string) => void;
+};
+
 export const TableColumns = (
-  header: string[]
+  header: string[],
+  params?: Params
 ): ColumnDef<PortfolioHistoryItem>[] => [
   {
     accessorKey: 'date',
@@ -21,7 +43,8 @@ export const TableColumns = (
   ...header.map(
     headerItem =>
       ({
-        header: headerItem,
+        header: () =>
+          buildClickableHeader(headerItem, params?.onPortfolioClick),
         accessorKey: headerItem,
         cell: ({ cell }) => {
           const value = cell.getValue<number>();
@@ -32,7 +55,7 @@ export const TableColumns = (
 
   {
     accessorKey: 'total',
-    header: 'Total',
+    header: () => buildClickableHeader('Total', params?.onPortfolioClick),
     cell: ({ cell }) => (
       <div className="text-right">
         {formatCurrency(cell.getValue<number>())}
@@ -42,7 +65,7 @@ export const TableColumns = (
 
   {
     accessorKey: 'delta',
-    header: 'Delta',
+    header: () => buildClickableHeader('Delta', params?.onPortfolioClick),
     cell: ({ cell }) => (
       <div className="text-right">
         {formatCurrency(cell.getValue<number>())}
