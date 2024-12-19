@@ -66,6 +66,7 @@ const History = () => {
         <ChartDialog
           open={chartOpen}
           title={chartPortfolio}
+          data={rows}
           onOpenChange={setChartOpen}
         />
       ) : null}

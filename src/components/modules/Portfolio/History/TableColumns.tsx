@@ -55,7 +55,7 @@ export const TableColumns = (
 
   {
     accessorKey: 'total',
-    header: () => buildClickableHeader('Total', params?.onPortfolioClick),
+    header: () => buildClickableHeader('total', params?.onPortfolioClick),
     cell: ({ cell }) => (
       <div className="text-right">
         {formatCurrency(cell.getValue<number>())}
@@ -65,7 +65,7 @@ export const TableColumns = (
 
   {
     accessorKey: 'delta',
-    header: () => buildClickableHeader('Delta', params?.onPortfolioClick),
+    header: () => buildClickableHeader('delta', params?.onPortfolioClick),
     cell: ({ cell }) => (
       <div className="text-right">
         {formatCurrency(cell.getValue<number>())}
