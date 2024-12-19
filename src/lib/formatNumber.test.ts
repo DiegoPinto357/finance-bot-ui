@@ -21,12 +21,20 @@ describe('formatNumber', () => {
       expect(formatCurrency(undefined)).toBe('');
     });
 
-    it('returns an empty string for zero when allowZero is false', () => {
+    it('returns an empty string for zero when allowZero is not defined', () => {
       expect(formatCurrency(0)).toBe('');
     });
 
+    it('returns an empty string for zero when allowZero false', () => {
+      expect(formatCurrency(0, { allowZero: false })).toBe('');
+    });
+
     it('formats 0 as currency when allowZero is true', () => {
-      expect(formatCurrency(0, true)).toBe('R$ 0,00');
+      expect(formatCurrency(0, { allowZero: true })).toBe('R$ 0,00');
+    });
+
+    it('formats value without decimal points when omitCents is true', () => {
+      expect(formatCurrency(9876.54, { omitCents: true })).toBe('R$ 9.877');
     });
 
     it('handles negative numbers correctly', () => {
