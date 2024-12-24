@@ -14,6 +14,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const processDate = (stringDate: string) => {
+  const [year, month, day] = stringDate.split('-').map(Number);
+  return new Date(year, month - 1, day);
+};
+
 type DataPoint = {
   date: string;
 } & Record<string, number | string>;
@@ -36,13 +41,12 @@ const Chart = ({ portfolio, data }: ChartProps) => {
           tickLine
           tickMargin={8}
           axisLine
-          tickFormatter={value => {
-            const date = new Date(value);
-            return date.toLocaleDateString('en-US', {
+          tickFormatter={value =>
+            processDate(value).toLocaleDateString('en-US', {
               month: 'short',
               year: '2-digit',
-            });
-          }}
+            })
+          }
         />
         <YAxis
           tickLine
@@ -57,13 +61,13 @@ const Chart = ({ portfolio, data }: ChartProps) => {
           content={
             <ChartTooltipContent
               nameKey={portfolio}
-              labelFormatter={value => {
-                return new Date(value).toLocaleDateString('en-US', {
+              labelFormatter={value =>
+                processDate(value).toLocaleDateString('en-US', {
                   month: 'short',
                   day: 'numeric',
                   year: 'numeric',
-                });
-              }}
+                })
+              }
               formatter={value => formatCurrency(value as number)}
             />
           }
