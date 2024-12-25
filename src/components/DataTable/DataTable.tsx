@@ -76,7 +76,26 @@ const DataTable = <TData, TValue>({
     },
   });
 
+  const tableContainerRef = useRef<HTMLDivElement | null>(null);
   const lastRowRef = useRef<HTMLTableRowElement | null>(null);
+
+  useEffect(() => {
+    const container = tableContainerRef.current;
+    if (!container) return;
+
+    const onWheel = (event: WheelEvent) => {
+      if (event.shiftKey) {
+        event.preventDefault();
+        container.scrollLeft += event.deltaY;
+      }
+    };
+
+    container.addEventListener('wheel', onWheel);
+
+    return () => {
+      container.removeEventListener('wheel', onWheel);
+    };
+  }, []);
 
   useEffect(() => {
     if (scrollToBottom && lastRowRef.current) {
@@ -126,7 +145,10 @@ const DataTable = <TData, TValue>({
         ) : null}
       </div>
 
-      <div className="rounded-md border max-h-[73vh] overflow-y-auto">
+      <div
+        ref={tableContainerRef}
+        className="rounded-md border max-h-[73vh] overflow-y-auto"
+      >
         <Table>
           <TableHeader className="sticky top-0 z-10 opacity-95 bg-background">
             {table.getHeaderGroups().map(headerGroup => (
