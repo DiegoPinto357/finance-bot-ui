@@ -14,14 +14,18 @@ const PageHeading = ({
   children,
 }: PropsWithChildren<Props>) => {
   return (
-    <div className="flex items-baseline gap-2">
+    <div className="flex items-baseline gap-3">
       <Typography variant="h1">{children}</Typography>
       <Button
+        className="h-12 p-0"
         variant="link"
         disabled={isRefreshing}
         onClick={() => onRefreshClick()}
       >
-        <RotateCw className={isRefreshing ? 'animate-spin' : ''} />
+        <RotateCw
+          style={{ height: '1.25rem', width: '1.25rem' }}
+          className={`w-6 h-6 ${isRefreshing ? 'animate-spin' : ''}`}
+        />
       </Button>
     </div>
   );
