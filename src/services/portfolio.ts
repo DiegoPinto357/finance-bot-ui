@@ -91,6 +91,11 @@ const getHistory = async () => {
   return await httpClient.get<PortfolioHistory>(url);
 };
 
+const setHistory = async () => {
+  const url = `/api/portfolio/history`;
+  return await httpClient.post(url);
+};
+
 export type TransferParams = {
   value: number | 'all';
   portfolio: Portfolio;
@@ -120,6 +125,7 @@ export default {
   getBalance,
   getShares,
   getHistory,
+  setHistory,
   transfer,
   swap,
 };

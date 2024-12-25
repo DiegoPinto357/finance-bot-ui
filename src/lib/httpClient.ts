@@ -42,7 +42,7 @@ const get = async <T>(url: string, config?: RawAxiosRequestConfig<unknown>) => {
 
 const post = async <T>(
   url: string,
-  data: object,
+  data: object = {},
   config?: RawAxiosRequestConfig<unknown>
 ) => {
   await isReady;

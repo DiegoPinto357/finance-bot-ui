@@ -38,6 +38,7 @@ export type DataTableProps<TData, TValue> = {
   columnPinning?: { left: string[]; right: string[] };
   columnSelector?: boolean;
   scrollToBottom?: boolean;
+  scrollToBottomTrigger?: boolean;
   onCellDrop?: (dragAndDropInfo: DragAndDropInfo) => void;
 };
 
@@ -48,6 +49,7 @@ const DataTable = <TData, TValue>({
   columnPinning,
   columnSelector,
   scrollToBottom,
+  scrollToBottomTrigger,
   onCellDrop,
 }: DataTableProps<TData, TValue>) => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -80,7 +82,7 @@ const DataTable = <TData, TValue>({
     if (scrollToBottom && lastRowRef.current) {
       lastRowRef.current.scrollIntoView();
     }
-  }, [scrollToBottom]);
+  }, [scrollToBottom, scrollToBottomTrigger]);
 
   return (
     <div className={className}>
