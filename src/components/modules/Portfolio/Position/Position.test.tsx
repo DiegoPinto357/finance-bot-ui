@@ -19,6 +19,13 @@ describe('Portfolio', () => {
     vi.clearAllMocks();
   });
 
+  it('renders total and sub total values', () => {
+    render(<Portfolio />);
+    expect(screen.getByTestId('total-heading')).toHaveTextContent(
+      'Total: R$ 162.520,41 (R$ 152.089,29)'
+    );
+  });
+
   describe('drag and drop values', () => {
     it('opens operation modal on drag and drop table cell for fixed assets', async () => {
       const portfolio = 'suricat';
