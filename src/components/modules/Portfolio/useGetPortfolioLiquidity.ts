@@ -2,6 +2,6 @@ import { useQuery } from 'react-query';
 import portfolioService from '../../../services/portfolio';
 
 const useGetPortfolioLiquidity = () =>
-  useQuery('portfolioHistory', () => portfolioService.getLiquidity());
+  useQuery('portfolioLiquidity', () => portfolioService.getLiquidity());
 
 export default useGetPortfolioLiquidity;
