@@ -11,6 +11,7 @@ import { formatCurrency, formatPrecision } from '@/lib/formatNumber';
 import type { HeaderContext } from '@tanstack/react-table';
 import type { CryptoBalanceItem } from '@/services/crypto';
 
+// TODO duplication on portfolio liquidity
 const getSortableHeader =
   (label: string) =>
   ({ column }: HeaderContext<CryptoBalanceItem, unknown>) => {

@@ -96,7 +96,7 @@ const setHistory = async () => {
   return await httpClient.post(url);
 };
 
-type PortfolioLiquidity = {
+export type PortfolioLiquidity = {
   portfolio: string;
   liquidityValue: number;
   liquidityRatio: number;
