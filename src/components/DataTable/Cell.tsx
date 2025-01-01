@@ -18,10 +18,15 @@ export type DragAndDropInfo = {
 
 type Props<TData, TValue> = {
   cell: Cell<TData, TValue>;
+  className?: string;
   onDrop?: (dragAndDropInfo: DragAndDropInfo) => void;
 };
 
-const Cell = <TData, TValue>({ cell, onDrop }: Props<TData, TValue>) => {
+const Cell = <TData, TValue>({
+  cell,
+  className,
+  onDrop,
+}: Props<TData, TValue>) => {
   const [, drop] = useDrop(
     () => ({
       accept: 'tableCell',
@@ -41,6 +46,7 @@ const Cell = <TData, TValue>({ cell, onDrop }: Props<TData, TValue>) => {
     <TableCell
       key={cell.id}
       ref={drop}
+      className={className}
       style={getCommonPinningStyles(cell.column)}
     >
       {flexRender(cell.column.columnDef.cell, cell.getContext())}

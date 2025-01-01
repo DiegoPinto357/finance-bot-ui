@@ -31,6 +31,11 @@ import type {
 } from '@tanstack/react-table';
 import type { DragAndDropInfo } from './Cell';
 
+type CellStyle = {
+  classname: string;
+  excludeFirstCol?: boolean;
+};
+
 export type DataTableProps<TData, TValue> = {
   className?: string;
   columns: ColumnDef<TData, TValue>[];
@@ -39,6 +44,7 @@ export type DataTableProps<TData, TValue> = {
   columnSelector?: boolean;
   scrollToBottom?: boolean;
   scrollToBottomTrigger?: boolean;
+  cellStyle?: CellStyle;
   onCellDrop?: (dragAndDropInfo: DragAndDropInfo) => void;
 };
 
@@ -50,6 +56,7 @@ const DataTable = <TData, TValue>({
   columnSelector,
   scrollToBottom,
   scrollToBottomTrigger,
+  cellStyle,
   onCellDrop,
 }: DataTableProps<TData, TValue>) => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -171,9 +178,21 @@ const DataTable = <TData, TValue>({
                     data-state={row.getIsSelected() && 'selected'}
                     ref={isLastRow ? lastRowRef : undefined}
                   >
-                    {row.getVisibleCells().map(cell => (
-                      <Cell key={cell.id} cell={cell} onDrop={onCellDrop} />
-                    ))}
+                    {row.getVisibleCells().map((cell, index) => {
+                      const isFirstCol = index === 0;
+                      const cellStyleClass =
+                        cellStyle?.excludeFirstCol && isFirstCol
+                          ? ''
+                          : cellStyle?.classname ?? '';
+                      return (
+                        <Cell
+                          key={cell.id}
+                          cell={cell}
+                          className={cellStyleClass}
+                          onDrop={onCellDrop}
+                        />
+                      );
+                    })}
                   </TableRow>
                 );
               })

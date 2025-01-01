@@ -50,6 +50,7 @@ const Diff = () => {
           columns={TableColumns(header, mappedData)}
           data={mappedData}
           columnPinning={{ left: ['portfolio'], right: ['total'] }}
+          cellStyle={{ classname: 'p-0 pr-[0.5px]', excludeFirstCol: true }}
         />
       )}
     </>

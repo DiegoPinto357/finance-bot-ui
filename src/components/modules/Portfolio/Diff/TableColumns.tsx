@@ -62,7 +62,7 @@ export const TableColumns = (
             const value = cell.getValue<number>();
             const backgroundColor = getBackgroundColor(value, min, max);
             return (
-              <div style={{ backgroundColor, padding: '0.25rem' }}>
+              <div className="p-2" style={{ backgroundColor }}>
                 {formatCurrency(value)}
               </div>
             );
