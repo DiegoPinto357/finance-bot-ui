@@ -23,7 +23,7 @@ const PageHeading = ({
         onClick={() => onRefreshClick()}
       >
         <RotateCw
-          style={{ height: '1.25rem', width: '1.25rem' }}
+          style={{ height: '1.5rem', width: '1.5rem' }}
           className={`w-6 h-6 ${isRefreshing ? 'animate-spin' : ''}`}
         />
       </Button>
