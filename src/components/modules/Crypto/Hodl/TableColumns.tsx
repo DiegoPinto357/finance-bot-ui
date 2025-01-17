@@ -10,7 +10,8 @@ import type { CryptoBalanceItem } from '@/services/crypto';
 const binanceTradeBaseUrl = 'https://www.binance.com/en/trade/';
 const binanceTradeUrlParams = 'type=spot';
 
-const assetsPairedWithUsdt = ['ATOM', 'FTM', 'RUNE', 'USDC', 'VET'];
+// TODO move to server side
+const assetsPairedWithUsdt = ['ATOM', 'S', 'RUNE', 'USDC', 'VET'];
 
 export const TableColumns: ColumnDef<CryptoBalanceItem>[] = [
   {
