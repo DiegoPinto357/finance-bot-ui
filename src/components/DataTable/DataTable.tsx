@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useDndScrolling } from 'react-dnd-scrolling';
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -85,6 +86,10 @@ const DataTable = <TData, TValue>({
 
   const tableContainerRef = useRef<HTMLDivElement | null>(null);
   const lastRowRef = useRef<HTMLTableRowElement | null>(null);
+
+  useDndScrolling(tableContainerRef, {
+    strengthMultiplier: 50,
+  });
 
   useEffect(() => {
     const container = tableContainerRef.current;
