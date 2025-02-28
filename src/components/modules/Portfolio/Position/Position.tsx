@@ -30,8 +30,6 @@ const FIXED_HEADER_ORDER = ['nubank', 'iti'];
 const STOCK_HEADER_ORDER = ['float', 'br', 'fii', 'us'];
 const CRYPTO_HEADER_ORDER = ['hodl', 'backed', 'defi', 'defi2'];
 
-const PORTFOLIOS_TO_REMOVE_FROM_SUB_TOTAL = ['mae', 'leni'];
-
 const reorderAssets = (header: string[], order: string[]) => {
   const reorderedArray: string[] = [];
   const otherElements: string[] = [];
@@ -163,15 +161,6 @@ const Position = () => {
   }, []);
 
   const total = data?.total;
-  const subTotal = Object.entries(data?.balance ?? {}).reduce(
-    (subTotal, [portfolio, balance]) => {
-      if (PORTFOLIOS_TO_REMOVE_FROM_SUB_TOTAL.includes(portfolio))
-        return subTotal;
-
-      return subTotal + balance.total;
-    },
-    0
-  );
 
   return (
     <>
@@ -192,7 +181,7 @@ const Position = () => {
             onCellDrop={handleCellDrop}
           />
           <Typography variant="h3" data-testid="total-heading">
-            Total: {formatCurrency(total)} ({formatCurrency(subTotal)})
+            Total: {formatCurrency(total)}
           </Typography>
         </>
       )}
