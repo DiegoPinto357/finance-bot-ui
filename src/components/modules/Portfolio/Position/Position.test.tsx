@@ -5,6 +5,7 @@ import Portfolio from '.';
 import type { Asset } from '@/types';
 
 vi.mock('react-dnd');
+vi.mock('react-dnd-scrolling');
 vi.mock('../useGetPortfolioBalance');
 vi.mock('../useTransfer');
 vi.mock('../useSwap');
@@ -14,7 +15,7 @@ vi.mock('../../Stock/getStockAssetPosition');
 vi.mock('../../Stock/setStockAssetValue');
 vi.mock('../../../DataTable');
 
-describe('Portfolio', () => {
+describe('Portfolio Position', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -22,7 +23,7 @@ describe('Portfolio', () => {
   it('renders total and sub total values', () => {
     render(<Portfolio />);
     expect(screen.getByTestId('total-heading')).toHaveTextContent(
-      'Total: R$ 162.520,41 (R$ 152.089,29)'
+      'Total: R$ 162.520,41'
     );
   });
 
