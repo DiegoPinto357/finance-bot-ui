@@ -1,8 +1,10 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, renderHook, screen, within } from '@testing-library/react';
 import { triggerCellDrop } from '../../../DataTable/__mocks__/DataTable';
+import useGetPortfolioBalance from '../useGetPortfolioBalance';
 import Portfolio from '.';
 
 import type { Asset } from '@/types';
+import userEvent from '@testing-library/user-event';
 
 vi.mock('react-dnd');
 vi.mock('react-dnd-scrolling');
@@ -103,6 +105,31 @@ describe('Portfolio Position', () => {
 
       expect(operationDialog).toBeVisible();
       expect(originCurrentValue).toBeInTheDocument();
+    });
+
+    it('refetches data when operation dialog is closed', async () => {
+      const portfolio = 'suricat';
+      const origin: Asset = { class: 'fixed', name: 'iti' };
+      const destiny: Asset = { class: 'fixed', name: 'nubank' };
+
+      render(<Portfolio />);
+
+      triggerCellDrop({
+        drag: { colId: origin, rowId: portfolio },
+        drop: { colId: destiny, rowId: portfolio },
+      });
+
+      const operationDialog = screen.getByRole('dialog', {
+        name: 'Operation',
+      });
+      const closeButton = await within(operationDialog).findByRole('button', {
+        name: 'Close',
+      });
+      await userEvent.click(closeButton);
+
+      const { result } = renderHook(useGetPortfolioBalance);
+      const { refetch } = result.current;
+      expect(refetch).toBeCalledTimes(1);
     });
 
     it('does not open operations dialog to operate across portfolios', async () => {

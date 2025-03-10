@@ -160,6 +160,13 @@ const Position = () => {
     setOpenOperationDialog(true);
   }, []);
 
+  const handleOperationDialogOpenChange = (open: boolean) => {
+    setOpenOperationDialog(open);
+    if (!open) {
+      refetch();
+    }
+  };
+
   const total = data?.total;
 
   return (
@@ -192,7 +199,7 @@ const Position = () => {
           operations={['swap', 'transfer']}
           operationData={operationData}
           portfolios={portfolios} // TODO consider using a context provider
-          onOpenChange={setOpenOperationDialog}
+          onOpenChange={handleOperationDialogOpenChange}
         />
       ) : null}
 
