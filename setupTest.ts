@@ -54,3 +54,5 @@ const mockLocalStorage = (() => {
 })();
 
 vi.stubGlobal('localStorage', mockLocalStorage);
+
+vi.mock('../src/services/plannedExpenses.ts');

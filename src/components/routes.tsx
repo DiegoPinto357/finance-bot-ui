@@ -8,7 +8,9 @@ import PortfolioPosition from './modules/Portfolio/Position';
 import PortfolioDiff from './modules/Portfolio/Diff';
 import PortfolioLiquidity from './modules/Portfolio/Liquidity';
 import PortfolioHistory from './modules/Portfolio/History';
+import PlannedExpenses from './modules/PlannedExpenses';
 import Settings from './Settings';
+
 
 export type Route = {
   path: string;
@@ -40,6 +42,11 @@ export const routes: Record<string, Route[]> = {
       path: '/contact',
       label: 'Contact',
       component: NotFound,
+    },
+    {
+      path: '/planned-expenses',
+      label: 'Planned Expenses',
+      component: PlannedExpenses,
     },
   ],
   stock: [

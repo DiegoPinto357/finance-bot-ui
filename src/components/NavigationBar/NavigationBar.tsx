@@ -14,6 +14,7 @@ const NavigationBar = () => {
         <SubMenu items={routes.stock}>Stock</SubMenu>
         <SubMenu items={routes.crypto}>Crypto</SubMenu>
         <SubMenu items={routes.portfolio}>Portfolio</SubMenu>
+        <MenuItem path="/planned-expenses">Planned Expenses</MenuItem>
         <MenuItem path="/settings">Settings</MenuItem>
       </NavigationMenuList>
     </NavigationMenu>
