@@ -17,6 +17,7 @@ type Props<TFieldValues extends FieldValues> = {
   description?: string;
   type?: React.HTMLInputTypeAttribute;
   disabled?: boolean;
+  className?: string;
 };
 
 const FormField = <TFieldValues extends FieldValues>({
@@ -26,6 +27,7 @@ const FormField = <TFieldValues extends FieldValues>({
   description,
   type,
   disabled,
+  className,
 }: Props<TFieldValues>) => {
   return (
     <DefaultFormField
@@ -33,7 +35,7 @@ const FormField = <TFieldValues extends FieldValues>({
       name={name}
       disabled={disabled}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className={className}>
           <FormLabel>{label}</FormLabel>
           <FormControl>
             <Input {...field} type={type} value={field.value ?? ''} />

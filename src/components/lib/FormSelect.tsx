@@ -23,6 +23,7 @@ type Props<TFieldValues extends FieldValues> = {
   options: string[];
   description?: string;
   onChange?: (checked: boolean) => void;
+  className?: string;
 };
 
 const FormSelect = <TFieldValues extends FieldValues>({
@@ -31,13 +32,14 @@ const FormSelect = <TFieldValues extends FieldValues>({
   label,
   options,
   description,
+  className,
 }: Props<TFieldValues>) => {
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className={className}>
           <FormLabel>{label}</FormLabel>
           <Select onValueChange={field.onChange} defaultValue={field.value}>
             <FormControl>

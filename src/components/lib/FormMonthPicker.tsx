@@ -19,6 +19,7 @@ type Props<TFieldValues extends FieldValues> = {
   name: Path<TFieldValues>;
   label: string;
   container?: HTMLElement | null;
+  className?: string;
 };
 
 const FormMonthPicker = <TFieldValues extends FieldValues>({
@@ -26,6 +27,7 @@ const FormMonthPicker = <TFieldValues extends FieldValues>({
   name,
   label,
   container,
+  className,
 }: Props<TFieldValues>) => {
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 
@@ -34,7 +36,7 @@ const FormMonthPicker = <TFieldValues extends FieldValues>({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className={className}>
           <FormLabel>{label}</FormLabel>
           <FormControl>
             <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>

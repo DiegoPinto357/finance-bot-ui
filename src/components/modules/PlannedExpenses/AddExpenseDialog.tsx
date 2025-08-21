@@ -87,6 +87,7 @@ const AddExpenseDialog = () => {
           <DialogHeader>
             <DialogTitle>Add Planned Expense</DialogTitle>
           </DialogHeader>
+
           <Form {...form}>
             <form
               id="add-expense-form"
@@ -99,33 +100,39 @@ const AddExpenseDialog = () => {
                 label="Description"
               />
 
-              <FormSelect
-                control={form.control}
-                name="portfolio"
-                label="Portfolio"
-                options={portfolios}
-              />
+              <div className="flex gap-4">
+                <FormSelect
+                  className="flex-1"
+                  control={form.control}
+                  name="portfolio"
+                  label="Portfolio"
+                  options={portfolios}
+                />
+                <FormMonthPicker
+                  control={form.control}
+                  name="startDate"
+                  label="Start Date"
+                  container={dialogContentRef.current}
+                  className="flex-1"
+                />
+              </div>
 
-              <FormField
-                control={form.control}
-                name="totalAmount"
-                label="Total Amount"
-                type="number"
-              />
-
-              <FormField
-                control={form.control}
-                name="installments"
-                label="Installments"
-                type="number"
-              />
-
-              <FormMonthPicker
-                control={form.control}
-                name="startDate"
-                label="Start Date"
-                container={dialogContentRef.current}
-              />
+              <div className="flex gap-4">
+                <FormField
+                  className="flex-1"
+                  control={form.control}
+                  name="totalAmount"
+                  label="Total Amount"
+                  type="number"
+                />
+                <FormField
+                  className="flex-1"
+                  control={form.control}
+                  name="installments"
+                  label="Installments"
+                  type="number"
+                />
+              </div>
             </form>
           </Form>
 
