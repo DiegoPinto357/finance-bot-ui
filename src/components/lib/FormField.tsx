@@ -36,7 +36,7 @@ const FormField = <TFieldValues extends FieldValues>({
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input {...field} type={type} />
+            <Input {...field} type={type} value={field.value ?? ''} />
           </FormControl>
           {description ? (
             <FormDescription>{description}</FormDescription>

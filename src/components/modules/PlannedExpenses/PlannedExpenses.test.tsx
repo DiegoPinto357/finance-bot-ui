@@ -31,7 +31,7 @@ describe('PlannedExpenses', () => {
       screen.getByRole('button', { name: 'Next month' })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Mês Atual' })
+      screen.getByRole('button', { name: 'Current Month' })
     ).toBeInTheDocument();
   });
 
@@ -40,7 +40,7 @@ describe('PlannedExpenses', () => {
     const monthLabel = screen.getByText(/^[A-Za-z]{3} \d{4}$/);
     const prevBtn = screen.getByRole('button', { name: 'Previous month' });
     const nextBtn = screen.getByRole('button', { name: 'Next month' });
-    const currentBtn = screen.getByRole('button', { name: 'Mês Atual' });
+    const currentBtn = screen.getByRole('button', { name: 'Current Month' });
 
     const initialMonth = monthLabel.textContent;
     await userEvent.click(prevBtn);
@@ -82,7 +82,7 @@ describe('PlannedExpenses', () => {
     render(<PlannedExpenses />);
 
     expect(
-      screen.getByRole('button', { name: 'Adicionar Despesa' })
+      screen.getByRole('button', { name: 'Add Expense' })
     ).toBeInTheDocument();
   });
 });

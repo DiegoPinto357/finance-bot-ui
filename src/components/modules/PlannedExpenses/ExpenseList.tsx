@@ -34,9 +34,9 @@ const ExpenseList = ({ portfolioInstallments }: ExpenseListProps) => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Descrição</TableHead>
-                  <TableHead>Parcela</TableHead>
-                  <TableHead className="text-right">Valor</TableHead>
+                  <TableHead>Description</TableHead>
+                  <TableHead>Installment</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

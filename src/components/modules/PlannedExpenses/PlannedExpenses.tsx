@@ -65,7 +65,13 @@ const PlannedExpenses = () => {
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
-          <Button variant="outline" onClick={handleCurrentMonth} className="ml-4">Mês Atual</Button>
+          <Button
+            variant="outline"
+            onClick={handleCurrentMonth}
+            className="ml-4"
+          >
+            Current Month
+          </Button>
         </div>
         <AddExpenseDialog />
       </div>
