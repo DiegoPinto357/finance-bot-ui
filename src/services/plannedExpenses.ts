@@ -1,18 +1,29 @@
 import httpClient from '../lib/httpClient';
-import { AddPlannedExpense, PlannedExpense } from '../types';
+import { PortfolioInstallments } from '../types';
 
-export const getPlannedExpenses = async ({
+export const getMonthlyInstallments = async ({
   month,
   year,
 }: {
-  month: number;
+  month: string;
   year: number;
-}): Promise<PlannedExpense[]> => {
-  return await httpClient.get(`/planned-expenses?month=${month}&year=${year}`);
+}): Promise<PortfolioInstallments[]> => {
+  return await httpClient.get(
+    `/api/plannedExpenses/monthly?month=${month}&year=${year}`
+  );
+};
+
+export type AddPlannedExpense = {
+  description: string;
+  portfolio: string;
+  totalValue: number;
+  installments: number;
+  startMonth: string;
+  startYear: number;
 };
 
 export const addPlannedExpense = async (
   data: AddPlannedExpense
-): Promise<PlannedExpense> => {
-  return await httpClient.post('/planned-expenses', data);
+): Promise<void> => {
+  return await httpClient.post('/api/plannedExpenses', data);
 };

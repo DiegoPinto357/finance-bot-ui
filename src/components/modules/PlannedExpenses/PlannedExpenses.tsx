@@ -1,4 +1,4 @@
-import { useGetPlannedExpenses } from './useGetPlannedExpenses';
+import { useGetMonthlyInstallments } from './useGetPlannedExpenses';
 import { useState } from 'react';
 import { Button } from '../../ui/button';
 import PageHeading from '../../lib/PageHeading';
@@ -28,11 +28,11 @@ const PlannedExpenses = () => {
   });
 
   const {
-    data: expenses,
+    data: monthlyInstallments,
     isLoading,
     isFetching,
     refetch,
-  } = useGetPlannedExpenses({
+  } = useGetMonthlyInstallments({
     month: currentDate.getMonth() + 1,
     year: currentDate.getFullYear(),
   });
@@ -49,20 +49,31 @@ const PlannedExpenses = () => {
             size="icon"
             onClick={handlePreviousMonth}
             className="mr-4"
+            aria-label="Previous month"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <span className="text-xl font-semibold w-32 text-center">
             {monthYear}
           </span>
-          <Button variant="outline" size="icon" onClick={handleNextMonth} className="ml-4">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handleNextMonth}
+            className="ml-4"
+            aria-label="Next month"
+          >
             <ChevronRight className="h-4 w-4" />
           </Button>
           <Button variant="outline" onClick={handleCurrentMonth} className="ml-4">Mês Atual</Button>
         </div>
         <AddExpenseDialog />
       </div>
-      {isLoading ? <Loader /> : <ExpenseList expenses={expenses || []} />}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <ExpenseList portfolioInstallments={monthlyInstallments || []} />
+      )}
     </div>
   );
 };

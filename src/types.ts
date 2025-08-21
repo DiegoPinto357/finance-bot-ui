@@ -17,11 +17,17 @@ export type PlannedExpense = {
   date: string;
 };
 
-export type AddPlannedExpense = {
+export type InstallmentDetail = {
+  installmentNumber: number;
+  value: number;
+  totalInstallments: number;
   description: string;
+  plannedExpenseId: string;
+};
+
+export type PortfolioInstallments = {
   portfolio: string;
-  totalAmount: number;
-  installments: number;
-  startDate: string;
+  installments: InstallmentDetail[];
+  totalValue: number;
 };
 
