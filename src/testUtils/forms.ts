@@ -1,5 +1,6 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MONTHS } from '@/lib/constants';
 
 export const fillFormField = async (
   fieldName: string,
@@ -37,4 +38,14 @@ export const selectFormFieldOption = async (
   if (field) {
     await userEvent.selectOptions(field, value);
   }
+};
+
+type Month = (typeof MONTHS)[number];
+
+export const selectMonth = async (fieldName: string, month: Month) => {
+  const fieldContainer = screen.getByText(fieldName).closest('div');
+  const fieldButton = within(fieldContainer as HTMLElement).getByRole('button');
+  await userEvent.click(fieldButton);
+  const monthToSelect = screen.getByText(month);
+  await userEvent.click(monthToSelect);
 };

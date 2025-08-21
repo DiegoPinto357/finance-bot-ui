@@ -1,8 +1,12 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useMutation } from 'react-query';
 import AddExpenseDialog from './AddExpenseDialog';
-import { fillFormField, selectFormFieldOption } from '@/testUtils/forms';
+import {
+  fillFormField,
+  selectFormFieldOption,
+  selectMonth,
+} from '@/testUtils/forms';
 
 vi.mock('react-query');
 
@@ -45,13 +49,7 @@ describe('AddExpenseDialog', () => {
     await selectFormFieldOption('Portfolio', 'Essential');
     await fillFormField('Total Amount', 100);
     await fillFormField('Installments', 1);
-
-    // For the month picker, we need to open the popover and select a month
-    const startDateContainer = screen.getByText('Start Date').closest('div');
-    const startDateButton = within(startDateContainer!).getByRole('button');
-    await userEvent.click(startDateButton);
-    const monthToSelect = screen.getByText('Jan');
-    await userEvent.click(monthToSelect);
+    await selectMonth('Start Date', 'Jan');
 
     const saveButton = screen.getByRole('button', { name: 'Submit expense' });
     await userEvent.click(saveButton);
@@ -98,12 +96,7 @@ describe('AddExpenseDialog', () => {
     await selectFormFieldOption('Portfolio', 'Essential');
     await fillFormField('Total Amount', 100);
     await fillFormField('Installments', 1);
-
-    const startDateContainer = screen.getByText('Start Date').closest('div');
-    const startDateButton = within(startDateContainer!).getByRole('button');
-    await userEvent.click(startDateButton);
-    const monthToSelect = screen.getByText('Jan');
-    await userEvent.click(monthToSelect);
+    await selectMonth('Start Date', 'Jan');
 
     const saveButton = screen.getByRole('button', { name: 'Submit expense' });
     await userEvent.click(saveButton);
