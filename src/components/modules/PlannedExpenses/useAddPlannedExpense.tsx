@@ -4,7 +4,7 @@ import {
   AddPlannedExpense,
 } from '../../../services/plannedExpenses';
 
-export const useAddPlannedExpense = () => {
+const useAddPlannedExpense = () => {
   const queryClient = useQueryClient();
 
   return useMutation(
@@ -16,3 +16,5 @@ export const useAddPlannedExpense = () => {
     }
   );
 };
+
+export default useAddPlannedExpense;

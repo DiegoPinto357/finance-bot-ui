@@ -10,6 +10,13 @@ import {
 
 vi.mock('react-query');
 
+vi.mock('../Portfolio/useGetPortfolios', () => ({
+  default: () => ({
+    data: ['Essential', 'Investments', 'Leisure', 'Travel', 'Financing'],
+    isLoading: false,
+  }),
+}));
+
 describe('AddExpenseDialog', () => {
   const mockedAddExpense = vi.fn();
 

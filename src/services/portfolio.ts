@@ -133,6 +133,11 @@ const swap = async (data: SwapParams) => {
   return await httpClient.post<{ status: string }>(url, data);
 };
 
+const getList = async () => {
+  const url = `/api/portfolio/list`;
+  return await httpClient.get<Portfolio[]>(url);
+};
+
 export default {
   getBalance,
   getShares,
@@ -141,4 +146,5 @@ export default {
   getLiquidity,
   transfer,
   swap,
+  getList,
 };

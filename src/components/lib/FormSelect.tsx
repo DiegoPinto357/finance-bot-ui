@@ -24,6 +24,7 @@ type Props<TFieldValues extends FieldValues> = {
   description?: string;
   onChange?: (checked: boolean) => void;
   className?: string;
+  disabled?: boolean;
 };
 
 const FormSelect = <TFieldValues extends FieldValues>({
@@ -33,6 +34,7 @@ const FormSelect = <TFieldValues extends FieldValues>({
   options,
   description,
   className,
+  disabled,
 }: Props<TFieldValues>) => {
   return (
     <FormField
@@ -41,7 +43,7 @@ const FormSelect = <TFieldValues extends FieldValues>({
       render={({ field }) => (
         <FormItem className={className}>
           <FormLabel>{label}</FormLabel>
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <Select onValueChange={field.onChange} defaultValue={field.value} disabled={disabled}>
             <FormControl>
               <SelectTrigger>
                 <SelectValue />

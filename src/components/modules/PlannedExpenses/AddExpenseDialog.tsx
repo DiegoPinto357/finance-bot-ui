@@ -14,7 +14,8 @@ import {
 import { Form } from '../../ui/form';
 import FormField from '../../lib/FormField';
 import FormSelect from '../../lib/FormSelect';
-import { useAddPlannedExpense } from './useAddPlannedExpense';
+import useGetPortfolios from '../Portfolio/useGetPortfolios';
+import useAddPlannedExpense from './useAddPlannedExpense';
 import { MONTHS } from '../../../lib/constants';
 import FormMonthPicker from '../../lib/FormMonthPicker';
 import { Plus } from 'lucide-react';
@@ -50,7 +51,10 @@ const AddExpenseDialog = () => {
     },
   });
 
-  const { mutateAsync: addExpense, isLoading } = useAddPlannedExpense();
+  const { mutateAsync: addExpense, isLoading: isAddingExpense } =
+    useAddPlannedExpense();
+  const { data: portfolios, isLoading: isLoadingPortfolios } =
+    useGetPortfolios();
 
   const onSubmit = async (data: FormSchemaType) => {
     const { totalAmount, startDate, ...rest } = data;
@@ -64,15 +68,6 @@ const AddExpenseDialog = () => {
     });
     setIsDialogOpen(false);
   };
-
-  // Mocked portfolios - replace with actual data
-  const portfolios = [
-    'Essential',
-    'Investments',
-    'Leisure',
-    'Travel',
-    'Financing',
-  ];
 
   return (
     <>
@@ -106,7 +101,8 @@ const AddExpenseDialog = () => {
                   control={form.control}
                   name="portfolio"
                   label="Portfolio"
-                  options={portfolios}
+                  options={portfolios || []}
+                  disabled={isLoadingPortfolios}
                 />
                 <FormMonthPicker
                   control={form.control}
@@ -139,7 +135,7 @@ const AddExpenseDialog = () => {
           <DialogFooter className="pt-4">
             <Button
               className="w-full"
-              disabled={isLoading}
+              disabled={isAddingExpense}
               onClick={async () => {
                 if (await form.trigger()) {
                   setConfirmDialogOpen(true);
