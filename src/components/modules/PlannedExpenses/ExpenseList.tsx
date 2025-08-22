@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from '../../ui/table';
+import Typography from '@/components/lib/Typography';
 import { formatCurrency } from '../../../lib/formatNumber';
 
 interface ExpenseListProps {
@@ -22,6 +23,10 @@ const ExpenseList = ({ portfolioInstallments }: ExpenseListProps) => {
 
   return (
     <div data-testid="expense-list">
+      <Typography variant="h2" data-testid="total-heading" className="my-4">
+        Total: {formatCurrency(totalAmount)}
+      </Typography>
+
       {portfolioInstallments.map(portfolioGroup => (
         <Card key={portfolioGroup.portfolio} className="mb-4">
           <CardHeader>
@@ -59,10 +64,6 @@ const ExpenseList = ({ portfolioInstallments }: ExpenseListProps) => {
           </CardContent>
         </Card>
       ))}
-      <div className="text-right text-xl font-bold mt-4">
-        <span>Total:</span>
-        <span className="ml-2">{formatCurrency(totalAmount)}</span>
-      </div>
     </div>
   );
 };
