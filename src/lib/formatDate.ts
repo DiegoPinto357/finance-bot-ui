@@ -10,5 +10,14 @@ export const formatMonthYear = (
 
 export const monthYearStringToDate = (dateString: string): Date | undefined => {
   if (!dateString) return undefined;
-  return new Date(dateString + '-01');
+  const [year, month] = dateString.split('-').map(Number);
+  if (!year || !month) return undefined;
+  return new Date(year, month - 1, 1);
+};
+
+export const getNextMonthString = (date: Date = new Date()): string => {
+  const nextMonthDate = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+  return `${nextMonthDate.getFullYear()}-${String(
+    nextMonthDate.getMonth() + 1
+  ).padStart(2, '0')}`;
 };

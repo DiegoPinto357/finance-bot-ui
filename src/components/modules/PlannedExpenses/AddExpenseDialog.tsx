@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Plus } from 'lucide-react';
 import { Button } from '../../ui/button';
 import {
   Dialog,
@@ -18,9 +19,9 @@ import useGetPortfolios from '../Portfolio/useGetPortfolios';
 import useAddPlannedExpense from './useAddPlannedExpense';
 import { MONTHS } from '../../../lib/constants';
 import FormMonthPicker from '../../lib/FormMonthPicker';
-import { Plus } from 'lucide-react';
 import ConfirmDialog from '../../lib/ConfirmDialog';
 import { currencyField } from '@/lib/formFieldSchema';
+import { getNextMonthString } from '../../../lib/formatDate';
 
 const formSchema = z.object({
   description: z.string().min(1, 'Description is required'),
@@ -47,7 +48,7 @@ const AddExpenseDialog = () => {
       description: '',
       portfolio: '',
       installments: 1,
-      startDate: new Date().toISOString().slice(0, 7),
+      startDate: getNextMonthString(),
     },
   });
 

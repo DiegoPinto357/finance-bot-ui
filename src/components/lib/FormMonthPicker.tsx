@@ -58,7 +58,13 @@ const FormMonthPicker = <TFieldValues extends FieldValues>({
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" container={container}>
                 <MonthPicker
-                  selectedMonth={monthYearStringToDate(field.value)}
+                  selectedMonth={
+                    field.value &&
+                    typeof field.value === 'string' &&
+                    field.value.trim() !== ''
+                      ? monthYearStringToDate(field.value)
+                      : new Date()
+                  }
                   onMonthSelect={date => {
                     const value = `${date.getFullYear()}-${String(
                       date.getMonth() + 1
